@@ -1,0 +1,30 @@
+.module__heading {
+	padding: 20px;
+	position: relative;
+}
+
+card-base h1 {
+	margin-right: 10px;
+
+	&:read-write:focus { 
+		outline: none; 
+		background: $grey-200;
+		color: rgba(0, 0, 0, .7);
+	}
+}
+
+.module__heading__button {
+	background: transparent;
+	width: 24px; height: 24px;
+	border: none;
+	position: absolute;
+	top: 20px; right: 10px;
+
+	&:focus, &:active { outline: none; }
+
+	&:hover {
+		svg { fill: $grey; }
+	}
+
+	svg { fill: $grey-300; }
+}

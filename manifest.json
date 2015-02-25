@@ -1,0 +1,26 @@
+{
+	"manifest_version": 2,
+	"name": "BrowDash",
+	"description": "This extension creates a personal Dashboard when opening a new tab",
+	"version": "1.0.0",
+	"author": "Moritz Kröger <@morkro>",
+	"icons": {
+		"16": "/assets/icons/icon-16.png",
+		"48": "/assets/icons/icon-48.png",
+		"128": "/assets/icons/icon-128.png"
+	},
+	"permissions": [
+		"<all_urls>", "tabs", "activeTab", "geolocation"
+	],
+	"chrome_url_overrides": {
+		"newtab": "index.html"
+	},
+	"web_accessible_resources": [
+		"scripts/app.min.js",
+		"scripts/card-base.min.js",
+		"css/main.min.css",
+		"card-base.html"
+	],
+	"offline_enabled": true,
+	"content_security_policy": "default-src 'self'; script-src 'self'; object-src 'none'"
+}

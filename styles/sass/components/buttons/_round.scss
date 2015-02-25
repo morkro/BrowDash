@@ -1,0 +1,7 @@
+.btn--round {
+	border-radius: 50%;
+	box-shadow: $shadow-btn;
+	padding: 16px;
+
+	svg { fill: $white; }
+}

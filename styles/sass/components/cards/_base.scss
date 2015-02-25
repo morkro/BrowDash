@@ -1,0 +1,20 @@
+card-base, .module {
+	position: relative;
+	z-index: z($content, cards);
+	background: white;
+	display: inline-block;
+	box-shadow: $shadow-base;
+	border-radius: 2px;
+	margin-bottom: 25px;
+	transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
+
+	&.editmode {
+		z-index: z($content, editmode);
+		transform: translateY(-5px);
+		box-shadow: $shadow-z4;
+	}
+}
+
+.module--longshadow {
+	box-shadow: $shadow-z4;
+}

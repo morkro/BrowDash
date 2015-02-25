@@ -1,0 +1,70 @@
+#brow__dialog {
+	position: absolute;
+	z-index: z($modals, dialog);
+	top: 0; left: 0;
+	right: 0; bottom: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	align-items: center;
+	justify-content: center;
+	display: none;
+
+	&.show {
+		display: flex;
+
+		.dialog__inner {
+			opacity: 1; 
+			display: block;
+		}
+	}
+}
+
+.dialog__inner {
+	max-width: 600px;
+	width: 85%;
+	height: 70%;
+	min-height: 300px;
+	opacity: 0;
+	display: none;
+	overflow: hidden;
+
+	&.module { padding: 0; }
+
+	.dialog__sidebar,
+	.dialog__content {
+		height: calc(100% - 60px);
+	}
+}
+
+.dialog__sidebar {
+	float: left;
+	width: 30%;
+}
+
+.dialog__content {
+	float: right;
+	width: 70%;
+	padding: 15px;
+
+	> div {
+		display: none;
+
+		&.active { display: block; }
+	}
+
+	h4 {
+		margin-bottom: 20px;
+
+		&:not(:first-of-type) { 
+			margin-top: 20px; 
+		}
+	}
+
+	span {
+		font-style: italic;
+		color: $grey;
+	}
+
+	a:hover { text-decoration: underline; }
+}

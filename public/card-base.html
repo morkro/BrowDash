@@ -1,0 +1,83 @@
+<template id="card">
+	<style>
+		.module { background: white; display: inline-block; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24); border-radius: 2px; margin-bottom: 25px; }
+		.module__heading { padding: 20px; position: relative; }
+		.module__heading__button { background: transparent; width: 24px; height: 24px; border: none; position: absolute; top: 20px; right: 10px; }
+		.module__heading__button:focus, .module__heading__button:active { outline: none; }
+		.module__heading__button:hover { cursor: pointer; }
+		.module__heading__button:hover svg { fill: #000000; fill-opacity: 0.6;}
+		.module__heading__button svg { fill: #000000; fill-opacity: 0.3;}
+		.module__heading__settings { display: none; position: absolute; z-index: 1; top: 16px; right: 14px; width: 150px; padding: 0; list-style: none; margin: 0;}
+		.module__heading__settings li { width: 100%; }
+		.module__heading__settings li:last-child { border-top: 1px solid rgba(0, 0, 0, .1); }
+		.module__heading__settings button { width: 100%; background: none; border: none; line-height: 52px; cursor: pointer; text-align: left; font-size: 12px; padding: 0 12px; }
+		.module__heading__settings button:hover { background: rgba(0, 0, 0, .05); }
+		.module__heading__settings button:active, .module__heading__settings button:focus { outline: none; }
+		.module__heading__settings button svg { position: relative; top: 7px; margin-right: 4px;}
+		.module__content { padding: 0 20px 20px; }
+		.hidden { display: none; }
+	</style>
+	
+	<section>
+		<header class="module__heading">
+			<content select="h1"></content>
+			<button class="module__heading__button">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".3">
+					<path d="M0 0h24v24h-24z" fill="none"></path>
+					<path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+				</svg>
+			</button>
+			<ul class="module module__heading__settings">
+				<li><button class="heading__settings__edit">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
+						<path d="M3 17.25v3.75h3.75l11.06-11.06-3.75-3.75-11.06 11.06zm17.71-10.21c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+						<path d="M0 0h24v24h-24z" fill="none"/>
+					</svg>
+					Edit
+				</button></li>
+				<li class="hidden"><button class="heading__settings__save">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
+						<path d="M0 0h24v24h-24z" fill="none"/>
+						<path d="M9 16.17l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41z"/>
+					</svg>	
+					Save
+				</button></li>
+				<li><button class="heading__settings__remove">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
+						<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-12h-12v12zm13-15h-3.5l-1-1h-5l-1 1h-3.5v2h14v-2z"/>
+						<path d="M0 0h24v24h-24z" fill="none"/>
+					</svg>
+					Delete
+				</button></li>
+			</ul>
+		</header>
+
+		<div class="module__content">
+			<content select="div"></content>
+		</div>
+	</section>
+</template>
+
+<script>
+	(function() {
+		var importDoc		= document.currentScript.ownerDocument;
+		var cardTemplate	= importDoc.querySelector('#card');
+		var CardProto		= Object.create(HTMLDivElement.prototype);
+		
+		CardProto.createdCallback = function () {
+			var root = this.createShadowRoot();
+			root.appendChild( document.importNode(cardTemplate.content, true) );
+			this.settings	= root.querySelector('.module__heading__settings');
+			this.edit		= root.querySelector('.heading__settings__edit');
+			this.save		= root.querySelector('.heading__settings__save');
+			this.remove		= root.querySelector('.heading__settings__remove');
+			var btn			= root.querySelector('.module__heading__button');
+			btn.addEventListener('click', this.openSettings.bind(this));
+		};
+		CardProto.openSettings = function () {
+			this.dispatchEvent(new Event('btn-settings'));
+		};
+		
+		document.registerElement('card-base', { prototype: CardProto });
+	})();
+</script>

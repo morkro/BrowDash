@@ -1,0 +1,12 @@
+#brow__footer {
+	position: fixed;
+	bottom: 40px;
+	left: 50%;
+	z-index: z($modals, footer);
+	width: 56px;
+	transform: translateX(-50%);
+
+	[data-tooltip]:before {
+		width: 210%;
+	}
+}

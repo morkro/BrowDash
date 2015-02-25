@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>New Tab</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="css/main.min.css">
+	<link rel="import" href="card-base.html">
+</head>
+<body>
+	<!-- Dashboard Header -->
+	<header id="brow__header">
+		<!-- Timer -->
+		<h1 class="header__timer trigger-timer">00:00:00</h1>
+		<!-- Settings -->
+		<button class="btn header__settings trigger-settings">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				<path d="M0 0h24v24h-24z" fill="none"/>
+				<path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65c-.03-.24-.24-.42-.49-.42h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-7.43 2.52c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+			</svg>
+		</button>
+	</header><!-- /Dashboard Header -->
+
+	<!-- Dashboard Content -->
+	<main id="brow__content" class="trigger-content" role="main">
+		<div class="content__overlay"></div>
+	</main><!-- /Dashboard Content -->
+
+	<!-- Settings -->
+	<div id="brow__dialog">
+		<section class="dialog__inner module module--longshadow clearfix">
+			<!-- Headings -->
+			<header class="dialog__heading">
+				<h3>Settings</h3>
+				<button role="button" class="btn dialog__close">Close</button>
+			</header><!-- /Headings -->
+
+			<!-- Sidebar -->
+			<aside class="dialog__sidebar">
+				<ul class="dialog__sidebar__list">
+					<li><a href="#settings-theme" class="active sidebar__list__item">Theme</a></li>
+					<li><a href="#settings-data" class="sidebar__list__item">Data usage</a></li>
+					<li><a href="#settings-more" class="sidebar__list__item">Contribution</a></li>
+				</ul>
+			</aside><!-- /Sidebar -->
+
+			<!-- Content -->
+			<div class="dialog__content">
+				<!-- Theme -->
+				<div class="dialog__content__theme active">
+					<h4>Color scheme</h4>
+					<ul class="settings__theme">
+						<li data-settings-theme="blue-a400"></li>
+						<li data-settings-theme="pink-400"></li>
+						<li data-settings-theme="teal-400"></li>
+						<li data-settings-theme="indigo-400"></li>
+						<li data-settings-theme="red"></li>
+					</ul>
+					<h4>Layout</h4>
+					<span>More settings are coming.</span>
+				</div><!-- /Theme -->
+
+				<!-- Data -->
+				<div class="dialog__content__data">
+					<h4>What happens to my data?</h4>
+					<p>
+						Your data is saved locally in your current browser through the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API" target="_blank">localStorage API</a>. 
+						No cookies are in use nor will your data be uploaded somewhere.
+						<br><br>
+						That means you have full power about your data. If you want to delete or just review everything,
+						open the <span>Chrome Developer Tools</span> and go to the <span>Resources</span> tab. Under <span>Local Storage</span> you can see all your saved data.
+					</p>
+				</div><!-- /Data -->
+
+				<!-- More -->
+				<div class="dialog__content__more">
+					<h4>Contribution</h4>
+					<p>
+						You've suggestions or just want to contribute?
+						<br>
+						This project is Open Source; just go the public <a>Github Repository</a>.
+					</p>
+					<h4>Changelog</h4>
+					<span>List will be updated in future.</span>
+				</div><!-- /Data -->
+			</div><!-- /Content -->
+		</section>
+	</div><!-- /Settings -->
+
+	<!-- Dashboard Overlay -->
+	<div id="brow__overlay"></div>
+
+	<!-- Dashboard Footer -->
+	<footer id="brow__footer">
+		<!-- Select card type -->
+		<div class="footer__select">
+
+		</div><!-- /Select card type -->
+
+		<!-- Button -->
+		<button data-tooltip="Add a new card" data-tooltip-pos="top" class="btn btn--round trigger-cards">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				<path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/>
+				<path d="M0 0h24v24h-24z" fill="none"/>
+			</svg>
+		</button><!-- /Button -->
+	</footer><!-- /Dashboard Footer -->
+
+	<!-- Scripts -->
+	<script type="text/javascript" src="scripts/app.js"></script>
+</body>
+</html>

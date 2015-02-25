@@ -1,0 +1,23 @@
+.btn {
+	background: transparent;
+	border: none;
+	padding: 0;
+	display: inline-block;
+	text-transform: uppercase;
+	transition: all 150ms ease-in-out;
+
+	&:focus { outline: none; }
+
+	svg { fill: $white; }
+}
+
+.header__settings {
+	&:hover {
+		svg { fill: rgba(0, 0, 0, .54); }
+	}
+
+	svg { 
+		fill: rgba(0, 0, 0, .26);
+		transition: all 150ms ease-in-out;
+	}
+}

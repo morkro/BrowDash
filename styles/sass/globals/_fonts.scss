@@ -1,0 +1,22 @@
+/**
+ * FONT-FACE
+ */
+@include font-face("Roboto", "../assets/fonts/Roboto-Thin", 100);
+@include font-face("Roboto", "../assets/fonts/Roboto-ThinItalic", 100, italic);
+@include font-face("Roboto", "../assets/fonts/Roboto-Light", 200);
+@include font-face("Roboto", "../assets/fonts/Roboto-LightItalic", 200, italic);
+@include font-face("Roboto", "../assets/fonts/Roboto-Regular", 300);
+@include font-face("Roboto", "../assets/fonts/Roboto-RegularItalic", 300, italic);
+@include font-face("Roboto", "../assets/fonts/Roboto-Medium", 400);
+@include font-face("Roboto", "../assets/fonts/Roboto-MediumItalic", 400, italic);
+@include font-face("Roboto", "../assets/fonts/Roboto-Bold", 500);
+@include font-face("Roboto", "../assets/fonts/Roboto-BoldItalic", 500, italic);
+@include font-face("Roboto", "../assets/fonts/Roboto-Black", 600);
+@include font-face("Roboto", "../assets/fonts/Roboto-BlackItalic", 600, italic);
+
+/**
+ * FONT-FAMILY VARIABLES
+ *
+ * Usage: Overall font-family.
+ */
+$Roboto:	"Roboto", "Myriad Pro", Myriad, Arial, sans-serif;

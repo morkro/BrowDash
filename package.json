@@ -1,0 +1,44 @@
+{
+   "name": "browdash",
+   "private": true,
+   "version": "0.1.0",
+   "license": "MIT",
+   "author": {
+      "name": "Moritz Kröger",
+      "email": "write@morkro.de"
+   },
+   "homepage": "https://github.com/morkro/BrowDash",
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/morkro/BrowDash.git"
+   },
+   "bugs": {
+      "url": "https://github.com/morkro/BrowDash/issues"
+   },
+   "dependencies": {
+      "express": "*"
+   },
+   "devDependencies": {
+      "grunt": "0.4.x",
+      "grunt-contrib-sass": "0.7.x",
+      "grunt-autoprefixer": "0.7.x",
+      "grunt-contrib-cssmin": "0.10.x",
+      "grunt-contrib-copy": "0.5.x",
+      "grunt-contrib-watch": "0.6.x",
+      "grunt-contrib-concat": "0.4.x",
+      "grunt-contrib-jshint": "*",
+      "grunt-contrib-uglify": "0.5.x",
+      "grunt-contrib-clean": "0.6.x",
+      "grunt-uncss": "0.3.x",
+      "grunt-newer": "0.7.x",
+      "jshint-stylish": "1.x.x",
+      "time-grunt": "1.0.x",
+      "grunt-notify": "0.3.x",
+      "load-grunt-tasks": "0.6.x",
+      "grunt-string-replace": "1.0.x"
+   },
+   "scripts": {
+      "start": "node server.js",
+      "build": "grunt dev watch"
+   }
+}

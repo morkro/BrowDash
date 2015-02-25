@@ -1,0 +1,23 @@
+/**
+ * FUNCTIONS
+ * ==============================
+ *
+ * This function is usefull in combination with z-index and lists.
+ * It checks that we are requesting something that exists in the list. If the value exists, 
+ * then it returns the result of the index call, just like before. If the value does not exist, 
+ * then two things happen:
+ * 	1. A warning is printed telling you that the item you’re requesting is not in the list, 
+ *    	and the values of the list are printed so that you can see what to choose from.
+ * 	2. The value returned is null, which tells Sass not to print out the rule at all.
+ */
+@function z($list, $element) {
+   $z-index: index($list, $element);
+   
+   @if $z-index {
+      @return $z-index;
+   }
+
+   @warn 'There is no item "#{$element}" in this list; choose one of: #{$list}';
+   
+   @return null;
+}
