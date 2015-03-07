@@ -68,8 +68,8 @@ Brow.Cards = (function (Brow) {
 	 * @param  {Object} event
 	 */
 	const _closeCardSettings = function (event) {
-		var settingsAreVisible	= null;
-		var targetIsNotBtn		= null;
+		let settingsAreVisible	= null;
+		let targetIsNotBtn		= null;
 
 		if (browCardSettings) {
 			settingsAreVisible	= browCardSettings.style.display === 'block';
@@ -120,7 +120,7 @@ Brow.Cards = (function (Brow) {
 	 * @param  {Object} event
 	 */
 	const _activateCardEditMode = function (event) {
-		var _curCardType = browCardElem.getAttribute('data-module-type');
+		let _curCardType = browCardElem.getAttribute('data-module-type');
 
 		isEditMode = true;
 		browCardElem.classList.add('editmode');
@@ -153,8 +153,8 @@ Brow.Cards = (function (Brow) {
 	 */
 	const _removeCard = function (event) {
 		event.preventDefault();
-		var _curCardGUI = browCardElem.getAttribute('data-module-guid');
-		var _isCreateBtnInEditMode = createButton.classList.contains('editmode');
+		let _curCardGUI = browCardElem.getAttribute('data-module-guid');
+		let _isCreateBtnInEditMode = createButton.classList.contains('editmode');
 		// Remove item
 		if (_isCreateBtnInEditMode || isEditMode) {
 			createButton.classList.remove('editmode');
@@ -170,8 +170,8 @@ Brow.Cards = (function (Brow) {
 	 * @private
 	 */
 	const _parseCardsFromStorage = function () {
-		var storageItem = null, i;
-		var loopStorage = function loopStorage (index) {
+		let storageItem = null;
+		let loopStorage = function loopStorage (index) {
 			storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
 			if (storageItem['module']) {
 				_createCard({
@@ -183,7 +183,7 @@ Brow.Cards = (function (Brow) {
 			}	
 		};
 
-		for (i = localStorage.length; i--;) {
+		for (let i = localStorage.length; i--;) {
 			loopStorage(i);
 		}
 	};
@@ -195,10 +195,10 @@ Brow.Cards = (function (Brow) {
 	 * @param			{Event} event
 	 */
 	const _saveCardsToStorage = function (event) {
-		var _module = event.target.parentElement;
-		var _moduleGUID = _module.getAttribute('data-module-guid');
-		var _moduleType = _module.getAttribute('data-module-type');
-		var _moduleSettings = {
+		let _module = event.target.parentElement;
+		let _moduleGUID = _module.getAttribute('data-module-guid');
+		let _moduleType = _module.getAttribute('data-module-type');
+		let _moduleSettings = {
 			module: true,
 			guid: _moduleGUID,
 			type: _moduleType,
@@ -231,13 +231,13 @@ Brow.Cards = (function (Brow) {
 	 * @param			{Object} config
 	 */
 	const _createCard = function (config) {
-		var _cardType	= (config.type) ? config.type : 'basic';
-		var _cardTitle	= (config.title) ? config.title : Brow.Data.Header(config.type);
-		var _cardCount	= (config.count) ? config.count : 1;
-		var _cardGUID	= (config.guid) ? config.guid : Brow.GUID();
-		var _cardWrapper, i;
+		let _cardType	= (config.type) ? config.type : 'basic';
+		let _cardTitle	= (config.title) ? config.title : Brow.Data.Header(config.type);
+		let _cardCount	= (config.count) ? config.count : 1;
+		let _cardGUID	= (config.guid) ? config.guid : Brow.GUID();
+		let _cardWrapper = null;
 
-		for (i = _cardCount; i--;) {
+		for (let i = _cardCount; i--;) {
 			// Create basic element
 			_cardWrapper = document.createElement('card-base');
 			_cardWrapper.setAttribute('data-module-guid', _cardGUID);
@@ -259,14 +259,14 @@ Brow.Cards = (function (Brow) {
 	 * @param			{String} title
 	 */	
 	const _createCardHeadline = function (title) {
-		var _cHeadElem = document.createElement('h1');
+		let _cHeadElem = document.createElement('h1');
 		if (typeof title !== 'string') title.toString();
 		_cHeadElem.textContent = title;
 		return _cHeadElem;
 	};
 
 	const _createCardContent = function (type) {
-		var container = document.createElement('div');
+		let container = document.createElement('div');
 		container.classList.add('content__' + type);
 
 		switch (type) {

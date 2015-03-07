@@ -35,9 +35,9 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Object} event
 	 */
 	const _closeSettings = function (event) {
-		var _curTarget			= event.target;
-		var _isCloseBtn		= _curTarget.classList.contains('dialog__close');
-		var _isOutsideDialog	= _curTarget === this && this.classList.contains('show');
+		let _curTarget			= event.target;
+		let _isCloseBtn		= _curTarget.classList.contains('dialog__close');
+		let _isOutsideDialog	= _curTarget === this && this.classList.contains('show');
 
 		if (_isCloseBtn || _isOutsideDialog) {
 			this.classList.remove('show');
@@ -51,7 +51,7 @@ Brow.Settings = (function (Brow) {
 	 * @return			{Object}
 	 */
 	const _isCustomTheme = function () {
-		var CUSTOM = localStorage['BROW_THEME'];
+		let CUSTOM = localStorage['BROW_THEME'];
 		return CUSTOM;
 	};
 
@@ -105,7 +105,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _chooseTheme = function (event) {
 		event.preventDefault();
-		var _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
+		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
 		localStorage['BROW_THEME'] = JSON.stringify(_themeColor);
 		_updateAndValidateTheme(_themeColor);
 	};
@@ -116,10 +116,10 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Object} settings
 	 */
 	const _updateSettingsContent = function (event) {
-		var _sidebarElem		= event.target;
-		var _contentName		= _sidebarElem.getAttribute('href').split('-')[1];
-		var _contentElem		= DIALOG.querySelector('.dialog__content__' + _contentName);
-		var _curActiveElems	= DIALOG.querySelectorAll('.active');
+		let _sidebarElem		= event.target;
+		let _contentName		= _sidebarElem.getAttribute('href').split('-')[1];
+		let _contentElem		= DIALOG.querySelector('.dialog__content__' + _contentName);
+		let _curActiveElems	= DIALOG.querySelectorAll('.active');
 
 		// if link is clicked
 		if (_sidebarElem.classList.contains('sidebar__list__item')) {

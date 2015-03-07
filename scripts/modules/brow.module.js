@@ -13,8 +13,8 @@ Brow.Module = (function (Brow) {
 	 * @return {HTMLElement}
 	 */
 	const _returnBasicModule = function () {
-		var _cParagraphElem	= document.createElement('p');
-		var defaultContent	= Brow.Data.Content('basic')['default'];
+		let _cParagraphElem	= document.createElement('p');
+		let defaultContent	= Brow.Data.Content('basic')['default'];
 		_cParagraphElem.setAttribute('data-basic-preview', defaultContent);
 		return _cParagraphElem;
 	};
