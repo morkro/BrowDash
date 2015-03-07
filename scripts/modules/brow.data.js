@@ -1,7 +1,13 @@
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.Data
+ * @description	Stores all module related data like default content.
+ * @param			{Object} Brow
+ * @return			{Function} Header
+ * @return			{Function} Content
+ */
 Brow.Data = (function (Brow) {
+	'use strict';
+
 	/* Constants */
 	const _cardDefaultTitles = {
 		'basic': 'Storage all the things!',

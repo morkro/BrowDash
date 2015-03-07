@@ -1,7 +1,9 @@
-/* Because ES6: */
+/* Because 'const' in strict mode fails < Chrome 41 */
 /* jshint strict:false */
 
 (function (window, undefined) {
+	//'use strict';
+
 	/* Constants */
 	const TIMER					= document.querySelector('.trigger-timer');
 	const CONTENT				= document.querySelector('.trigger-content');

@@ -1,6 +1,3 @@
-/* Because ES6: */
-/* jshint strict:false */
-
 var Brow = window.Brow = {};
 
 /**
@@ -10,6 +7,8 @@ var Brow = window.Brow = {};
  * @return			{String}
  */
 Brow.GUID = (function () {
+	'use strict';
+	
 	const s4 = function s4 () {
 		return Math.floor((1 + Math.random()) * 0x10000)
 				.toString(16)
@@ -21,10 +20,16 @@ Brow.GUID = (function () {
 				s4() + '-' + s4() + s4() + s4();
 	};
 })();
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.Data
+ * @description	Stores all module related data like default content.
+ * @param			{Object} Brow
+ * @return			{Function} Header
+ * @return			{Function} Content
+ */
 Brow.Data = (function (Brow) {
+	'use strict';
+
 	/* Constants */
 	const _cardDefaultTitles = {
 		'basic': 'Storage all the things!',
@@ -65,10 +70,16 @@ Brow.Data = (function (Brow) {
 		Content: _getDefaultContent
 	};
 })(Brow);
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.Settings
+ * @description	Shows/hides the modal, saves and parses the users personal theming settings.
+ * @param			{Object} Brow
+ * @return			{Function} Open
+ * @return			{Function} Initial
+ */
 Brow.Settings = (function (Brow) {
+	'use strict';
+
 	/* Constants */
 	const OVERLAY	= document.querySelector('#brow__overlay');
 	const DIALOG	= document.querySelector('#brow__dialog');
@@ -226,12 +237,17 @@ Brow.Settings = (function (Brow) {
 		Initial: _initSettings
 	};
 })(Brow);
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.DateTimer
+ * @description	Creates a time string and refreshes it every second.
+ * @param			{Object} Brow
+ * @return			{Function} Append
+ */
 Brow.DateTimer = (function (Brow) {
+	'use strict';
+
 	/**
-	 * @description	Creates a string with current time.
+	 * @description	Creates a string with current time in HH:MM:SS
 	 * @private
 	 * @return			{String}
 	 */
@@ -262,11 +278,13 @@ Brow.DateTimer = (function (Brow) {
 		Append: _setElem
 	};
 })(Brow);
-/* Because ES6: */
-/* jshint strict:false */
-
 Brow.Module = (function (Brow) {
+	'use strict';
+
 	/* Constnats */
+	const AVAILABLE_MODULES = [
+		'basic', 'weather'
+	];
 
 	/* Variables */
 
@@ -281,18 +299,31 @@ Brow.Module = (function (Brow) {
 		return _cParagraphElem;
 	};
 
+	const _validateModuleEditMode = function (moduleType) {
+		console.log(moduleType);
+	};
+
 	/* Public API */
 	return {
-		Basic: _returnBasicModule
+		Basic: _returnBasicModule,
+		Edit: _validateModuleEditMode
 	};
 })(Brow);
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.Cards
+ * @description	Is responsible for general card management like creating new cards,
+ *                applying events, deleting/editing and saving them, saving/parsing content.
+ * @param			{Object} Brow
+ * @return			{Function} Initialise
+ * @return			{Function} Options
+ * @return			{Function} Create
+ */
 Brow.Cards = (function (Brow) {
+	'use strict';
+
 	/* Constants */
-	const MAIN = document.querySelector('#brow__content');
-	const OVERLAY = MAIN.querySelector('.content__overlay');
+	const MAIN		= document.querySelector('#brow__content');
+	const OVERLAY	= MAIN.querySelector('.content__overlay');
 
 	/* Variables */
 	var browCustom			= false;
@@ -401,17 +432,16 @@ Brow.Cards = (function (Brow) {
 	 */
 	const _activateCardEditMode = function (event) {
 		var _curCardType = browCardElem.getAttribute('data-module-type');
+
 		isEditMode = true;
 		browCardElem.classList.add('editmode');
 		OVERLAY.classList.add('show');
 		browCardEdit.parentNode.classList.add('hidden');
 		browCardSave.parentNode.classList.remove('hidden');
+		browCardSettings.style.display = null;
+		createButton.classList.add('editmode');
 
-		switch (_curCardType) {
-			case 'basic':
-				Brow.Module.Edit(_curCardType);
-				break;
-		}
+		Brow.Module.Edit( _curCardType );
 	};
 
 	/**
@@ -424,6 +454,8 @@ Brow.Cards = (function (Brow) {
 		OVERLAY.classList.remove('show');
 		browCardEdit.parentNode.classList.remove('hidden');
 		browCardSave.parentNode.classList.add('hidden');
+		browCardSettings.style.display = null;
+		createButton.classList.remove('editmode');
 	};
 
 	/**
@@ -433,7 +465,12 @@ Brow.Cards = (function (Brow) {
 	const _removeCard = function (event) {
 		event.preventDefault();
 		var _curCardGUI = browCardElem.getAttribute('data-module-guid');
+		var _isCreateBtnInEditMode = createButton.classList.contains('editmode');
 		// Remove item
+		if (_isCreateBtnInEditMode || isEditMode) {
+			createButton.classList.remove('editmode');
+		}
+		isEditMode = false;
 		OVERLAY.classList.remove('show');
 		localStorage.removeItem(_curCardGUI);
 		MAIN.removeChild(browCardElem);
@@ -576,10 +613,12 @@ Brow.Cards = (function (Brow) {
 		Create: _createCard
 	};
 })(Brow);
-/* Because ES6: */
+/* Because 'const' in strict mode fails < Chrome 41 */
 /* jshint strict:false */
 
 (function (window, undefined) {
+	//'use strict';
+
 	/* Constants */
 	const TIMER					= document.querySelector('.trigger-timer');
 	const CONTENT				= document.querySelector('.trigger-content');

@@ -1,9 +1,14 @@
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.DateTimer
+ * @description	Creates a time string and refreshes it every second.
+ * @param			{Object} Brow
+ * @return			{Function} Append
+ */
 Brow.DateTimer = (function (Brow) {
+	'use strict';
+
 	/**
-	 * @description	Creates a string with current time.
+	 * @description	Creates a string with current time in HH:MM:SS
 	 * @private
 	 * @return			{String}
 	 */

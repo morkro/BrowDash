@@ -3,7 +3,7 @@ A simple and customisable "new tab" Chrome extension using Google Material Desig
 
 ### Goals
 
-Having a full customisable dashboard with a set of different modules (cards) using bleeding edge technologies and Googles material design. The user can create new cards, change the order and theme of each card as well as the entire dashboards theme and delete cards.
+Having a full customisable dashboard with a set of different modules _(cards)_ using bleeding edge technologies and Googles material design. The user can create new cards, change the order and theme of each card as well as the entire dashboards theme and delete cards.
 
 ### Available cards (first draft)
 

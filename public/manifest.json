@@ -2,7 +2,7 @@
 	"manifest_version": 2,
 	"name": "BrowDash",
 	"description": "This extension creates a personal Dashboard when opening a new tab",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"author": "Moritz Kröger <@morkro>",
 	"icons": {
 		"16": "/assets/icons/icon-16.png",

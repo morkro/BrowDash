@@ -1,10 +1,18 @@
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.Cards
+ * @description	Is responsible for general card management like creating new cards,
+ *                applying events, deleting/editing and saving them, saving/parsing content.
+ * @param			{Object} Brow
+ * @return			{Function} Initialise
+ * @return			{Function} Options
+ * @return			{Function} Create
+ */
 Brow.Cards = (function (Brow) {
+	'use strict';
+
 	/* Constants */
-	const MAIN = document.querySelector('#brow__content');
-	const OVERLAY = MAIN.querySelector('.content__overlay');
+	const MAIN		= document.querySelector('#brow__content');
+	const OVERLAY	= MAIN.querySelector('.content__overlay');
 
 	/* Variables */
 	var browCustom			= false;
@@ -113,17 +121,16 @@ Brow.Cards = (function (Brow) {
 	 */
 	const _activateCardEditMode = function (event) {
 		var _curCardType = browCardElem.getAttribute('data-module-type');
+
 		isEditMode = true;
 		browCardElem.classList.add('editmode');
 		OVERLAY.classList.add('show');
 		browCardEdit.parentNode.classList.add('hidden');
 		browCardSave.parentNode.classList.remove('hidden');
+		browCardSettings.style.display = null;
+		createButton.classList.add('editmode');
 
-		switch (_curCardType) {
-			case 'basic':
-				Brow.Module.Edit(_curCardType);
-				break;
-		}
+		Brow.Module.Edit( _curCardType );
 	};
 
 	/**
@@ -136,6 +143,8 @@ Brow.Cards = (function (Brow) {
 		OVERLAY.classList.remove('show');
 		browCardEdit.parentNode.classList.remove('hidden');
 		browCardSave.parentNode.classList.add('hidden');
+		browCardSettings.style.display = null;
+		createButton.classList.remove('editmode');
 	};
 
 	/**
@@ -145,7 +154,12 @@ Brow.Cards = (function (Brow) {
 	const _removeCard = function (event) {
 		event.preventDefault();
 		var _curCardGUI = browCardElem.getAttribute('data-module-guid');
+		var _isCreateBtnInEditMode = createButton.classList.contains('editmode');
 		// Remove item
+		if (_isCreateBtnInEditMode || isEditMode) {
+			createButton.classList.remove('editmode');
+		}
+		isEditMode = false;
 		OVERLAY.classList.remove('show');
 		localStorage.removeItem(_curCardGUI);
 		MAIN.removeChild(browCardElem);

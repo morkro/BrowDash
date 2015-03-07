@@ -1,8 +1,10 @@
-/* Because ES6: */
-/* jshint strict:false */
-
 Brow.Module = (function (Brow) {
+	'use strict';
+
 	/* Constnats */
+	const AVAILABLE_MODULES = [
+		'basic', 'weather'
+	];
 
 	/* Variables */
 
@@ -17,8 +19,13 @@ Brow.Module = (function (Brow) {
 		return _cParagraphElem;
 	};
 
+	const _validateModuleEditMode = function (moduleType) {
+		console.log(moduleType);
+	};
+
 	/* Public API */
 	return {
-		Basic: _returnBasicModule
+		Basic: _returnBasicModule,
+		Edit: _validateModuleEditMode
 	};
 })(Brow);

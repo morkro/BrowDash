@@ -1,0 +1,6 @@
+#footer__add {
+	&.editmode {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+}

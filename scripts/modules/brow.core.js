@@ -1,6 +1,3 @@
-/* Because ES6: */
-/* jshint strict:false */
-
 var Brow = window.Brow = {};
 
 /**
@@ -10,6 +7,8 @@ var Brow = window.Brow = {};
  * @return			{String}
  */
 Brow.GUID = (function () {
+	'use strict';
+	
 	const s4 = function s4 () {
 		return Math.floor((1 + Math.random()) * 0x10000)
 				.toString(16)

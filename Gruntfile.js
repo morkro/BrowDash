@@ -32,34 +32,32 @@ module.exports = function(grunt) {
 			description: 'Chrome Dashboard Extension',
 			update: grunt.template.today('h:mm:s'),
 			directory: {
-				dist: {
+				dest: {
 					'public'	: 'public',
-					'assets'	: '<%= app.directory.dist.public %>/assets',
-					'scripts': '<%= app.directory.dist.public %>/scripts',
-					'css'		: '<%= app.directory.dist.public %>/css',
+					'assets'	: '<%= app.directory.dest.public %>/assets',
+					'scripts': '<%= app.directory.dest.public %>/scripts',
+					'css'		: '<%= app.directory.dest.public %>/css',
 				},
-				config: {
-					'sass'			: 'styles/sass',
-					'css'				: 'styles/css',
-					'assets'			: 'assets',	
-					'fonts'			: '<%= app.directory.config.assets %>/fonts',
-					'scripts'		: 'scripts',
-					'views'			: 'views'
+				build: {
+					'sass'	: 'styles/sass',
+					'css'		: 'styles/css',
+					'assets'	: 'assets',	
+					'fonts'	: '<%= app.directory.build.assets %>/fonts',
+					'scripts': 'scripts',
+					'views'	: 'views'
 				}
 			},
-			js: {
-				app: [
-					// Services
-					'<%= app.directory.config.scripts %>/browdash/brow.core.js',
-					'<%= app.directory.config.scripts %>/browdash/brow.data.js',
-					'<%= app.directory.config.scripts %>/browdash/brow.settings.js',
-					'<%= app.directory.config.scripts %>/browdash/brow.timer.js',
-					'<%= app.directory.config.scripts %>/browdash/brow.module.js',
-					'<%= app.directory.config.scripts %>/browdash/brow.cards.js',
-					// App initialisation
-					'<%= app.directory.config.scripts %>/app.init.js',
-				]
-			}
+			scripts: [
+				// Services
+				'<%= app.directory.build.scripts %>/modules/brow.core.js',
+				'<%= app.directory.build.scripts %>/modules/brow.data.js',
+				'<%= app.directory.build.scripts %>/modules/brow.settings.js',
+				'<%= app.directory.build.scripts %>/modules/brow.timer.js',
+				'<%= app.directory.build.scripts %>/modules/brow.module.js',
+				'<%= app.directory.build.scripts %>/modules/brow.cards.js',
+				// App initialisation
+				'<%= app.directory.build.scripts %>/app.init.js',
+			]
 		},
 
 		/**
@@ -69,19 +67,19 @@ module.exports = function(grunt) {
 		copy: {
 			html: {
 				expand	: true,
-				src		: '<%= app.directory.config.views %>/*.*',
-				dest		: '<%= app.directory.dist.public %>/',
+				src		: '<%= app.directory.build.views %>/*.*',
+				dest		: '<%= app.directory.dest.public %>/',
 				flatten	: true,
 				filter	: 'isFile'
 			},
 			assets: {
 				expand	: true,
-				src		: '<%= app.directory.config.assets %>/**/*.*',
-				dest		: '<%= app.directory.dist.public %>'
+				src		: '<%= app.directory.build.assets %>/**/*.*',
+				dest		: '<%= app.directory.dest.public %>'
 			},
 			manifest: {
 				src		: 'manifest.json',
-				dest		: '<%= app.directory.dist.public %>/manifest.json'
+				dest		: '<%= app.directory.dest.public %>/manifest.json'
 			}
 		},
 
@@ -91,7 +89,7 @@ module.exports = function(grunt) {
 		 */
 		clean: {
 			build: {
-				src: ['<%= app.directory.dist.public %>']
+				src: ['<%= app.directory.dest.public %>']
 			}
 		},
 
@@ -101,8 +99,8 @@ module.exports = function(grunt) {
 		 */
 		concat: {
 			app: {
-				src: '<%= app.js.app %>',
-				dest: '<%= app.directory.dist.scripts %>/app.js'
+				src: '<%= app.scripts %>',
+				dest: '<%= app.directory.dest.scripts %>/app.js'
 			},
 		},
 
@@ -119,7 +117,7 @@ module.exports = function(grunt) {
 				sub		: true,
 				esnext	: true
 			},
-			beforeconcat: '<%= app.directory.config.scripts %>/**/*.js'
+			beforeconcat: '<%= app.directory.build.scripts %>/**/*.js'
 		},
 
 		/**
@@ -131,8 +129,8 @@ module.exports = function(grunt) {
 				style: 'compact'
 			},
 			files: {
-				src	:  '<%= app.directory.config.sass %>/main.scss',
-				dest	: '<%= app.directory.config.css %>/main.unprefixed.css'
+				src	:  '<%= app.directory.build.sass %>/main.scss',
+				dest	: '<%= app.directory.build.css %>/main.unprefixed.css'
 			}
 		},
 
@@ -145,8 +143,8 @@ module.exports = function(grunt) {
 				browsers: ['last 2 Chrome versions']
 			},
 			files: {
-				src	: '<%= app.directory.config.css %>/main.unprefixed.css',
-				dest	: '<%= app.directory.config.css %>/main.css'
+				src	: '<%= app.directory.build.css %>/main.unprefixed.css',
+				dest	: '<%= app.directory.build.css %>/main.css'
 			}
 		},
 
@@ -161,9 +159,9 @@ module.exports = function(grunt) {
 				},
 				files: [{
 					expand	: true,
-					cwd		: '<%= app.directory.config.css %>',
+					cwd		: '<%= app.directory.build.css %>',
 					src		: 'main.css',
-					dest		: '<%= app.directory.dist.css %>',
+					dest		: '<%= app.directory.dest.css %>',
 					ext		: '.min.css'
 				}]
 			}
@@ -177,23 +175,23 @@ module.exports = function(grunt) {
 			markup: {
 				files: [
 					'*.html',
-					'<%= app.directory.config.views %>/**/*.html'
+					'<%= app.directory.build.views %>/**/*.html'
 				],
 				tasks: ['newer:copy:html']
 			},
 			css: {
 				files: [
-					'<%= app.directory.config.sass %>/**/*.scss',
-					'<%= app.directory.config.css %>/**/*.css'
+					'<%= app.directory.build.sass %>/**/*.scss',
+					'<%= app.directory.build.css %>/**/*.css'
 				],
 				tasks: ['css']
 			},
 			js: {
-				files: '<%= app.directory.config.scripts %>/**/*.js',
+				files: '<%= app.directory.build.scripts %>/**/*.js',
 				tasks: ['newer:jshint', 'newer:concat']
 			},
 			assets: {
-				files: '<%= app.directory.config.assets %>/**/*.*',
+				files: '<%= app.directory.build.assets %>/**/*.*',
 				tasks: ['newer:copy:assets']
 			}
 		},

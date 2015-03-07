@@ -1,7 +1,13 @@
-/* Because ES6: */
-/* jshint strict:false */
-
+/**
+ * @name				Brow.Settings
+ * @description	Shows/hides the modal, saves and parses the users personal theming settings.
+ * @param			{Object} Brow
+ * @return			{Function} Open
+ * @return			{Function} Initial
+ */
 Brow.Settings = (function (Brow) {
+	'use strict';
+
 	/* Constants */
 	const OVERLAY	= document.querySelector('#brow__overlay');
 	const DIALOG	= document.querySelector('#brow__dialog');
