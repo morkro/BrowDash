@@ -17,7 +17,6 @@
 		.module__content { padding: 0 20px 20px; }
 		.hidden { display: none; }
 	</style>
-	
 	<section>
 		<header class="module__heading">
 			<content select="h1"></content>
@@ -60,18 +59,20 @@
 
 <script>
 	(function() {
+		'use strict';
+		
 		var importDoc		= document.currentScript.ownerDocument;
 		var cardTemplate	= importDoc.querySelector('#card');
 		var CardProto		= Object.create(HTMLDivElement.prototype);
 		
 		CardProto.createdCallback = function () {
-			var root = this.createShadowRoot();
+			let root = this.createShadowRoot();
 			root.appendChild( document.importNode(cardTemplate.content, true) );
 			this.settings	= root.querySelector('.module__heading__settings');
 			this.edit		= root.querySelector('.heading__settings__edit');
 			this.save		= root.querySelector('.heading__settings__save');
 			this.remove		= root.querySelector('.heading__settings__remove');
-			var btn			= root.querySelector('.module__heading__button');
+			let btn			= root.querySelector('.module__heading__button');
 			btn.addEventListener('click', this.openSettings.bind(this));
 		};
 		CardProto.openSettings = function () {

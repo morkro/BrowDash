@@ -48,15 +48,15 @@ module.exports = function(grunt) {
 				}
 			},
 			scripts: [
-				// Services
+				/* Modules */
 				'<%= app.directory.build.scripts %>/modules/brow.core.js',
 				'<%= app.directory.build.scripts %>/modules/brow.data.js',
 				'<%= app.directory.build.scripts %>/modules/brow.settings.js',
 				'<%= app.directory.build.scripts %>/modules/brow.timer.js',
 				'<%= app.directory.build.scripts %>/modules/brow.module.js',
 				'<%= app.directory.build.scripts %>/modules/brow.cards.js',
-				// App initialisation
-				'<%= app.directory.build.scripts %>/app.init.js',
+				/* App initialisation */
+				'<%= app.directory.build.scripts %>/app.init.js'
 			]
 		},
 
