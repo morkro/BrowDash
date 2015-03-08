@@ -1,8 +1,5 @@
-/* Because 'const' in strict mode fails < Chrome 41 */
-/* jshint strict:false */
-
 (function (window, undefined) {
-	//'use strict';
+	'use strict';
 
 	/* Constants */
 	const TIMER					= document.querySelector('.trigger-timer');

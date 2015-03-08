@@ -13,10 +13,10 @@ Brow.DateTimer = (function (Brow) {
 	 * @return			{String}
 	 */
 	const _getTime = function () {
-		let _date = new Date();
-		let _dateHours = (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
-		let _dateMinutes = (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
-		let _dateSeconds = (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
+		let _date			= new Date();
+		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
+		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
+		let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
 
 		return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
 	};
