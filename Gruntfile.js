@@ -50,6 +50,7 @@ module.exports = function(grunt) {
 			scripts: [
 				/* Modules */
 				'<%= app.directory.build.scripts %>/modules/brow.core.js',
+				'<%= app.directory.build.scripts %>/modules/brow.guid.js',
 				'<%= app.directory.build.scripts %>/modules/brow.data.js',
 				'<%= app.directory.build.scripts %>/modules/brow.settings.js',
 				'<%= app.directory.build.scripts %>/modules/brow.timer.js',
@@ -80,6 +81,10 @@ module.exports = function(grunt) {
 			manifest: {
 				src		: 'manifest.json',
 				dest		: '<%= app.directory.dest.public %>/manifest.json'
+			},
+			components: {
+				src		: '<%= app.directory.build.scripts %>/components/card.js',
+				dest		: '<%= app.directory.dest.scripts %>/card.js'
 			}
 		},
 
@@ -187,8 +192,16 @@ module.exports = function(grunt) {
 				tasks: ['css']
 			},
 			js: {
-				files: '<%= app.directory.build.scripts %>/**/*.js',
+				files: [
+					'!<%= app.directory.build.scripts %>/components/*.js',
+					'<%= app.directory.build.scripts %>/modules/*.js',
+					'<%= app.directory.build.scripts %>/app.init.js'
+				],
 				tasks: ['newer:jshint', 'newer:concat']
+			},
+			components: {
+				files: '<%= app.directory.build.scripts %>/components/*.js',
+				tasks: ['newer:copy:components']
 			},
 			assets: {
 				files: '<%= app.directory.build.assets %>/**/*.*',

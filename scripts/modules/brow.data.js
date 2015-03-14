@@ -1,11 +1,11 @@
 /**
- * @name				Brow.Data
+ * @name				BrowDash.Data
  * @description	Stores all module related data like default content.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Header
  * @return			{Function} Content
  */
-Brow.Data = (function (Brow) {
+BrowDash.Data = (function (BrowDash) {
 	'use strict';
 
 	/* Constants */
@@ -14,6 +14,7 @@ Brow.Data = (function (Brow) {
 		'todo': 'Task list',
 		'weather': 'Weather'
 	};
+
 	const _cardDefaultContents = {
 		'basic': {
 			'default': 'What do you want to save?'
@@ -21,7 +22,7 @@ Brow.Data = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Data.Header
+	 * @name				BrowDash.Data.Header
 	 * @description	Returns the default title of each module
 	 * @public
 	 * @param			{String} type
@@ -32,7 +33,7 @@ Brow.Data = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Data.Content
+	 * @name				BrowDash.Data.Content
 	 * @description	Returns the default content of each module
 	 * @public
 	 * @param			{String} type
@@ -47,4 +48,4 @@ Brow.Data = (function (Brow) {
 		Header: _getDefaultHeader,
 		Content: _getDefaultContent
 	};
-})(Brow);
+})(BrowDash);

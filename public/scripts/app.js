@@ -1,18 +1,36 @@
-var Brow = window.Brow = {};
+(function (window) {
+	'use strict';
 
+	function BrowDash (options) {
+		if (!options) {
+			throw new Error('No options passed!');
+		}
+		
+		this.theme		= BrowDash.Settings.Initial( options.theme );
+		this.settings	= BrowDash.Settings.Open( options.settings );
+		this.timer		= BrowDash.DateTimer.Append( options.timer );
+		this.cards		= BrowDash.Cards.Options({
+			appendCards: options.content,
+			createCards: options.create
+		});
+		this.init = BrowDash.Cards.Initialise('BROW_CUSTOM');
+	}
+
+	window.BrowDash = BrowDash;
+
+})(window);
 /**
- * @name				Brow.GUID
+ * @name				BrowDash.GUID
  * @description	Returns a Globally Unique Identifer as string
  * @public
  * @return			{String}
  */
-Brow.GUID = (function () {
+BrowDash.GUID = (function () {
 	'use strict';
 	
 	const s4 = function s4 () {
 		return Math.floor((1 + Math.random()) * 0x10000)
-				.toString(16)
-				.substring(1);
+				.toString(16).substring(1);
 	};
 
 	return function() {
@@ -21,13 +39,13 @@ Brow.GUID = (function () {
 	};
 })();
 /**
- * @name				Brow.Data
+ * @name				BrowDash.Data
  * @description	Stores all module related data like default content.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Header
  * @return			{Function} Content
  */
-Brow.Data = (function (Brow) {
+BrowDash.Data = (function (BrowDash) {
 	'use strict';
 
 	/* Constants */
@@ -36,6 +54,7 @@ Brow.Data = (function (Brow) {
 		'todo': 'Task list',
 		'weather': 'Weather'
 	};
+
 	const _cardDefaultContents = {
 		'basic': {
 			'default': 'What do you want to save?'
@@ -43,7 +62,7 @@ Brow.Data = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Data.Header
+	 * @name				BrowDash.Data.Header
 	 * @description	Returns the default title of each module
 	 * @public
 	 * @param			{String} type
@@ -54,7 +73,7 @@ Brow.Data = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Data.Content
+	 * @name				BrowDash.Data.Content
 	 * @description	Returns the default content of each module
 	 * @public
 	 * @param			{String} type
@@ -69,15 +88,15 @@ Brow.Data = (function (Brow) {
 		Header: _getDefaultHeader,
 		Content: _getDefaultContent
 	};
-})(Brow);
+})(BrowDash);
 /**
- * @name				Brow.Settings
+ * @name				BrowDash.Settings
  * @description	Shows/hides the modal, saves and parses the users personal theming settings.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Open
  * @return			{Function} Initial
  */
-Brow.Settings = (function (Brow) {
+BrowDash.Settings = (function (BrowDash) {
 	'use strict';
 
 	/* Constants */
@@ -85,6 +104,7 @@ Brow.Settings = (function (Brow) {
 	const DIALOG	= document.querySelector('#brow__dialog');
 	const SIDEBAR	= document.querySelector('.dialog__sidebar__list');
 	const THEME		= document.querySelector('.settings__theme');
+	const BROW_KEY = 'BROW_THEME';
 
 	/* Variables */
 	var settingsBtn	= null;
@@ -123,7 +143,7 @@ Brow.Settings = (function (Brow) {
 	 * @return			{Object}
 	 */
 	const _isCustomTheme = function () {
-		let CUSTOM = localStorage['BROW_THEME'];
+		let CUSTOM = localStorage[BROW_KEY];
 		return CUSTOM;
 	};
 
@@ -148,7 +168,7 @@ Brow.Settings = (function (Brow) {
 	 * @param			{String} storage
 	 */
 	const _updateThemeFromStorage = function (storage) {
-		storage = JSON.parse(localStorage['BROW_THEME']);
+		storage = JSON.parse(localStorage[BROW_KEY]);
 		document.body.className = '';
 		document.body.classList.add('theme-'+ storage.theme);
 
@@ -178,7 +198,7 @@ Brow.Settings = (function (Brow) {
 	const _chooseTheme = function (event) {
 		event.preventDefault();
 		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-		localStorage['BROW_THEME'] = JSON.stringify(_themeColor);
+		localStorage[BROW_KEY] = JSON.stringify(_themeColor);
 		_updateAndValidateTheme(_themeColor);
 	};
 
@@ -207,7 +227,7 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Settings.Initial
+	 * @name				BrowDash.Settings.Initial
 	 *	@description	Updates the current theme.
 	 * @public
 	 * @param			{Object} settings
@@ -218,7 +238,7 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Settings.Open
+	 * @name				BrowDash.Settings.Open
 	 *	@description	Adds events
 	 * @public
 	 * @param			{HTMLElement} elem
@@ -236,14 +256,14 @@ Brow.Settings = (function (Brow) {
 		Open: _addEvents,
 		Initial: _initSettings
 	};
-})(Brow);
+})(BrowDash);
 /**
- * @name				Brow.DateTimer
+ * @name				BrowDash.DateTimer
  * @description	Creates a time string and refreshes it every second.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Append
  */
-Brow.DateTimer = (function (Brow) {
+BrowDash.DateTimer = (function (BrowDash) {
 	'use strict';
 
 	/**
@@ -261,7 +281,7 @@ Brow.DateTimer = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.DateTimer.Append
+	 * @name				BrowDash.DateTimer.Append
 	 * @description	Sets the element in which the time should be displayed.
 	 * @public
 	 * @param			{Element} elem
@@ -277,8 +297,8 @@ Brow.DateTimer = (function (Brow) {
 	return {
 		Append: _setElem
 	};
-})(Brow);
-Brow.Module = (function (Brow) {
+})(BrowDash);
+BrowDash.Module = (function (BrowDash) {
 	'use strict';
 
 	/* Constnats */
@@ -287,38 +307,103 @@ Brow.Module = (function (Brow) {
 	];
 
 	/* Variables */
+	var curCardType = null;
+	var curCardElem = null;
+	var curBasicModule = {
+		headline: null,
+		content: null
+	};
 
 	/**
-	 * Creates a basic module containing a <p> tag.
+	 * @description	Creates a basic module containing a <p> tag.
+	 * @private
 	 * @return {HTMLElement}
 	 */
 	const _returnBasicModule = function () {
 		let _cParagraphElem	= document.createElement('p');
-		let defaultContent	= Brow.Data.Content('basic')['default'];
-		_cParagraphElem.setAttribute('data-basic-preview', defaultContent);
+		let _defaultContent	= BrowDash.Data.Content('basic')['default'];
+		_cParagraphElem.setAttribute('data-basic-preview', _defaultContent);
 		return _cParagraphElem;
 	};
 
-	const _validateModuleEditMode = function (moduleType) {
-		console.log(moduleType);
+	/**
+	 * @description	Validates the given object and calls different editing functions.
+	 * @private
+	 * @param  {Object} options
+	 */
+	const _validateModuleEditMode = function (options) {
+		if (!options || typeof options !== 'object') {
+			throw new Error('No options passed!');
+		}
+		curCardType = options.type;
+		curCardElem = options.elem;
+
+		if (AVAILABLE_MODULES[curCardType]) {
+			switch (curCardType) {
+				case 'basic':
+					_activateBasicEditMode(curCardElem);
+					break;
+			}
+		} else {
+			throw new Error('Module ['+ curCardType + '] isn\'t available!');
+		}
+	};
+
+	/**
+	 * [_validateModuleSaving description]
+	 * @param  {[type]} elem [description]
+	 * @return {[type]}      [description]
+	 */
+	const _validateModuleSaving = function (elem) {
+		switch (curCardType) {
+			case 'basic':
+				_saveBasicState();
+				break;
+		}
+	};
+
+	/**
+	 * [_saveBasicState description]
+	 * @param  {[type]} cardElem [description]
+	 * @return {[type]}          [description]
+	 */
+	const _saveBasicState = function (cardElem) {
+		curBasicModule['headline'].removeAttribute('contenteditable');
+		curBasicModule['content'].removeAttribute('contenteditable');
+		curBasicModule['headline']	= null;
+		curBasicModule['content']	= null;
+		curCardElem						= null;
+	};
+
+	/**
+	 * [_activateBasicEditMode description]
+	 * @param  {[type]} cardElem [description]
+	 * @return {[type]}          [description]
+	 */
+	const _activateBasicEditMode = function (cardElem) {
+		curBasicModule['headline']	= cardElem.querySelector('h1');
+		curBasicModule['content']	= cardElem.querySelector('p');
+		curBasicModule['headline'].setAttribute('contenteditable', true);
+		curBasicModule['content'].setAttribute('contenteditable', true);
 	};
 
 	/* Public API */
 	return {
 		Basic: _returnBasicModule,
-		Edit: _validateModuleEditMode
+		Edit: _validateModuleEditMode,
+		Save: _validateModuleSaving
 	};
-})(Brow);
+})(BrowDash);
 /**
- * @name				Brow.Cards
+ * @name				BrowDash.Cards
  * @description	Is responsible for general card management like creating new cards,
  *                applying events, deleting/editing and saving them, saving/parsing content.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Initialise
  * @return			{Function} Options
  * @return			{Function} Create
  */
-Brow.Cards = (function (Brow) {
+BrowDash.Cards = (function (BrowDash) {
 	'use strict';
 
 	/* Constants */
@@ -326,47 +411,45 @@ Brow.Cards = (function (Brow) {
 	const OVERLAY	= MAIN.querySelector('.content__overlay');
 
 	/* Variables */
-	var browCustom			= false;
-	var browCardCount		= 0;
-
-	var browCardElem		= null;
-	var browCardSettings	= null;
-	var browCardEdit		= null;
-	var browCardSave		= null;
-	var browCardRemove	= null;
-	var browCustomKey		= null;
+	var BrowDashCustom			= false;
+	var BrowDashCardCount		= 0;
 	
-	var appContent			= null; 
-	var createButton		= null;
-	var isEditMode			= false;
+	var BrowDashCardElem			= null;
+	var BrowDashCardSettings	= null;
+	var BrowDashCardEdit			= null;
+	var BrowDashCardSave			= null;
+	var BrowDashCardRemove		= null;
+	var BrowDashCustomKey		= null;
+	
+	var appContent					= null; 
+	var createButton				= null;
+	var isEditMode					= false;
 
 	/**
-	 * @name				Brow.Cards.Options
+	 * @name				BrowDash.Cards.Options
 	 * @description	Sets all elements to variables.
 	 * @public
 	 * @param			{Object} options
 	 */
 	const _setOptions = function (options) {
-		appContent = options.appendCards;
-		createButton = options.createCards;
+		appContent		= options.appendCards;
+		createButton	= options.createCards;
 
 		/* Add events */
 		createButton.addEventListener('click', _addNewCard);
 		//MAIN.addEventListener('keyup', _saveCardsToStorage);
 		document.documentElement.addEventListener('click', _closeCardSettings);
-
-		return this;
 	};
 
 	/**
-	 * @name				Brow.Cards.Init
+	 * @name				BrowDash.Cards.Initialise
 	 * @description	Checks localStorage and loads the users cards
 	 * @public
 	 * @param			{Object} storage
 	 */
 	const _initialiseCards = function (storage) {
-		browCustomKey = storage;
-		if (!localStorage[browCustomKey]) {
+		BrowDashCustomKey = storage;
+		if (!localStorage[BrowDashCustomKey]) {
 			_createCard({ type: 'basic' });
 		} else {
 			_parseCardsFromStorage();
@@ -374,7 +457,7 @@ Brow.Cards = (function (Brow) {
 	};
 
 	/**
-	 * Removes style attribute on settings container
+	 * @description	Removes style attribute on settings container
 	 * @private
 	 * @param  {Object} event
 	 */
@@ -382,89 +465,97 @@ Brow.Cards = (function (Brow) {
 		let settingsAreVisible	= null;
 		let targetIsNotBtn		= null;
 
-		if (browCardSettings) {
-			settingsAreVisible	= browCardSettings.style.display === 'block';
-			targetIsNotBtn			= event.target !== browCardElem;
+		if (BrowDashCardSettings) {
+			settingsAreVisible	= BrowDashCardSettings.style.display === 'block';
+			targetIsNotBtn			= event.target !== BrowDashCardElem;
 			if (targetIsNotBtn && settingsAreVisible) {
-				browCardSettings.style.display = null;
+				BrowDashCardSettings.style.display = null;
 			}
 		}
 	};
 
 	/**
-	 * Removes all previous stored card settings
+	 * @description	Removes all previous stored card settings
 	 * @private
 	 */
 	const _removePrevCardSettings = function () {
-		if (browCardElem !== null) {
-			browCardElem		= null;
-			browCardSettings.style.display = null;
-			browCardSettings	= null;
-			browCardEdit		= null;
-			browCardSave		= null;
-			browCardRemove		= null;
+		if (BrowDashCardElem !== null) {
+			BrowDashCardElem		= null;
+			BrowDashCardSettings.style.display = null;
+			BrowDashCardSettings	= null;
+			BrowDashCardEdit		= null;
+			BrowDashCardSave		= null;
+			BrowDashCardRemove	= null;
 		}
 	};
 
 	/**
-	 * Sets eventListener on current card element.
+	 * @description	Sets eventListener on current card element.
+	 * @private
 	 * @param {Object} event
 	 */
 	const _setCardEvents = function (event) {
 		// If previous settings aren't closed yet.
 		_removePrevCardSettings();
 
-		browCardSettings	= event.target.settings;
-		browCardEdit		= event.target.edit;
-		browCardSave		= event.target.save;
-		browCardRemove		= event.target.remove;
-		browCardElem		= event.target;
+		BrowDashCardSettings	= event.target.settings;
+		BrowDashCardEdit		= event.target.edit;
+		BrowDashCardSave		= event.target.save;
+		BrowDashCardRemove	= event.target.remove;
+		BrowDashCardElem		= event.target;
 
-		browCardEdit.addEventListener('click', _activateCardEditMode);
-		browCardSave.addEventListener('click', _saveCardChanges);
-		browCardRemove.addEventListener('click', _removeCard);
-		browCardSettings.style.display = 'block';
+		BrowDashCardEdit.addEventListener('click', _activateCardEditMode);
+		BrowDashCardSave.addEventListener('click', _saveCardChanges);
+		BrowDashCardRemove.addEventListener('click', _removeCard);
+		BrowDashCardSettings.style.display = 'block';
 	};
 
 	/**
-	 * Shows the save button and makes editing possible.
+	 * @description	Shows the save button and makes editing possible.
+	 * @private
 	 * @param  {Object} event
 	 */
 	const _activateCardEditMode = function (event) {
-		let _curCardType = browCardElem.getAttribute('data-module-type');
+		let _curCardType = BrowDashCardElem.getAttribute('data-module-type');
 
 		isEditMode = true;
-		browCardElem.classList.add('editmode');
+		BrowDashCardElem.classList.add('editmode');
 		OVERLAY.classList.add('show');
-		browCardEdit.parentNode.classList.add('hidden');
-		browCardSave.parentNode.classList.remove('hidden');
-		browCardSettings.style.display = null;
+		BrowDashCardEdit.parentNode.classList.add('hidden');
+		BrowDashCardSave.parentNode.classList.remove('hidden');
+		BrowDashCardSettings.style.display = null;
 		createButton.classList.add('editmode');
 
-		Brow.Module.Edit( _curCardType );
+		BrowDash.Module.Edit({
+			type: _curCardType,
+			elem: BrowDashCardElem
+		});
 	};
 
 	/**
-	 * Shows the edit button and saves the content to localStorage.
+	 * @description	Shows the edit button and saves the content to localStorage.
+	 * @private
 	 * @param  {Object} event
 	 */
 	const _saveCardChanges = function (event) {
 		isEditMode = false;
-		browCardElem.classList.remove('editmode');
+		BrowDashCardElem.classList.remove('editmode');
 		OVERLAY.classList.remove('show');
-		browCardEdit.parentNode.classList.remove('hidden');
-		browCardSave.parentNode.classList.add('hidden');
-		browCardSettings.style.display = null;
+		BrowDashCardEdit.parentNode.classList.remove('hidden');
+		BrowDashCardSave.parentNode.classList.add('hidden');
+		BrowDashCardSettings.style.display = null;
 		createButton.classList.remove('editmode');
+		BrowDash.Module.Save();
 	};
 
 	/**
-	 * Removes a card from localStorage.
+	 * @description	Removes a card from localStorage.
+	 * @private
 	 * @param  {Object} event
 	 */
 	const _removeCard = function (event) {
 		event.preventDefault();
-		let _curCardGUI = browCardElem.getAttribute('data-module-guid');
+		let _curCardGUI = BrowDashCardElem.getAttribute('data-module-guid');
 		let _isCreateBtnInEditMode = createButton.classList.contains('editmode');
 		// Remove item
 		if (_isCreateBtnInEditMode || isEditMode) {
@@ -473,7 +564,7 @@ Brow.Cards = (function (Brow) {
 		isEditMode = false;
 		OVERLAY.classList.remove('show');
 		localStorage.removeItem(_curCardGUI);
-		MAIN.removeChild(browCardElem);
+		MAIN.removeChild(BrowDashCardElem);
 	};
 
 	/**
@@ -529,23 +620,23 @@ Brow.Cards = (function (Brow) {
 	 * @private
 	 */
 	const _setCustomBool = function () {
-		if (!browCustom) {
-			browCustom = true;
-			localStorage[browCustomKey] = true;
+		if (!BrowDashCustom) {
+			BrowDashCustom = true;
+			localStorage[BrowDashCustomKey] = true;
 		}
 	};
 
 	/**
-	 * @name				Brow.Cards.Create
+	 * @name				BrowDash.Cards.Create
 	 * @description	Creates a new card module
 	 * @public
 	 * @param			{Object} config
 	 */
 	const _createCard = function (config) {
 		let _cardType	= (config.type) ? config.type : 'basic';
-		let _cardTitle	= (config.title) ? config.title : Brow.Data.Header(config.type);
+		let _cardTitle	= (config.title) ? config.title : BrowDash.Data.Header(config.type);
 		let _cardCount	= (config.count) ? config.count : 1;
-		let _cardGUID	= (config.guid) ? config.guid : Brow.GUID();
+		let _cardGUID	= (config.guid) ? config.guid : BrowDash.GUID();
 		let _cardWrapper = null;
 
 		for (let i = _cardCount; i--;) {
@@ -571,7 +662,7 @@ Brow.Cards = (function (Brow) {
 	 */	
 	const _createCardHeadline = function (title) {
 		let _cHeadElem = document.createElement('h1');
-		if (typeof title !== 'string') title.toString();
+		//if (typeof title !== 'string' && typeof title !== undefined) title.toString();
 		_cHeadElem.textContent = title;
 		return _cHeadElem;
 	};
@@ -582,10 +673,10 @@ Brow.Cards = (function (Brow) {
 
 		switch (type) {
 			case 'basic':
-				container.appendChild( Brow.Module.Basic() );
+				container.appendChild( BrowDash.Module.Basic() );
 				break;
 			default:
-				container.appendChild( Brow.Module.Basic() );
+				container.appendChild( BrowDash.Module.Basic() );
 				break;
 		}
 
@@ -612,30 +703,16 @@ Brow.Cards = (function (Brow) {
 		Options: _setOptions,
 		Create: _createCard
 	};
-})(Brow);
-(function (window, undefined) {
+})(BrowDash);
+(function (window) {
 	'use strict';
 
-	/* Constants */
-	const TIMER					= document.querySelector('.trigger-timer');
-	const CONTENT				= document.querySelector('.trigger-content');
-	const ADD_BUTTON			= document.querySelector('.trigger-cards');
-	const SETTINGS_BUTTON	= document.querySelector('.trigger-settings');
+	const APP = new BrowDash({
+		theme: 'blue-a400',
+		timer: document.querySelector('.trigger-timer'),
+		settings: document.querySelector('.trigger-settings'),
+		create: document.querySelector('.trigger-newcard'),
+		content: document.querySelector('.trigger-content')
+	});
 
-	/* Timer in header */
-	Brow.DateTimer.Append(TIMER);
-
-	/* Sets default theme and binds element to show the settings dialog */
-	Brow.Settings.Initial({ theme: 'blue-a400' });
-	Brow.Settings.Open(SETTINGS_BUTTON);
-
-	/* 
-	 * Gets several options to display the cards & sets the
-	 * string as a condition to initialse the app.
-	 */
-	Brow.Cards.Options({
-		appendCards: CONTENT,
-		createCards: ADD_BUTTON
-	}).Initialise('BROW_CUSTOM');
-
-})(window, undefined);
+})(window);

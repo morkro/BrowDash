@@ -1,11 +1,11 @@
 /**
- * @name				Brow.Settings
+ * @name				BrowDash.Settings
  * @description	Shows/hides the modal, saves and parses the users personal theming settings.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Open
  * @return			{Function} Initial
  */
-Brow.Settings = (function (Brow) {
+BrowDash.Settings = (function (BrowDash) {
 	'use strict';
 
 	/* Constants */
@@ -13,6 +13,7 @@ Brow.Settings = (function (Brow) {
 	const DIALOG	= document.querySelector('#brow__dialog');
 	const SIDEBAR	= document.querySelector('.dialog__sidebar__list');
 	const THEME		= document.querySelector('.settings__theme');
+	const BROW_KEY = 'BROW_THEME';
 
 	/* Variables */
 	var settingsBtn	= null;
@@ -51,7 +52,7 @@ Brow.Settings = (function (Brow) {
 	 * @return			{Object}
 	 */
 	const _isCustomTheme = function () {
-		let CUSTOM = localStorage['BROW_THEME'];
+		let CUSTOM = localStorage[BROW_KEY];
 		return CUSTOM;
 	};
 
@@ -76,7 +77,7 @@ Brow.Settings = (function (Brow) {
 	 * @param			{String} storage
 	 */
 	const _updateThemeFromStorage = function (storage) {
-		storage = JSON.parse(localStorage['BROW_THEME']);
+		storage = JSON.parse(localStorage[BROW_KEY]);
 		document.body.className = '';
 		document.body.classList.add('theme-'+ storage.theme);
 
@@ -106,7 +107,7 @@ Brow.Settings = (function (Brow) {
 	const _chooseTheme = function (event) {
 		event.preventDefault();
 		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-		localStorage['BROW_THEME'] = JSON.stringify(_themeColor);
+		localStorage[BROW_KEY] = JSON.stringify(_themeColor);
 		_updateAndValidateTheme(_themeColor);
 	};
 
@@ -135,7 +136,7 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Settings.Initial
+	 * @name				BrowDash.Settings.Initial
 	 *	@description	Updates the current theme.
 	 * @public
 	 * @param			{Object} settings
@@ -146,7 +147,7 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.Settings.Open
+	 * @name				BrowDash.Settings.Open
 	 *	@description	Adds events
 	 * @public
 	 * @param			{HTMLElement} elem
@@ -164,4 +165,4 @@ Brow.Settings = (function (Brow) {
 		Open: _addEvents,
 		Initial: _initSettings
 	};
-})(Brow);
+})(BrowDash);

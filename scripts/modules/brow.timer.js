@@ -1,10 +1,10 @@
 /**
- * @name				Brow.DateTimer
+ * @name				BrowDash.DateTimer
  * @description	Creates a time string and refreshes it every second.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Append
  */
-Brow.DateTimer = (function (Brow) {
+BrowDash.DateTimer = (function (BrowDash) {
 	'use strict';
 
 	/**
@@ -22,7 +22,7 @@ Brow.DateTimer = (function (Brow) {
 	};
 
 	/**
-	 * @name				Brow.DateTimer.Append
+	 * @name				BrowDash.DateTimer.Append
 	 * @description	Sets the element in which the time should be displayed.
 	 * @public
 	 * @param			{Element} elem
@@ -38,4 +38,4 @@ Brow.DateTimer = (function (Brow) {
 	return {
 		Append: _setElem
 	};
-})(Brow);
+})(BrowDash);

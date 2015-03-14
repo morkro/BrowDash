@@ -1,22 +1,21 @@
-var Brow = window.Brow = {};
-
-/**
- * @name				Brow.GUID
- * @description	Returns a Globally Unique Identifer as string
- * @public
- * @return			{String}
- */
-Brow.GUID = (function () {
+(function (window) {
 	'use strict';
-	
-	const s4 = function s4 () {
-		return Math.floor((1 + Math.random()) * 0x10000)
-				.toString(16)
-				.substring(1);
-	};
 
-	return function() {
-		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-				s4() + '-' + s4() + s4() + s4();
-	};
-})();
+	function BrowDash (options) {
+		if (!options) {
+			throw new Error('No options passed!');
+		}
+		
+		this.theme		= BrowDash.Settings.Initial( options.theme );
+		this.settings	= BrowDash.Settings.Open( options.settings );
+		this.timer		= BrowDash.DateTimer.Append( options.timer );
+		this.cards		= BrowDash.Cards.Options({
+			appendCards: options.content,
+			createCards: options.create
+		});
+		this.init = BrowDash.Cards.Initialise('BROW_CUSTOM');
+	}
+
+	window.BrowDash = BrowDash;
+
+})(window);

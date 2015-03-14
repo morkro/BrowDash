@@ -1,13 +1,13 @@
 /**
- * @name				Brow.Cards
+ * @name				BrowDash.Cards
  * @description	Is responsible for general card management like creating new cards,
  *                applying events, deleting/editing and saving them, saving/parsing content.
- * @param			{Object} Brow
+ * @param			{Object} BrowDash
  * @return			{Function} Initialise
  * @return			{Function} Options
  * @return			{Function} Create
  */
-Brow.Cards = (function (Brow) {
+BrowDash.Cards = (function (BrowDash) {
 	'use strict';
 
 	/* Constants */
@@ -15,47 +15,45 @@ Brow.Cards = (function (Brow) {
 	const OVERLAY	= MAIN.querySelector('.content__overlay');
 
 	/* Variables */
-	var browCustom			= false;
-	var browCardCount		= 0;
-
-	var browCardElem		= null;
-	var browCardSettings	= null;
-	var browCardEdit		= null;
-	var browCardSave		= null;
-	var browCardRemove	= null;
-	var browCustomKey		= null;
+	var BrowDashCustom			= false;
+	var BrowDashCardCount		= 0;
 	
-	var appContent			= null; 
-	var createButton		= null;
-	var isEditMode			= false;
+	var BrowDashCardElem			= null;
+	var BrowDashCardSettings	= null;
+	var BrowDashCardEdit			= null;
+	var BrowDashCardSave			= null;
+	var BrowDashCardRemove		= null;
+	var BrowDashCustomKey		= null;
+	
+	var appContent					= null; 
+	var createButton				= null;
+	var isEditMode					= false;
 
 	/**
-	 * @name				Brow.Cards.Options
+	 * @name				BrowDash.Cards.Options
 	 * @description	Sets all elements to variables.
 	 * @public
 	 * @param			{Object} options
 	 */
 	const _setOptions = function (options) {
-		appContent = options.appendCards;
-		createButton = options.createCards;
+		appContent		= options.appendCards;
+		createButton	= options.createCards;
 
 		/* Add events */
 		createButton.addEventListener('click', _addNewCard);
 		//MAIN.addEventListener('keyup', _saveCardsToStorage);
 		document.documentElement.addEventListener('click', _closeCardSettings);
-
-		return this;
 	};
 
 	/**
-	 * @name				Brow.Cards.Init
+	 * @name				BrowDash.Cards.Initialise
 	 * @description	Checks localStorage and loads the users cards
 	 * @public
 	 * @param			{Object} storage
 	 */
 	const _initialiseCards = function (storage) {
-		browCustomKey = storage;
-		if (!localStorage[browCustomKey]) {
+		BrowDashCustomKey = storage;
+		if (!localStorage[BrowDashCustomKey]) {
 			_createCard({ type: 'basic' });
 		} else {
 			_parseCardsFromStorage();
@@ -63,7 +61,7 @@ Brow.Cards = (function (Brow) {
 	};
 
 	/**
-	 * Removes style attribute on settings container
+	 * @description	Removes style attribute on settings container
 	 * @private
 	 * @param  {Object} event
 	 */
@@ -71,89 +69,97 @@ Brow.Cards = (function (Brow) {
 		let settingsAreVisible	= null;
 		let targetIsNotBtn		= null;
 
-		if (browCardSettings) {
-			settingsAreVisible	= browCardSettings.style.display === 'block';
-			targetIsNotBtn			= event.target !== browCardElem;
+		if (BrowDashCardSettings) {
+			settingsAreVisible	= BrowDashCardSettings.style.display === 'block';
+			targetIsNotBtn			= event.target !== BrowDashCardElem;
 			if (targetIsNotBtn && settingsAreVisible) {
-				browCardSettings.style.display = null;
+				BrowDashCardSettings.style.display = null;
 			}
 		}
 	};
 
 	/**
-	 * Removes all previous stored card settings
+	 * @description	Removes all previous stored card settings
 	 * @private
 	 */
 	const _removePrevCardSettings = function () {
-		if (browCardElem !== null) {
-			browCardElem		= null;
-			browCardSettings.style.display = null;
-			browCardSettings	= null;
-			browCardEdit		= null;
-			browCardSave		= null;
-			browCardRemove		= null;
+		if (BrowDashCardElem !== null) {
+			BrowDashCardElem		= null;
+			BrowDashCardSettings.style.display = null;
+			BrowDashCardSettings	= null;
+			BrowDashCardEdit		= null;
+			BrowDashCardSave		= null;
+			BrowDashCardRemove	= null;
 		}
 	};
 
 	/**
-	 * Sets eventListener on current card element.
+	 * @description	Sets eventListener on current card element.
+	 * @private
 	 * @param {Object} event
 	 */
 	const _setCardEvents = function (event) {
 		// If previous settings aren't closed yet.
 		_removePrevCardSettings();
 
-		browCardSettings	= event.target.settings;
-		browCardEdit		= event.target.edit;
-		browCardSave		= event.target.save;
-		browCardRemove		= event.target.remove;
-		browCardElem		= event.target;
+		BrowDashCardSettings	= event.target.settings;
+		BrowDashCardEdit		= event.target.edit;
+		BrowDashCardSave		= event.target.save;
+		BrowDashCardRemove	= event.target.remove;
+		BrowDashCardElem		= event.target;
 
-		browCardEdit.addEventListener('click', _activateCardEditMode);
-		browCardSave.addEventListener('click', _saveCardChanges);
-		browCardRemove.addEventListener('click', _removeCard);
-		browCardSettings.style.display = 'block';
+		BrowDashCardEdit.addEventListener('click', _activateCardEditMode);
+		BrowDashCardSave.addEventListener('click', _saveCardChanges);
+		BrowDashCardRemove.addEventListener('click', _removeCard);
+		BrowDashCardSettings.style.display = 'block';
 	};
 
 	/**
-	 * Shows the save button and makes editing possible.
+	 * @description	Shows the save button and makes editing possible.
+	 * @private
 	 * @param  {Object} event
 	 */
 	const _activateCardEditMode = function (event) {
-		let _curCardType = browCardElem.getAttribute('data-module-type');
+		let _curCardType = BrowDashCardElem.getAttribute('data-module-type');
 
 		isEditMode = true;
-		browCardElem.classList.add('editmode');
+		BrowDashCardElem.classList.add('editmode');
 		OVERLAY.classList.add('show');
-		browCardEdit.parentNode.classList.add('hidden');
-		browCardSave.parentNode.classList.remove('hidden');
-		browCardSettings.style.display = null;
+		BrowDashCardEdit.parentNode.classList.add('hidden');
+		BrowDashCardSave.parentNode.classList.remove('hidden');
+		BrowDashCardSettings.style.display = null;
 		createButton.classList.add('editmode');
 
-		Brow.Module.Edit( _curCardType );
+		BrowDash.Module.Edit({
+			type: _curCardType,
+			elem: BrowDashCardElem
+		});
 	};
 
 	/**
-	 * Shows the edit button and saves the content to localStorage.
+	 * @description	Shows the edit button and saves the content to localStorage.
+	 * @private
 	 * @param  {Object} event
 	 */
 	const _saveCardChanges = function (event) {
 		isEditMode = false;
-		browCardElem.classList.remove('editmode');
+		BrowDashCardElem.classList.remove('editmode');
 		OVERLAY.classList.remove('show');
-		browCardEdit.parentNode.classList.remove('hidden');
-		browCardSave.parentNode.classList.add('hidden');
-		browCardSettings.style.display = null;
+		BrowDashCardEdit.parentNode.classList.remove('hidden');
+		BrowDashCardSave.parentNode.classList.add('hidden');
+		BrowDashCardSettings.style.display = null;
 		createButton.classList.remove('editmode');
+		BrowDash.Module.Save();
 	};
 
 	/**
-	 * Removes a card from localStorage.
+	 * @description	Removes a card from localStorage.
+	 * @private
 	 * @param  {Object} event
 	 */
 	const _removeCard = function (event) {
 		event.preventDefault();
-		let _curCardGUI = browCardElem.getAttribute('data-module-guid');
+		let _curCardGUI = BrowDashCardElem.getAttribute('data-module-guid');
 		let _isCreateBtnInEditMode = createButton.classList.contains('editmode');
 		// Remove item
 		if (_isCreateBtnInEditMode || isEditMode) {
@@ -162,7 +168,7 @@ Brow.Cards = (function (Brow) {
 		isEditMode = false;
 		OVERLAY.classList.remove('show');
 		localStorage.removeItem(_curCardGUI);
-		MAIN.removeChild(browCardElem);
+		MAIN.removeChild(BrowDashCardElem);
 	};
 
 	/**
@@ -218,23 +224,23 @@ Brow.Cards = (function (Brow) {
 	 * @private
 	 */
 	const _setCustomBool = function () {
-		if (!browCustom) {
-			browCustom = true;
-			localStorage[browCustomKey] = true;
+		if (!BrowDashCustom) {
+			BrowDashCustom = true;
+			localStorage[BrowDashCustomKey] = true;
 		}
 	};
 
 	/**
-	 * @name				Brow.Cards.Create
+	 * @name				BrowDash.Cards.Create
 	 * @description	Creates a new card module
 	 * @public
 	 * @param			{Object} config
 	 */
 	const _createCard = function (config) {
 		let _cardType	= (config.type) ? config.type : 'basic';
-		let _cardTitle	= (config.title) ? config.title : Brow.Data.Header(config.type);
+		let _cardTitle	= (config.title) ? config.title : BrowDash.Data.Header(config.type);
 		let _cardCount	= (config.count) ? config.count : 1;
-		let _cardGUID	= (config.guid) ? config.guid : Brow.GUID();
+		let _cardGUID	= (config.guid) ? config.guid : BrowDash.GUID();
 		let _cardWrapper = null;
 
 		for (let i = _cardCount; i--;) {
@@ -260,7 +266,7 @@ Brow.Cards = (function (Brow) {
 	 */	
 	const _createCardHeadline = function (title) {
 		let _cHeadElem = document.createElement('h1');
-		if (typeof title !== 'string') title.toString();
+		//if (typeof title !== 'string' && typeof title !== undefined) title.toString();
 		_cHeadElem.textContent = title;
 		return _cHeadElem;
 	};
@@ -271,10 +277,10 @@ Brow.Cards = (function (Brow) {
 
 		switch (type) {
 			case 'basic':
-				container.appendChild( Brow.Module.Basic() );
+				container.appendChild( BrowDash.Module.Basic() );
 				break;
 			default:
-				container.appendChild( Brow.Module.Basic() );
+				container.appendChild( BrowDash.Module.Basic() );
 				break;
 		}
 
@@ -301,4 +307,4 @@ Brow.Cards = (function (Brow) {
 		Options: _setOptions,
 		Create: _createCard
 	};
-})(Brow);
+})(BrowDash);
