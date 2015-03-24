@@ -2,30 +2,37 @@
 	'use strict';
 
 	function BrowDash (options) {
-		if (!options) {
-			throw new Error('No options passed!');
+		if (!options || typeof options !== 'object') {
+			throw new Error('No valid options passed!');
 		}
+		if (!options.theme || typeof options.theme !== 'string') {
+			options.theme = 'blue-a400';
+		}
+
+		// this.settings = new BrowSettings( options.theme );
 		
-		this.theme		= BrowDash.Settings.Initial( options.theme );
-		this.settings	= BrowDash.Settings.Open( options.settings );
-		this.timer		= BrowDash.DateTimer.Append( options.timer );
+		this.theme		= BrowDash.Settings.Theme( options.theme );
+		this.settings	= BrowDash.Settings.Open( options.openSettings );
+		this.timer		= new BrowTimer( options.appendTimer ).run();
+		this.init		= BrowDash.Cards.Initialise('BROW_CUSTOM');
 		this.cards		= BrowDash.Cards.Options({
-			appendCards: options.content,
-			createCards: options.create
+			appendCards: options.appendContent,
+			createCards: options.createCards
 		});
-		this.init = BrowDash.Cards.Initialise('BROW_CUSTOM');
 	}
 
 	window.BrowDash = BrowDash;
 
 })(window);
+
+
 /**
- * @name				BrowDash.GUID
+ * @name				BrowGUID
  * @description	Returns a Globally Unique Identifer as string
  * @public
  * @return			{String}
  */
-BrowDash.GUID = (function () {
+BrowGUID = (function () {
 	'use strict';
 	
 	const s4 = function s4 () {
@@ -227,14 +234,15 @@ BrowDash.Settings = (function (BrowDash) {
 	};
 
 	/**
-	 * @name				BrowDash.Settings.Initial
+	 * @name				BrowDash.Settings.Theme
 	 *	@description	Updates the current theme.
 	 * @public
 	 * @param			{Object} settings
 	 */
-	const _initSettings = function (settings) {
+	const setTheme = function (settings) {
 		SIDEBAR.querySelector('.active');
 		_updateAndValidateTheme(settings);
+		return settings;
 	};
 
 	/**
@@ -243,7 +251,10 @@ BrowDash.Settings = (function (BrowDash) {
 	 * @public
 	 * @param			{HTMLElement} elem
 	 */
-	const _addEvents = function (elem) {
+	const addEvents = function (elem) {
+		if (!elem) {
+			throw new Error('HTMLElement missing!');
+		}
 		settingsBtn = elem;
 		settingsBtn.addEventListener('click', _showSettings);
 		DIALOG.addEventListener('click', _closeSettings);
@@ -253,25 +264,65 @@ BrowDash.Settings = (function (BrowDash) {
 
 	/* Public API */
 	return {
-		Open: _addEvents,
-		Initial: _initSettings
+		Open: addEvents,
+		Theme: setTheme
 	};
 })(BrowDash);
-/**
- * @name				BrowDash.DateTimer
- * @description	Creates a time string and refreshes it every second.
- * @param			{Object} BrowDash
- * @return			{Function} Append
- */
-BrowDash.DateTimer = (function (BrowDash) {
+
+
+BrowSettings = (function () {
 	'use strict';
 
+	function BrowSettings (options) {
+		if (!options || typeof options !== 'object') {
+			options = { 'theme': 'blue-a400', 'onclick': null };
+		}
+
+		this.theme = options.theme;
+
+		//this.theme = this.setTheme( options.theme );
+	}
+
 	/**
+	 * @name				BrowDash.Settings.Theme
+	 *	@description	Updates the current theme.
+	 * @public
+	 * @param			{Object} settings
+	 */
+	BrowSettings.prototype.addElements = function (config) {
+		console.log(config);
+		//console.log(this.foo);
+		/*SIDEBAR.querySelector('.active');
+		_updateAndValidateTheme(settings);
+		return settings;*/
+	};
+
+	return BrowSettings;
+});
+/**
+ * @name				BrowTimer
+ * @description	Class which appends a time string to an element 
+ *              	and updates it every second.
+ */
+BrowTimer = (function() {
+	'use strict';
+
+	function BrowTimer (elem) {
+		if (!(elem && elem.nodeName)) {
+			throw new Error('You haven\'t passed a valid HTMLElement!');
+		}
+
+		this.update	= 1000;
+		this.elem	= elem;
+	}
+
+	/**
+	 * @name 			BrowTimer.getTime
 	 * @description	Creates a string with current time in HH:MM:SS
-	 * @private
+	 * @public
 	 * @return			{String}
 	 */
-	const _getTime = function () {
+	BrowTimer.prototype.getTime = function () {
 		let _date			= new Date();
 		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
 		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
@@ -281,29 +332,68 @@ BrowDash.DateTimer = (function (BrowDash) {
 	};
 
 	/**
-	 * @name				BrowDash.DateTimer.Append
+	 * @name				BrowTimer.run
 	 * @description	Sets the element in which the time should be displayed.
 	 * @public
 	 * @param			{Element} elem
 	 */
-	const _setElem = function (elem) {
-		elem.textContent = _getTime();
+	BrowTimer.prototype.run = function () {
+		let _this = this;
+		this.elem.textContent = this.getTime();
 		setInterval(function () {
-			elem.textContent = _getTime();
-		}, 1000);
+			_this.elem.textContent = _this.getTime();
+		}, this.update);
 	};
 
-	/* Public API */
-	return {
-		Append: _setElem
-	};
-})(BrowDash);
+	return BrowTimer;
+})();
+
+/* ACTIVATE WHEN CHROME 42 IS AVAILABLE */
+// class BrowTimer {
+// 	constructor (elem) {
+// 		if (!(elem && elem.nodeName)) {
+// 			throw new Error('You haven\'t passed a valid HTMLElement!');
+// 		}
+
+// 		this.elem = elem;
+// 		this.update = 1000;
+// 	}
+
+// 	/**
+// 	 * @name 			BrowTimer.getTime
+// 	 * @description	Creates a string with current time in HH:MM:SS
+// 	 * @public
+// 	 * @return			{String}
+// 	 */
+// 	getTime() {
+// 		const _date			= new Date();
+// 		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
+// 		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
+// 		let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
+
+// 		return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
+// 	}
+
+// 	/**
+// 	 * @name				BrowTimer.run
+// 	 * @description	Sets the element in which the time should be displayed.
+// 	 * @public
+// 	 * @param			{Element} elem
+// 	 */
+// 	run() {
+// 		this.elem.textContent = this.getTime();
+// 		setInterval(function () {
+// 			this.elem.textContent = this.getTime();
+// 		}, this.update);
+// 	}
+// }
 BrowDash.Module = (function (BrowDash) {
 	'use strict';
 
 	/* Constnats */
 	const AVAILABLE_MODULES = [
-		'basic', 'weather'
+		'basic', 
+		'weather'
 	];
 
 	/* Variables */
@@ -319,7 +409,7 @@ BrowDash.Module = (function (BrowDash) {
 	 * @private
 	 * @return {HTMLElement}
 	 */
-	const _returnBasicModule = function () {
+	const returnBasicModule = function () {
 		let _cParagraphElem	= document.createElement('p');
 		let _defaultContent	= BrowDash.Data.Content('basic')['default'];
 		_cParagraphElem.setAttribute('data-basic-preview', _defaultContent);
@@ -331,7 +421,7 @@ BrowDash.Module = (function (BrowDash) {
 	 * @private
 	 * @param  {Object} options
 	 */
-	const _validateModuleEditMode = function (options) {
+	const validateModuleEditMode = function (options) {
 		if (!options || typeof options !== 'object') {
 			throw new Error('No options passed!');
 		}
@@ -354,7 +444,7 @@ BrowDash.Module = (function (BrowDash) {
 	 * @param  {[type]} elem [description]
 	 * @return {[type]}      [description]
 	 */
-	const _validateModuleSaving = function (elem) {
+	const validateModuleSaving = function (elem) {
 		switch (curCardType) {
 			case 'basic':
 				_saveBasicState();
@@ -389,9 +479,9 @@ BrowDash.Module = (function (BrowDash) {
 
 	/* Public API */
 	return {
-		Basic: _returnBasicModule,
-		Edit: _validateModuleEditMode,
-		Save: _validateModuleSaving
+		Basic: returnBasicModule,
+		Edit: validateModuleEditMode,
+		Save: validateModuleSaving
 	};
 })(BrowDash);
 /**
@@ -636,7 +726,7 @@ BrowDash.Cards = (function (BrowDash) {
 		let _cardType	= (config.type) ? config.type : 'basic';
 		let _cardTitle	= (config.title) ? config.title : BrowDash.Data.Header(config.type);
 		let _cardCount	= (config.count) ? config.count : 1;
-		let _cardGUID	= (config.guid) ? config.guid : BrowDash.GUID();
+		let _cardGUID	= (config.guid) ? config.guid : new BrowGUID();
 		let _cardWrapper = null;
 
 		for (let i = _cardCount; i--;) {
@@ -701,7 +791,7 @@ BrowDash.Cards = (function (BrowDash) {
 	return {
 		Initialise: _initialiseCards,
 		Options: _setOptions,
-		Create: _createCard
+		Create: _createCard 
 	};
 })(BrowDash);
 (function (window) {
@@ -709,10 +799,10 @@ BrowDash.Cards = (function (BrowDash) {
 
 	const APP = new BrowDash({
 		theme: 'blue-a400',
-		timer: document.querySelector('.trigger-timer'),
-		settings: document.querySelector('.trigger-settings'),
-		create: document.querySelector('.trigger-newcard'),
-		content: document.querySelector('.trigger-content')
+		openSettings: document.querySelector('.trigger-settings'),
+		appendTimer: document.querySelector('.trigger-timer'),
+		createCard: document.querySelector('.trigger-newcard'),
+		appendContent: document.querySelector('.trigger-content')
 	});
 
 })(window);

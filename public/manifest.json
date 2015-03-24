@@ -16,8 +16,8 @@
 		"newtab": "index.html"
 	},
 	"web_accessible_resources": [
-		"scripts/app.min.js",
-		"scripts/card-base.min.js",
+		"scripts/app.js",
+		"scripts/card.js",
 		"css/main.min.css",
 		"card-base.html"
 	],

@@ -3,10 +3,10 @@
 
 	const APP = new BrowDash({
 		theme: 'blue-a400',
-		timer: document.querySelector('.trigger-timer'),
-		settings: document.querySelector('.trigger-settings'),
-		create: document.querySelector('.trigger-newcard'),
-		content: document.querySelector('.trigger-content')
+		openSettings: document.querySelector('.trigger-settings'),
+		appendTimer: document.querySelector('.trigger-timer'),
+		createCard: document.querySelector('.trigger-newcard'),
+		appendContent: document.querySelector('.trigger-content')
 	});
 
 })(window);

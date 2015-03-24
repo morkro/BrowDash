@@ -1,18 +1,27 @@
 /**
- * @name				BrowDash.DateTimer
- * @description	Creates a time string and refreshes it every second.
- * @param			{Object} BrowDash
- * @return			{Function} Append
+ * @name				BrowTimer
+ * @description	Class which appends a time string to an element 
+ *              	and updates it every second.
  */
-BrowDash.DateTimer = (function (BrowDash) {
+BrowTimer = (function() {
 	'use strict';
 
+	function BrowTimer (elem) {
+		if (!(elem && elem.nodeName)) {
+			throw new Error('You haven\'t passed a valid HTMLElement!');
+		}
+
+		this.update	= 1000;
+		this.elem	= elem;
+	}
+
 	/**
+	 * @name 			BrowTimer.getTime
 	 * @description	Creates a string with current time in HH:MM:SS
-	 * @private
+	 * @public
 	 * @return			{String}
 	 */
-	const _getTime = function () {
+	BrowTimer.prototype.getTime = function () {
 		let _date			= new Date();
 		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
 		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
@@ -22,20 +31,58 @@ BrowDash.DateTimer = (function (BrowDash) {
 	};
 
 	/**
-	 * @name				BrowDash.DateTimer.Append
+	 * @name				BrowTimer.run
 	 * @description	Sets the element in which the time should be displayed.
 	 * @public
 	 * @param			{Element} elem
 	 */
-	const _setElem = function (elem) {
-		elem.textContent = _getTime();
+	BrowTimer.prototype.run = function () {
+		let _this = this;
+		this.elem.textContent = this.getTime();
 		setInterval(function () {
-			elem.textContent = _getTime();
-		}, 1000);
+			_this.elem.textContent = _this.getTime();
+		}, this.update);
 	};
 
-	/* Public API */
-	return {
-		Append: _setElem
-	};
-})(BrowDash);
+	return BrowTimer;
+})();
+
+/* ACTIVATE WHEN CHROME 42 IS AVAILABLE */
+// class BrowTimer {
+// 	constructor (elem) {
+// 		if (!(elem && elem.nodeName)) {
+// 			throw new Error('You haven\'t passed a valid HTMLElement!');
+// 		}
+
+// 		this.elem = elem;
+// 		this.update = 1000;
+// 	}
+
+// 	/**
+// 	 * @name 			BrowTimer.getTime
+// 	 * @description	Creates a string with current time in HH:MM:SS
+// 	 * @public
+// 	 * @return			{String}
+// 	 */
+// 	getTime() {
+// 		const _date			= new Date();
+// 		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
+// 		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
+// 		let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
+
+// 		return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
+// 	}
+
+// 	/**
+// 	 * @name				BrowTimer.run
+// 	 * @description	Sets the element in which the time should be displayed.
+// 	 * @public
+// 	 * @param			{Element} elem
+// 	 */
+// 	run() {
+// 		this.elem.textContent = this.getTime();
+// 		setInterval(function () {
+// 			this.elem.textContent = this.getTime();
+// 		}, this.update);
+// 	}
+// }

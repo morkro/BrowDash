@@ -136,14 +136,15 @@ BrowDash.Settings = (function (BrowDash) {
 	};
 
 	/**
-	 * @name				BrowDash.Settings.Initial
+	 * @name				BrowDash.Settings.Theme
 	 *	@description	Updates the current theme.
 	 * @public
 	 * @param			{Object} settings
 	 */
-	const _initSettings = function (settings) {
+	const setTheme = function (settings) {
 		SIDEBAR.querySelector('.active');
 		_updateAndValidateTheme(settings);
+		return settings;
 	};
 
 	/**
@@ -152,7 +153,10 @@ BrowDash.Settings = (function (BrowDash) {
 	 * @public
 	 * @param			{HTMLElement} elem
 	 */
-	const _addEvents = function (elem) {
+	const addEvents = function (elem) {
+		if (!elem) {
+			throw new Error('HTMLElement missing!');
+		}
 		settingsBtn = elem;
 		settingsBtn.addEventListener('click', _showSettings);
 		DIALOG.addEventListener('click', _closeSettings);
@@ -162,7 +166,38 @@ BrowDash.Settings = (function (BrowDash) {
 
 	/* Public API */
 	return {
-		Open: _addEvents,
-		Initial: _initSettings
+		Open: addEvents,
+		Theme: setTheme
 	};
 })(BrowDash);
+
+
+BrowSettings = (function () {
+	'use strict';
+
+	function BrowSettings (options) {
+		if (!options || typeof options !== 'object') {
+			options = { 'theme': 'blue-a400', 'onclick': null };
+		}
+
+		this.theme = options.theme;
+
+		//this.theme = this.setTheme( options.theme );
+	}
+
+	/**
+	 * @name				BrowDash.Settings.Theme
+	 *	@description	Updates the current theme.
+	 * @public
+	 * @param			{Object} settings
+	 */
+	BrowSettings.prototype.addElements = function (config) {
+		console.log(config);
+		//console.log(this.foo);
+		/*SIDEBAR.querySelector('.active');
+		_updateAndValidateTheme(settings);
+		return settings;*/
+	};
+
+	return BrowSettings;
+});

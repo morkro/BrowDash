@@ -3,7 +3,8 @@ BrowDash.Module = (function (BrowDash) {
 
 	/* Constnats */
 	const AVAILABLE_MODULES = [
-		'basic', 'weather'
+		'basic', 
+		'weather'
 	];
 
 	/* Variables */
@@ -19,7 +20,7 @@ BrowDash.Module = (function (BrowDash) {
 	 * @private
 	 * @return {HTMLElement}
 	 */
-	const _returnBasicModule = function () {
+	const returnBasicModule = function () {
 		let _cParagraphElem	= document.createElement('p');
 		let _defaultContent	= BrowDash.Data.Content('basic')['default'];
 		_cParagraphElem.setAttribute('data-basic-preview', _defaultContent);
@@ -31,7 +32,7 @@ BrowDash.Module = (function (BrowDash) {
 	 * @private
 	 * @param  {Object} options
 	 */
-	const _validateModuleEditMode = function (options) {
+	const validateModuleEditMode = function (options) {
 		if (!options || typeof options !== 'object') {
 			throw new Error('No options passed!');
 		}
@@ -54,7 +55,7 @@ BrowDash.Module = (function (BrowDash) {
 	 * @param  {[type]} elem [description]
 	 * @return {[type]}      [description]
 	 */
-	const _validateModuleSaving = function (elem) {
+	const validateModuleSaving = function (elem) {
 		switch (curCardType) {
 			case 'basic':
 				_saveBasicState();
@@ -89,8 +90,8 @@ BrowDash.Module = (function (BrowDash) {
 
 	/* Public API */
 	return {
-		Basic: _returnBasicModule,
-		Edit: _validateModuleEditMode,
-		Save: _validateModuleSaving
+		Basic: returnBasicModule,
+		Edit: validateModuleEditMode,
+		Save: validateModuleSaving
 	};
 })(BrowDash);

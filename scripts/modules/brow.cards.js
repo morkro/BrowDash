@@ -240,7 +240,7 @@ BrowDash.Cards = (function (BrowDash) {
 		let _cardType	= (config.type) ? config.type : 'basic';
 		let _cardTitle	= (config.title) ? config.title : BrowDash.Data.Header(config.type);
 		let _cardCount	= (config.count) ? config.count : 1;
-		let _cardGUID	= (config.guid) ? config.guid : BrowDash.GUID();
+		let _cardGUID	= (config.guid) ? config.guid : new BrowGUID();
 		let _cardWrapper = null;
 
 		for (let i = _cardCount; i--;) {
@@ -305,6 +305,6 @@ BrowDash.Cards = (function (BrowDash) {
 	return {
 		Initialise: _initialiseCards,
 		Options: _setOptions,
-		Create: _createCard
+		Create: _createCard 
 	};
 })(BrowDash);

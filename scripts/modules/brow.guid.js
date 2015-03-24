@@ -1,10 +1,10 @@
 /**
- * @name				BrowDash.GUID
+ * @name				BrowGUID
  * @description	Returns a Globally Unique Identifer as string
  * @public
  * @return			{String}
  */
-BrowDash.GUID = (function () {
+BrowGUID = (function () {
 	'use strict';
 	
 	const s4 = function s4 () {
