@@ -18,7 +18,6 @@ BrowTimer = (function() {
 	/**
 	 * @name 			BrowTimer.getTime
 	 * @description	Creates a string with current time in HH:MM:SS
-	 * @public
 	 * @return			{String}
 	 */
 	BrowTimer.prototype.getTime = function () {
@@ -33,15 +32,18 @@ BrowTimer = (function() {
 	/**
 	 * @name				BrowTimer.run
 	 * @description	Sets the element in which the time should be displayed.
-	 * @public
 	 * @param			{Element} elem
+	 * @return 			{HTMLElement}
 	 */
 	BrowTimer.prototype.run = function () {
 		let _this = this;
+		
 		this.elem.textContent = this.getTime();
 		setInterval(function () {
 			_this.elem.textContent = _this.getTime();
 		}, this.update);
+
+		return this.elem;
 	};
 
 	return BrowTimer;

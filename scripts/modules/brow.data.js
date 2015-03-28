@@ -1,11 +1,11 @@
 /**
- * @name				BrowDash.Data
+ * @name				Brow.Data
  * @description	Stores all module related data like default content.
- * @param			{Object} BrowDash
+ * @param			{Object} Brow
  * @return			{Function} Header
  * @return			{Function} Content
  */
-BrowDash.Data = (function (BrowDash) {
+Brow.Data = (function (Brow) {
 	'use strict';
 
 	/* Constants */
@@ -48,4 +48,4 @@ BrowDash.Data = (function (BrowDash) {
 		Header: _getDefaultHeader,
 		Content: _getDefaultContent
 	};
-})(BrowDash);
+})(Brow);

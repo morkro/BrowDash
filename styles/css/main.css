@@ -171,7 +171,9 @@ h1, h2, h3, h4, h5, h6 { font-weight: 300; margin: 0px; }
 
 h1 { font-size: 24px; }
 
-h4 { font-weight: 400; }
+h3 { font-size: 18px; }
+
+h4 { font-weight: 400; font-size: 15px; }
 
 /** Links */
 a { font-size: 14px; text-decoration: none; }
@@ -218,14 +220,14 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
   100% { display: block; opacity: 1; } }
 /* COMPONENTS */
 /* BUTTONS */
-.btn { background: transparent; border: none; padding: 0; display: inline-block; text-transform: uppercase; transition: all 150ms ease-in-out; }
+.btn { background: transparent; border: none; padding: 0; display: inline-block; text-transform: uppercase; transition: all 150ms ease-in-out; font-size: 14px; }
 .btn:focus { outline: none; }
 .btn svg { fill: #ffffff; }
 
 .header__settings:hover svg { fill: rgba(0, 0, 0, 0.54); }
 .header__settings svg { fill: rgba(0, 0, 0, 0.26); transition: all 150ms ease-in-out; }
 
-.btn--round { border-radius: 50%; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.48); padding: 16px; }
+.btn--round { border-radius: 50%; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.48); padding: 14px 16px; }
 .btn--round svg { fill: #ffffff; }
 
 /* DIALOG */

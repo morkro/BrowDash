@@ -22,5 +22,5 @@
 		"card-base.html"
 	],
 	"offline_enabled": true,
-	"content_security_policy": "default-src 'self'; script-src 'self'; object-src 'none'"
+	"content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none';"
 }

@@ -1,38 +1,23 @@
-(function (window) {
-	'use strict';
-
-	function BrowDash (options) {
-		if (!options || typeof options !== 'object') {
-			throw new Error('No valid options passed!');
-		}
-		if (!options.theme || typeof options.theme !== 'string') {
-			options.theme = 'blue-a400';
-		}
-
-		// this.settings = new BrowSettings( options.theme );
-		
-		this.theme		= BrowDash.Settings.Theme( options.theme );
-		this.settings	= BrowDash.Settings.Open( options.openSettings );
-		this.timer		= new BrowTimer( options.appendTimer ).run();
-		this.init		= BrowDash.Cards.Initialise('BROW_CUSTOM');
-		this.cards		= BrowDash.Cards.Options({
-			appendCards: options.appendContent,
-			createCards: options.createCards
-		});
-	}
-
-	window.BrowDash = BrowDash;
-
-})(window);
-
+/**
+ * @description	Initialise Brow object.
+ * @type 			{Object}
+ */
+var Brow = window.Brow = {};
 
 /**
- * @name				BrowGUID
+ * @name				Brow.isEditMode
+ * @description	/
+ * @public
+ */
+Brow.isEditMode = false;
+
+/**
+ * @name				Brow.GUID
  * @description	Returns a Globally Unique Identifer as string
  * @public
  * @return			{String}
  */
-BrowGUID = (function () {
+Brow.GUID = (function () {
 	'use strict';
 	
 	const s4 = function s4 () {
@@ -46,13 +31,13 @@ BrowGUID = (function () {
 	};
 })();
 /**
- * @name				BrowDash.Data
+ * @name				Brow.Data
  * @description	Stores all module related data like default content.
- * @param			{Object} BrowDash
+ * @param			{Object} Brow
  * @return			{Function} Header
  * @return			{Function} Content
  */
-BrowDash.Data = (function (BrowDash) {
+Brow.Data = (function (Brow) {
 	'use strict';
 
 	/* Constants */
@@ -95,210 +80,7 @@ BrowDash.Data = (function (BrowDash) {
 		Header: _getDefaultHeader,
 		Content: _getDefaultContent
 	};
-})(BrowDash);
-/**
- * @name				BrowDash.Settings
- * @description	Shows/hides the modal, saves and parses the users personal theming settings.
- * @param			{Object} BrowDash
- * @return			{Function} Open
- * @return			{Function} Initial
- */
-BrowDash.Settings = (function (BrowDash) {
-	'use strict';
-
-	/* Constants */
-	const OVERLAY	= document.querySelector('#brow__overlay');
-	const DIALOG	= document.querySelector('#brow__dialog');
-	const SIDEBAR	= document.querySelector('.dialog__sidebar__list');
-	const THEME		= document.querySelector('.settings__theme');
-	const BROW_KEY = 'BROW_THEME';
-
-	/* Variables */
-	var settingsBtn	= null;
-	var themeList		= null;
-
-	/**
-	 *	@description	Opens the settings dialog
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _showSettings = function (event) {
-		event.preventDefault();
-		OVERLAY.classList.add('show');
-		DIALOG.classList.add('show');
-	};
-
-	/**
-	 *	@description	Closes the settings dialog
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _closeSettings = function (event) {
-		let _curTarget			= event.target;
-		let _isCloseBtn		= _curTarget.classList.contains('dialog__close');
-		let _isOutsideDialog	= _curTarget === this && this.classList.contains('show');
-
-		if (_isCloseBtn || _isOutsideDialog) {
-			this.classList.remove('show');
-			OVERLAY.classList.remove('show');
-		}
-	};
-
-	/**
-	 * @description	Checks if custom theme settings are available.
-	 * @private
-	 * @return			{Object}
-	 */
-	const _isCustomTheme = function () {
-		let CUSTOM = localStorage[BROW_KEY];
-		return CUSTOM;
-	};
-
-	/**
-	 * @description	Checks if theme object is in localStorage and adds classes to DOM.
-	 * @private
-	 * @param			{Object} settings
-	 */
-	const _updateAndValidateTheme = function (settings) {
-		themeList = THEME.querySelectorAll('[data-settings-theme]');
-
-		if (_isCustomTheme()) {
-			_updateThemeFromStorage( _isCustomTheme() );
-		} else {
-			_updateThemeFromInitial( settings.theme );
-		}
-	};
-
-	/**
-	 * @description	Parses the custom settings from localStorage and sets classes.
-	 * @private
-	 * @param			{String} storage
-	 */
-	const _updateThemeFromStorage = function (storage) {
-		storage = JSON.parse(localStorage[BROW_KEY]);
-		document.body.className = '';
-		document.body.classList.add('theme-'+ storage.theme);
-
-		[].forEach.call(themeList, function (item) {
-			if (item.classList.contains('active')) {
-				item.classList.remove('active');
-			}
-		});
-		THEME.querySelector('[data-settings-theme="'+ storage.theme +'"]').classList.add('active');
-	};
-
-	/**
-	 * @description	Adds the theme class to <body> from initial settings.
-	 * @private
-	 * @param			{String} settings
-	 */
-	const _updateThemeFromInitial = function (settings) {
-		document.body.classList.add('theme-'+ settings);
-		THEME.querySelector('[data-settings-theme="'+ settings +'"]').classList.add('active');
-	};
-
-	/**
-	 * @description	Gets the color attribute of the clicked element and updates the theme.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _chooseTheme = function (event) {
-		event.preventDefault();
-		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-		localStorage[BROW_KEY] = JSON.stringify(_themeColor);
-		_updateAndValidateTheme(_themeColor);
-	};
-
-	/**
-	 * @description	/
-	 * @private
-	 * @param			{Object} settings
-	 */
-	const _updateSettingsContent = function (event) {
-		let _sidebarElem		= event.target;
-		let _contentName		= _sidebarElem.getAttribute('href').split('-')[1];
-		let _contentElem		= DIALOG.querySelector('.dialog__content__' + _contentName);
-		let _curActiveElems	= DIALOG.querySelectorAll('.active');
-
-		// if link is clicked
-		if (_sidebarElem.classList.contains('sidebar__list__item')) {
-			event.preventDefault();
-			if (!_contentElem.classList.contains('active')) {
-				[].forEach.call(_curActiveElems, function(elem) {
-					elem.classList.remove('active');
-				});
-				_contentElem.classList.add('active');
-				_sidebarElem.classList.add('active');
-			}
-		}
-	};
-
-	/**
-	 * @name				BrowDash.Settings.Theme
-	 *	@description	Updates the current theme.
-	 * @public
-	 * @param			{Object} settings
-	 */
-	const setTheme = function (settings) {
-		SIDEBAR.querySelector('.active');
-		_updateAndValidateTheme(settings);
-		return settings;
-	};
-
-	/**
-	 * @name				BrowDash.Settings.Open
-	 *	@description	Adds events
-	 * @public
-	 * @param			{HTMLElement} elem
-	 */
-	const addEvents = function (elem) {
-		if (!elem) {
-			throw new Error('HTMLElement missing!');
-		}
-		settingsBtn = elem;
-		settingsBtn.addEventListener('click', _showSettings);
-		DIALOG.addEventListener('click', _closeSettings);
-		SIDEBAR.addEventListener('click', _updateSettingsContent);
-		THEME.addEventListener('click', _chooseTheme);
-	};
-
-	/* Public API */
-	return {
-		Open: addEvents,
-		Theme: setTheme
-	};
-})(BrowDash);
-
-
-BrowSettings = (function () {
-	'use strict';
-
-	function BrowSettings (options) {
-		if (!options || typeof options !== 'object') {
-			options = { 'theme': 'blue-a400', 'onclick': null };
-		}
-
-		this.theme = options.theme;
-
-		//this.theme = this.setTheme( options.theme );
-	}
-
-	/**
-	 * @name				BrowDash.Settings.Theme
-	 *	@description	Updates the current theme.
-	 * @public
-	 * @param			{Object} settings
-	 */
-	BrowSettings.prototype.addElements = function (config) {
-		console.log(config);
-		//console.log(this.foo);
-		/*SIDEBAR.querySelector('.active');
-		_updateAndValidateTheme(settings);
-		return settings;*/
-	};
-
-	return BrowSettings;
-});
+})(Brow);
 /**
  * @name				BrowTimer
  * @description	Class which appends a time string to an element 
@@ -319,7 +101,6 @@ BrowTimer = (function() {
 	/**
 	 * @name 			BrowTimer.getTime
 	 * @description	Creates a string with current time in HH:MM:SS
-	 * @public
 	 * @return			{String}
 	 */
 	BrowTimer.prototype.getTime = function () {
@@ -334,15 +115,18 @@ BrowTimer = (function() {
 	/**
 	 * @name				BrowTimer.run
 	 * @description	Sets the element in which the time should be displayed.
-	 * @public
 	 * @param			{Element} elem
+	 * @return 			{HTMLElement}
 	 */
 	BrowTimer.prototype.run = function () {
 		let _this = this;
+		
 		this.elem.textContent = this.getTime();
 		setInterval(function () {
 			_this.elem.textContent = _this.getTime();
 		}, this.update);
+
+		return this.elem;
 	};
 
 	return BrowTimer;
@@ -387,7 +171,113 @@ BrowTimer = (function() {
 // 		}, this.update);
 // 	}
 // }
-BrowDash.Module = (function (BrowDash) {
+/**
+ * @name				Brow.Dialog
+ * @description	Shows/hides the dialog. Sets new theme.
+ * @todo  			Needs to be more modular. Should be able to load dynamic content.
+ * @param			{Object} Brow
+ * @return			{Function} addEvents
+ */
+Brow.Dialog = (function (Brow) {
+	'use strict';
+
+	/* Variables */
+	var settingsBtn		= null;
+	
+	var dialogOverlay		= null;
+	var dialogElem			= null;
+	var dialogTheme		= null;
+	var dialogThemeList	= null;
+	var dialogSidebar		= null;
+
+	/**
+	 *	@description	Opens the settings dialog
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _showSettings = function (event) {
+		event.preventDefault();
+		dialogElem.classList.add('show');
+		dialogOverlay.classList.add('show');
+	};
+
+	/**
+	 *	@description	Closes the settings dialog
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _closeSettings = function (event) {
+		let _curTarget			= event.target;
+		let _isCloseBtn		= _curTarget.classList.contains('dialog__close');
+		let _isOutsideDialog	= _curTarget === this && this.classList.contains('show');
+
+		if (_isCloseBtn || _isOutsideDialog) {
+			this.classList.remove('show');
+			dialogOverlay.classList.remove('show');
+		}
+	};
+
+	/**
+	 * @description	Gets the color attribute of the clicked element and updates the theme.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _chooseTheme = function (event) {
+		event.preventDefault();
+		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
+		localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
+		Brow.Settings.setTheme(_themeColor);
+	};
+
+	/**
+	 * @description	/
+	 * @private
+	 * @param			{Object} settings
+	 */
+	const _updateSettingsContent = function (event) {
+		let _sidebarElem		= event.target;
+		let _contentName		= _sidebarElem.getAttribute('href').split('-')[1];
+		let _contentElem		= dialogElem.querySelector('.dialog__content__' + _contentName);
+		let _curActiveElems	= dialogElem.querySelectorAll('.active');
+
+		// if link is clicked
+		if (_sidebarElem.classList.contains('sidebar__list__item')) {
+			event.preventDefault();
+			if (!_contentElem.classList.contains('active')) {
+				[].forEach.call(_curActiveElems, function(elem) {
+					elem.classList.remove('active');
+				});
+				_contentElem.classList.add('active');
+				_sidebarElem.classList.add('active');
+			}
+		}
+	};
+
+	/**
+	 * @name				Brow.Dialog.start
+	 *	@description	Adds events
+	 * @public
+	 * @param			{HTMLElement} elem
+	 */
+	const addEvents = function () {
+		settingsBtn		= Brow.Settings.getElem()['onClickSettings'];
+		dialogElem		= Brow.Settings.getElem()['DIALOG'];
+		dialogOverlay	= Brow.Settings.getElem()['DIALOG_OVERLAY'];
+		dialogSidebar	= dialogElem.querySelector('.dialog__sidebar__list');
+		dialogTheme		= dialogElem.querySelector('.settings__theme');
+		
+		settingsBtn.addEventListener('click', _showSettings);
+		dialogElem.addEventListener('click', _closeSettings);
+		dialogSidebar.addEventListener('click', _updateSettingsContent);
+		dialogTheme.addEventListener('click', _chooseTheme);
+	};
+	
+	/* Public API */
+	return {
+		addEvents: addEvents
+	};
+})(Brow);
+Brow.Module = (function (Brow) {
 	'use strict';
 
 	/* Constnats */
@@ -411,7 +301,7 @@ BrowDash.Module = (function (BrowDash) {
 	 */
 	const returnBasicModule = function () {
 		let _cParagraphElem	= document.createElement('p');
-		let _defaultContent	= BrowDash.Data.Content('basic')['default'];
+		let _defaultContent	= Brow.Data.Content('basic')['default'];
 		_cParagraphElem.setAttribute('data-basic-preview', _defaultContent);
 		return _cParagraphElem;
 	};
@@ -483,266 +373,34 @@ BrowDash.Module = (function (BrowDash) {
 		Edit: validateModuleEditMode,
 		Save: validateModuleSaving
 	};
-})(BrowDash);
-/**
- * @name				BrowDash.Cards
- * @description	Is responsible for general card management like creating new cards,
- *                applying events, deleting/editing and saving them, saving/parsing content.
- * @param			{Object} BrowDash
- * @return			{Function} Initialise
- * @return			{Function} Options
- * @return			{Function} Create
- */
-BrowDash.Cards = (function (BrowDash) {
+})(Brow);
+BrowCard = (function () {
 	'use strict';
 
-	/* Constants */
-	const MAIN		= document.querySelector('#brow__content');
-	const OVERLAY	= MAIN.querySelector('.content__overlay');
+	function BrowCard (config) {
+		if (!config) config = {};
 
-	/* Variables */
-	var BrowDashCustom			= false;
-	var BrowDashCardCount		= 0;
-	
-	var BrowDashCardElem			= null;
-	var BrowDashCardSettings	= null;
-	var BrowDashCardEdit			= null;
-	var BrowDashCardSave			= null;
-	var BrowDashCardRemove		= null;
-	var BrowDashCustomKey		= null;
-	
-	var appContent					= null; 
-	var createButton				= null;
-	var isEditMode					= false;
+		this.type	= (config.type) ? config.type : 'basic';
+		this.title	= (config.title) ? config.title : Brow.Data.Header(config.type);
+		this.guid	= (config.guid) ? config.guid : Brow.GUID();
+		this.config = { settings: null, edit: null, save: null, remove: null, elem: null };
+		this.isEditMode = false;
 
-	/**
-	 * @name				BrowDash.Cards.Options
-	 * @description	Sets all elements to variables.
-	 * @public
-	 * @param			{Object} options
-	 */
-	const _setOptions = function (options) {
-		appContent		= options.appendCards;
-		createButton	= options.createCards;
+		return this.createCard();
+	}
 
-		/* Add events */
-		createButton.addEventListener('click', _addNewCard);
-		//MAIN.addEventListener('keyup', _saveCardsToStorage);
-		document.documentElement.addEventListener('click', _closeCardSettings);
-	};
+	BrowCard.prototype.createCard = function () {
+		let baseElem = document.createElement('card-base');
+		let self = this;
 
-	/**
-	 * @name				BrowDash.Cards.Initialise
-	 * @description	Checks localStorage and loads the users cards
-	 * @public
-	 * @param			{Object} storage
-	 */
-	const _initialiseCards = function (storage) {
-		BrowDashCustomKey = storage;
-		if (!localStorage[BrowDashCustomKey]) {
-			_createCard({ type: 'basic' });
-		} else {
-			_parseCardsFromStorage();
-		}
-	};
-
-	/**
-	 * @description	Removes style attribute on settings container
-	 * @private
-	 * @param  {Object} event
-	 */
-	const _closeCardSettings = function (event) {
-		let settingsAreVisible	= null;
-		let targetIsNotBtn		= null;
-
-		if (BrowDashCardSettings) {
-			settingsAreVisible	= BrowDashCardSettings.style.display === 'block';
-			targetIsNotBtn			= event.target !== BrowDashCardElem;
-			if (targetIsNotBtn && settingsAreVisible) {
-				BrowDashCardSettings.style.display = null;
-			}
-		}
-	};
-
-	/**
-	 * @description	Removes all previous stored card settings
-	 * @private
-	 */
-	const _removePrevCardSettings = function () {
-		if (BrowDashCardElem !== null) {
-			BrowDashCardElem		= null;
-			BrowDashCardSettings.style.display = null;
-			BrowDashCardSettings	= null;
-			BrowDashCardEdit		= null;
-			BrowDashCardSave		= null;
-			BrowDashCardRemove	= null;
-		}
-	};
-
-	/**
-	 * @description	Sets eventListener on current card element.
-	 * @private
-	 * @param {Object} event
-	 */
-	const _setCardEvents = function (event) {
-		// If previous settings aren't closed yet.
-		_removePrevCardSettings();
-
-		BrowDashCardSettings	= event.target.settings;
-		BrowDashCardEdit		= event.target.edit;
-		BrowDashCardSave		= event.target.save;
-		BrowDashCardRemove	= event.target.remove;
-		BrowDashCardElem		= event.target;
-
-		BrowDashCardEdit.addEventListener('click', _activateCardEditMode);
-		BrowDashCardSave.addEventListener('click', _saveCardChanges);
-		BrowDashCardRemove.addEventListener('click', _removeCard);
-		BrowDashCardSettings.style.display = 'block';
-	};
-
-	/**
-	 * @description	Shows the save button and makes editing possible.
-	 * @private
-	 * @param  {Object} event
-	 */
-	const _activateCardEditMode = function (event) {
-		let _curCardType = BrowDashCardElem.getAttribute('data-module-type');
-
-		isEditMode = true;
-		BrowDashCardElem.classList.add('editmode');
-		OVERLAY.classList.add('show');
-		BrowDashCardEdit.parentNode.classList.add('hidden');
-		BrowDashCardSave.parentNode.classList.remove('hidden');
-		BrowDashCardSettings.style.display = null;
-		createButton.classList.add('editmode');
-
-		BrowDash.Module.Edit({
-			type: _curCardType,
-			elem: BrowDashCardElem
+		baseElem.setAttribute('data-module-guid', this.guid);
+		baseElem.setAttribute('data-module-type', this.type);
+		baseElem.appendChild( this.createHeadline( this.title ) );
+		baseElem.addEventListener('btn-settings', function (event) {
+			self.addEvents(event);
 		});
-	};
 
-	/**
-	 * @description	Shows the edit button and saves the content to localStorage.
-	 * @private
-	 * @param  {Object} event
-	 */
-	const _saveCardChanges = function (event) {
-		isEditMode = false;
-		BrowDashCardElem.classList.remove('editmode');
-		OVERLAY.classList.remove('show');
-		BrowDashCardEdit.parentNode.classList.remove('hidden');
-		BrowDashCardSave.parentNode.classList.add('hidden');
-		BrowDashCardSettings.style.display = null;
-		createButton.classList.remove('editmode');
-		BrowDash.Module.Save();
-	};
-
-	/**
-	 * @description	Removes a card from localStorage.
-	 * @private
-	 * @param  {Object} event
-	 */
-	const _removeCard = function (event) {
-		event.preventDefault();
-		let _curCardGUI = BrowDashCardElem.getAttribute('data-module-guid');
-		let _isCreateBtnInEditMode = createButton.classList.contains('editmode');
-		// Remove item
-		if (_isCreateBtnInEditMode || isEditMode) {
-			createButton.classList.remove('editmode');
-		}
-		isEditMode = false;
-		OVERLAY.classList.remove('show');
-		localStorage.removeItem(_curCardGUI);
-		MAIN.removeChild(BrowDashCardElem);
-	};
-
-	/**
-	 * @description	Gets localStorage list, parses and creates cards.
-	 * @private
-	 */
-	const _parseCardsFromStorage = function () {
-		let storageItem = null;
-		let loopStorage = function loopStorage (index) {
-			storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
-			if (storageItem['module']) {
-				_createCard({
-					type: storageItem['type'],
-					title: storageItem['title'],
-					guid: storageItem['guid'],
-					content: storageItem['content']
-				});
-			}	
-		};
-
-		for (let i = localStorage.length; i--;) {
-			loopStorage(i);
-		}
-	};
-
-	/**
-	 * @description	Creates a JSON objet of the card elements content
-	 *						and saves in localStorage.
-	 * @private
-	 * @param			{Event} event
-	 */
-	const _saveCardsToStorage = function (event) {
-		let _module = event.target.parentElement;
-		let _moduleGUID = _module.getAttribute('data-module-guid');
-		let _moduleType = _module.getAttribute('data-module-type');
-		let _moduleSettings = {
-			module: true,
-			guid: _moduleGUID,
-			type: _moduleType,
-			title: event.target.textContent,
-			content: null
-		};
-
-		// Set custom dependency to localStorage
-		_setCustomBool();
-		if (_module.nodeName === 'CARD-BASE') {
-			localStorage[_moduleGUID] = JSON.stringify(_moduleSettings);
-		}
-	};
-
-	/**
-	 * @description	Gives variables a boolean :)
-	 * @private
-	 */
-	const _setCustomBool = function () {
-		if (!BrowDashCustom) {
-			BrowDashCustom = true;
-			localStorage[BrowDashCustomKey] = true;
-		}
-	};
-
-	/**
-	 * @name				BrowDash.Cards.Create
-	 * @description	Creates a new card module
-	 * @public
-	 * @param			{Object} config
-	 */
-	const _createCard = function (config) {
-		let _cardType	= (config.type) ? config.type : 'basic';
-		let _cardTitle	= (config.title) ? config.title : BrowDash.Data.Header(config.type);
-		let _cardCount	= (config.count) ? config.count : 1;
-		let _cardGUID	= (config.guid) ? config.guid : new BrowGUID();
-		let _cardWrapper = null;
-
-		for (let i = _cardCount; i--;) {
-			// Create basic element
-			_cardWrapper = document.createElement('card-base');
-			_cardWrapper.setAttribute('data-module-guid', _cardGUID);
-			_cardWrapper.setAttribute('data-module-type', _cardType);
-			// Apply header
-			_cardWrapper.appendChild( _createCardHeadline( _cardTitle ) );
-			// Apply card content
-			_cardWrapper.appendChild( _createCardContent( _cardType ) );
-			// Apply to page
-			appContent.appendChild(_cardWrapper);
-			// Apply event listener
-			_cardWrapper.addEventListener('btn-settings', _setCardEvents);
-		}
+		return baseElem;
 	};
 
 	/**
@@ -750,59 +408,268 @@ BrowDash.Cards = (function (BrowDash) {
 	 * @private
 	 * @param			{String} title
 	 */	
-	const _createCardHeadline = function (title) {
-		let _cHeadElem = document.createElement('h1');
-		//if (typeof title !== 'string' && typeof title !== undefined) title.toString();
-		_cHeadElem.textContent = title;
-		return _cHeadElem;
-	};
-
-	const _createCardContent = function (type) {
-		let container = document.createElement('div');
-		container.classList.add('content__' + type);
-
-		switch (type) {
-			case 'basic':
-				container.appendChild( BrowDash.Module.Basic() );
-				break;
-			default:
-				container.appendChild( BrowDash.Module.Basic() );
-				break;
-		}
-
-		return container;
+	BrowCard.prototype.createHeadline = function (title) {
+		let headElem = document.createElement('h1');
+		headElem.textContent = title;
+		return headElem;
 	};
 
 	/**
-	 * @description	On click button, adds a card element
+	 * @description	Sets eventListener on current card element.
+	 * @private
+	 * @param			{Object} event
+	 */
+	BrowCard.prototype.addEvents = function (event) {
+		let self = this;
+
+		this.config.elem		= event.target;
+		this.config.settings	= event.target.settings;
+		this.config.edit		= event.target.edit;
+		this.config.save		= event.target.save;
+		this.config.remove	= event.target.remove;
+
+		this.config.settings.style.display = 'block';
+		this.config.edit.addEventListener('click', function (event) {
+			event.preventDefault();
+			self.activateCardEditMode(event);
+		});
+		this.config.save.addEventListener('click', function (event) {
+			event.preventDefault();
+			self.saveCardChanges(event);
+		});
+		this.config.remove.addEventListener('click', function (event) {
+			event.preventDefault();
+			self.removeCard(event);
+		});
+	};
+
+	/**
+	 * @description	Shows the save button and makes editing possible.
+	 * @private
+	 * @param			{Object} event
+	 */
+	BrowCard.prototype.activateCardEditMode = function (event) {
+		Brow.isEditMode = true;
+		this.isEditMode = true;
+
+		this.config.elem.classList.add('editmode');
+		this.config.edit.parentNode.classList.add('hidden');
+		this.config.save.parentNode.classList.remove('hidden');
+		this.config.settings.style.display = null;
+
+		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
+	};
+
+	/**
+	 * @description	Shows the edit button and saves the content to localStorage.
+	 * @private
+	 * @param			{Object} event
+	 */
+	BrowCard.prototype.saveCardChanges = function (event) {
+		Brow.isEditMode = false;
+		this.isEditMode = false;
+
+		this.config.elem.classList.remove('editmode');
+		this.config.edit.parentNode.classList.remove('hidden');
+		this.config.save.parentNode.classList.add('hidden');
+		this.config.settings.style.display = null;
+
+		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+	};
+
+	/**
+	 * @description	Removes a card from localStorage.
+	 * @private
+	 * @param			{Object} event
+	 */
+	BrowCard.prototype.removeCard = function (event) {
+		let curCardGUI = this.config.elem.getAttribute('data-module-guid');
+
+		Brow.isEditMode = false;
+		this.isEditMode = false;
+
+		localStorage.removeItem(curCardGUI);
+		Brow.Settings.getElem()['CONTENT'].removeChild( this.config.elem );
+		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+	};
+
+	return BrowCard;
+})();
+/**
+ * @name				Brow.Settings
+ * @description	Stores all necessary HTMLElements, sets the theme and 
+ *              	runs all other modules.	
+ * @param			{Object} Brow
+ * @return			{Function} setTheme
+ * @return			{Function} useElements
+ * @return			{Function} getElem
+ * @return			{Function} start
+ * @return			{String} BROW_KEY
+ */
+Brow.Settings = (function (Brow) {
+	'use strict';
+
+	/* Constants */
+	const BROW_KEY			= 'BROW_THEME';
+	const BROW_CUSTOM		= 'BROW_CUSTOM';
+	const DEFAULT_THEME	= 'blue-a400';
+
+	/* Variables */
+	var browElements = {
+		onClickSettings : null,
+		onClickNewCard : null,
+		CONTENT : null,
+		CONTENT_OVERLAY : null,
+		DIALOG : null,
+		DIALOG_OVERLAY : null
+	};
+
+	/**
+	 * @description	Adds event listener.
 	 * @private
 	 */
-	const _addNewCard = function (event) {
-		event.preventDefault();	
-		if (!isEditMode) {
-			_createCard({
-				type: 'basic'
-			});
-			createButton.removeEventListener('click', _addNewCard, true);
+	const _addEvents = function () {
+		browElements.onClickNewCard.addEventListener('click', _createNewCard);
+	};
+
+	/**
+	 * @description	Checks if custom theme settings are available.
+	 * @private
+	 * @return			{Object}
+	 */
+	const _isCustomTheme = function () {
+		let CUSTOM = localStorage[BROW_KEY];
+		return CUSTOM;
+	};
+
+	/**
+	 * @description	Parses the custom settings from localStorage and sets classes.
+	 * @private
+	 * @param			{String} storage
+	 */
+	const _updateThemeFromStorage = function (storage) {
+		storage = JSON.parse(localStorage[BROW_KEY]);
+		document.body.className = '';
+		document.body.classList.add('theme-'+ storage.theme);
+	};
+
+	/**
+	 * @description	Adds the theme class to <body> from initial settings.
+	 * @private
+	 * @param			{String} theme
+	 */
+	const _updateThemeFromConfig = function (theme) {
+		document.body.classList.add('theme-'+ theme);
+	};
+
+	/**
+	 * @description	Checks localStorage and loads the users cards
+	 * @public
+	 * @param			{Object} storage
+	 */
+	const _validateBrowCards = function (storage) {
+		if (!localStorage[BROW_CUSTOM]) {
+			let defaultCard = new BrowCard({ type: 'basic' });
+			browElements['CONTENT'].appendChild( defaultCard );
+		} else {
+			console.log('lolool found lots of cards!');
+			//_parseCardsFromStorage();
 		}
 	};
 
+	const _createNewCard = function (event) {
+		event.preventDefault();
+		if (!Brow.isEditMode) {
+			let defaultCard = new BrowCard({ type: 'basic' });
+			browElements['CONTENT'].appendChild( defaultCard );
+		}
+	};
+
+	/**
+	 * @name				Brow.Settings.setTheme
+	 *	@description	Updates the current theme.
+	 * @public
+	 * @param			{Object} theme
+	 */
+	const setTheme = function (theme) {
+		if (!theme || typeof theme !== 'string') {
+			theme = DEFAULT_THEME;
+		}
+
+		if (_isCustomTheme()) {
+			_updateThemeFromStorage( _isCustomTheme() );
+		} else {
+			_updateThemeFromConfig( theme );
+		}
+	};
+
+	/**
+	 * @name				Brow.Settings.useElements
+	 *	@description	Assigns app specific elements for further usage.
+	 * @public
+	 * @param			{Object} config
+	 */
+	const useElements = function (config) {
+		if (!config || typeof config !== 'object') {
+			throw new Error('No valid options passed!');
+		}
+
+		browElements = {
+			onClickSettings : config.onClickSettings,
+			onClickNewCard : config.onClickNewCard,
+			CONTENT : config.CONTENT,
+			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
+			DIALOG : config.DIALOG,
+			DIALOG_OVERLAY : config.DIALOG_OVERLAY
+		};
+	};
+
+	/**
+	 * @name				Brow.Settings.getElem
+	 *	@description	Returns the elements object
+	 * @public
+	 * @return			{Object}
+	 */
+	const getElem = function () {
+		return browElements;
+	};
+
+	/**
+	 * @name				Brow.Settings.start
+	 *	@description	Calls all necessary modules which are required to run the app.
+	 * @public
+	 */
+	const initialiseAndStartApp = function () {
+		Brow.Dialog.addEvents();
+		_addEvents();
+		_validateBrowCards();
+	};
+	
 	/* Public API */
 	return {
-		Initialise: _initialiseCards,
-		Options: _setOptions,
-		Create: _createCard 
-	};
-})(BrowDash);
+		setTheme : setTheme,
+		useElements : useElements,
+		getElem : getElem,
+		start : initialiseAndStartApp,
+		BROW_KEY : BROW_KEY
+	};	
+})(Brow);
 (function (window) {
 	'use strict';
 
-	const APP = new BrowDash({
-		theme: 'blue-a400',
-		openSettings: document.querySelector('.trigger-settings'),
-		appendTimer: document.querySelector('.trigger-timer'),
-		createCard: document.querySelector('.trigger-newcard'),
-		appendContent: document.querySelector('.trigger-content')
+	const TIMER		= new BrowTimer( document.querySelector('.trigger-timer') );
+	const BROW		= Brow.Settings;
+	const SETTINGS	= BROW.useElements({
+		onClickSettings : document.querySelector('.trigger-settings'),
+		onClickNewCard : document.querySelector('.trigger-newcard'),
+		CONTENT : document.querySelector('.trigger-content'),
+		CONTENT_OVERLAY : document.querySelector('.content__overlay'),
+		DIALOG : document.querySelector('.trigger-dialog'),
+		DIALOG_OVERLAY: document.querySelector('#brow__overlay')
 	});
+
+	TIMER.run();
+	BROW.setTheme('blue-a400');
+	BROW.start();
 
 })(window);

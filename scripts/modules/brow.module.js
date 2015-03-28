@@ -1,4 +1,4 @@
-BrowDash.Module = (function (BrowDash) {
+Brow.Module = (function (Brow) {
 	'use strict';
 
 	/* Constnats */
@@ -22,7 +22,7 @@ BrowDash.Module = (function (BrowDash) {
 	 */
 	const returnBasicModule = function () {
 		let _cParagraphElem	= document.createElement('p');
-		let _defaultContent	= BrowDash.Data.Content('basic')['default'];
+		let _defaultContent	= Brow.Data.Content('basic')['default'];
 		_cParagraphElem.setAttribute('data-basic-preview', _defaultContent);
 		return _cParagraphElem;
 	};
@@ -94,4 +94,4 @@ BrowDash.Module = (function (BrowDash) {
 		Edit: validateModuleEditMode,
 		Save: validateModuleSaving
 	};
-})(BrowDash);
+})(Brow);
