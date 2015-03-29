@@ -13,6 +13,11 @@ BrowCard = (function () {
 		return this.createCard();
 	}
 
+	/**
+	 * @name				BrowCard.createCard
+	 * @description	Creates a new card module
+	 * @public
+	 */
 	BrowCard.prototype.createCard = function () {
 		let baseElem = document.createElement('card-base');
 		let self = this;
@@ -20,6 +25,8 @@ BrowCard = (function () {
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
 		baseElem.appendChild( this.createHeadline( this.title ) );
+		baseElem.appendChild( this.createContent( this.type ) );
+
 		baseElem.addEventListener('btn-settings', function (event) {
 			self.addEvents(event);
 		});
@@ -28,7 +35,7 @@ BrowCard = (function () {
 	};
 
 	/**
-	 * @description	Creates the heading for new cards
+	 * @description	Creates the heading
 	 * @private
 	 * @param			{String} title
 	 */	
@@ -36,6 +43,36 @@ BrowCard = (function () {
 		let headElem = document.createElement('h1');
 		headElem.textContent = title;
 		return headElem;
+	};
+
+	/**
+	 * @description	Creates content and calls new classes based on the type.
+	 * @private
+	 * @param			{String} type
+	 * @return 			{HTMLElement}
+	 */	
+	BrowCard.prototype.createContent = function (type) {
+		var cardContent = null;
+	
+		switch (type) {
+			case 'basic':
+				cardContent = new BrowCardBasic();
+				break;
+			case 'weather':
+				cardContent = new BrowCardWeather();
+				break;
+			case 'notification':
+				cardContent = new BrowCardNotify();
+				break;
+			case 'todo':
+				cardContent = new BrowCardToDo();
+				break;
+			default:
+				cardContent = new BrowCardBasic();
+				break;
+		}
+
+		return cardContent;
 	};
 
 	/**
@@ -55,7 +92,7 @@ BrowCard = (function () {
 		this.config.settings.style.display = 'block';
 		this.config.edit.addEventListener('click', function (event) {
 			event.preventDefault();
-			self.activateCardEditMode(event);
+			self.activateEditMode(event);
 		});
 		this.config.save.addEventListener('click', function (event) {
 			event.preventDefault();
@@ -72,7 +109,7 @@ BrowCard = (function () {
 	 * @private
 	 * @param			{Object} event
 	 */
-	BrowCard.prototype.activateCardEditMode = function (event) {
+	BrowCard.prototype.activateEditMode = function (event) {
 		Brow.isEditMode = true;
 		this.isEditMode = true;
 

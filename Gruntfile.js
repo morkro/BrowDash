@@ -53,8 +53,8 @@ module.exports = function(grunt) {
 				'<%= app.directory.build.scripts %>/modules/brow.data.js',
 				'<%= app.directory.build.scripts %>/modules/brow.timer.js',
 				'<%= app.directory.build.scripts %>/modules/brow.dialog.js',
-				'<%= app.directory.build.scripts %>/modules/brow.module.js',
 				'<%= app.directory.build.scripts %>/modules/brow.card.js',
+				'<%= app.directory.build.scripts %>/modules/brow.card.basic.js',
 				'<%= app.directory.build.scripts %>/modules/brow.settings.js',
 				/* App initialisation */
 				'<%= app.directory.build.scripts %>/app.init.js'

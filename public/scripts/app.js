@@ -277,103 +277,6 @@ Brow.Dialog = (function (Brow) {
 		addEvents: addEvents
 	};
 })(Brow);
-Brow.Module = (function (Brow) {
-	'use strict';
-
-	/* Constnats */
-	const AVAILABLE_MODULES = [
-		'basic', 
-		'weather'
-	];
-
-	/* Variables */
-	var curCardType = null;
-	var curCardElem = null;
-	var curBasicModule = {
-		headline: null,
-		content: null
-	};
-
-	/**
-	 * @description	Creates a basic module containing a <p> tag.
-	 * @private
-	 * @return {HTMLElement}
-	 */
-	const returnBasicModule = function () {
-		let _cParagraphElem	= document.createElement('p');
-		let _defaultContent	= Brow.Data.Content('basic')['default'];
-		_cParagraphElem.setAttribute('data-basic-preview', _defaultContent);
-		return _cParagraphElem;
-	};
-
-	/**
-	 * @description	Validates the given object and calls different editing functions.
-	 * @private
-	 * @param  {Object} options
-	 */
-	const validateModuleEditMode = function (options) {
-		if (!options || typeof options !== 'object') {
-			throw new Error('No options passed!');
-		}
-		curCardType = options.type;
-		curCardElem = options.elem;
-
-		if (AVAILABLE_MODULES[curCardType]) {
-			switch (curCardType) {
-				case 'basic':
-					_activateBasicEditMode(curCardElem);
-					break;
-			}
-		} else {
-			throw new Error('Module ['+ curCardType + '] isn\'t available!');
-		}
-	};
-
-	/**
-	 * [_validateModuleSaving description]
-	 * @param  {[type]} elem [description]
-	 * @return {[type]}      [description]
-	 */
-	const validateModuleSaving = function (elem) {
-		switch (curCardType) {
-			case 'basic':
-				_saveBasicState();
-				break;
-		}
-	};
-
-	/**
-	 * [_saveBasicState description]
-	 * @param  {[type]} cardElem [description]
-	 * @return {[type]}          [description]
-	 */
-	const _saveBasicState = function (cardElem) {
-		curBasicModule['headline'].removeAttribute('contenteditable');
-		curBasicModule['content'].removeAttribute('contenteditable');
-		curBasicModule['headline']	= null;
-		curBasicModule['content']	= null;
-		curCardElem						= null;
-	};
-
-	/**
-	 * [_activateBasicEditMode description]
-	 * @param  {[type]} cardElem [description]
-	 * @return {[type]}          [description]
-	 */
-	const _activateBasicEditMode = function (cardElem) {
-		curBasicModule['headline']	= cardElem.querySelector('h1');
-		curBasicModule['content']	= cardElem.querySelector('p');
-		curBasicModule['headline'].setAttribute('contenteditable', true);
-		curBasicModule['content'].setAttribute('contenteditable', true);
-	};
-
-	/* Public API */
-	return {
-		Basic: returnBasicModule,
-		Edit: validateModuleEditMode,
-		Save: validateModuleSaving
-	};
-})(Brow);
 BrowCard = (function () {
 	'use strict';
 
@@ -389,6 +292,11 @@ BrowCard = (function () {
 		return this.createCard();
 	}
 
+	/**
+	 * @name				BrowCard.createCard
+	 * @description	Creates a new card module
+	 * @public
+	 */
 	BrowCard.prototype.createCard = function () {
 		let baseElem = document.createElement('card-base');
 		let self = this;
@@ -396,6 +304,8 @@ BrowCard = (function () {
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
 		baseElem.appendChild( this.createHeadline( this.title ) );
+		baseElem.appendChild( this.createContent( this.type ) );
+
 		baseElem.addEventListener('btn-settings', function (event) {
 			self.addEvents(event);
 		});
@@ -404,7 +314,7 @@ BrowCard = (function () {
 	};
 
 	/**
-	 * @description	Creates the heading for new cards
+	 * @description	Creates the heading
 	 * @private
 	 * @param			{String} title
 	 */	
@@ -412,6 +322,36 @@ BrowCard = (function () {
 		let headElem = document.createElement('h1');
 		headElem.textContent = title;
 		return headElem;
+	};
+
+	/**
+	 * @description	Creates content and calls new classes based on the type.
+	 * @private
+	 * @param			{String} type
+	 * @return 			{HTMLElement}
+	 */	
+	BrowCard.prototype.createContent = function (type) {
+		var cardContent = null;
+	
+		switch (type) {
+			case 'basic':
+				cardContent = new BrowCardBasic();
+				break;
+			case 'weather':
+				cardContent = new BrowCardWeather();
+				break;
+			case 'notification':
+				cardContent = new BrowCardNotify();
+				break;
+			case 'todo':
+				cardContent = new BrowCardToDo();
+				break;
+			default:
+				cardContent = new BrowCardBasic();
+				break;
+		}
+
+		return cardContent;
 	};
 
 	/**
@@ -431,7 +371,7 @@ BrowCard = (function () {
 		this.config.settings.style.display = 'block';
 		this.config.edit.addEventListener('click', function (event) {
 			event.preventDefault();
-			self.activateCardEditMode(event);
+			self.activateEditMode(event);
 		});
 		this.config.save.addEventListener('click', function (event) {
 			event.preventDefault();
@@ -448,7 +388,7 @@ BrowCard = (function () {
 	 * @private
 	 * @param			{Object} event
 	 */
-	BrowCard.prototype.activateCardEditMode = function (event) {
+	BrowCard.prototype.activateEditMode = function (event) {
 		Brow.isEditMode = true;
 		this.isEditMode = true;
 
@@ -494,6 +434,28 @@ BrowCard = (function () {
 	};
 
 	return BrowCard;
+})();
+BrowCardBasic = (function () {
+	'use strict';
+
+	function BrowCardBasic () {
+		this.container = document.createElement('div');
+
+		this.container.classList.add('content__basic');
+		this.container.appendChild( this.textElem() );
+
+		return this.container;
+	}
+
+	BrowCardBasic.prototype.textElem = function () {
+		let textElem			= document.createElement('p');
+		let defaultContent	= Brow.Data.Content('basic')['default'];
+		
+		textElem.setAttribute('data-basic-preview', defaultContent);
+		return textElem;
+	};
+
+	return BrowCardBasic;
 })();
 /**
  * @name				Brow.Settings
