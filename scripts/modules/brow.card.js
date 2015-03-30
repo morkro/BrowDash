@@ -12,10 +12,11 @@ BrowCard = (function () {
 		this.type			= (config.type) ? config.type : 'basic';
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
+		this.content		= (config.content) ? config.content : null;
 		this.config			= { settings: null, edit: null, save: null, remove: null, elem: null };
-		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: null };
+		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
-		this.content		= this.createContent( this.type );
+		this.body			= this.createContent();
 		
 		console.log(this);
 
@@ -34,7 +35,7 @@ BrowCard = (function () {
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
 		baseElem.appendChild( this.headline );
-		baseElem.appendChild( this.content.getContent() );
+		baseElem.appendChild( this.body.getContent() );
 
 		baseElem.addEventListener('btn-settings', function (event) {
 			self.addEvents(event);
@@ -60,10 +61,10 @@ BrowCard = (function () {
 	 * @param			{String} type
 	 * @return 			{HTMLElement}
 	 */	
-	BrowCard.prototype.createContent = function (type) {
+	BrowCard.prototype.createContent = function () {
 		var cardContent = null;
 	
-		switch (type) {
+		switch (this.type) {
 			case 'basic':
 				cardContent = new BrowCardBasic( this );
 				break;
@@ -122,7 +123,7 @@ BrowCard = (function () {
 		// config
 		Brow.isEditMode = true;
 		this.isEditMode = true;
-		this.content.edit();
+		this.body.edit();
 
 		// visual
 		this.config.elem.classList.add('editmode');
@@ -141,7 +142,8 @@ BrowCard = (function () {
 		// config
 		Brow.isEditMode = false;
 		this.isEditMode = false;
-		this.content.save();
+		this.body.save();
+		Brow.Settings.checkCustom();
 
 		// visual
 		this.config.elem.classList.remove('editmode');

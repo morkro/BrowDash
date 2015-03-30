@@ -291,10 +291,11 @@ BrowCard = (function () {
 		this.type			= (config.type) ? config.type : 'basic';
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
+		this.content		= (config.content) ? config.content : null;
 		this.config			= { settings: null, edit: null, save: null, remove: null, elem: null };
-		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: null };
+		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
-		this.content		= this.createContent( this.type );
+		this.body			= this.createContent();
 		
 		console.log(this);
 
@@ -313,7 +314,7 @@ BrowCard = (function () {
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
 		baseElem.appendChild( this.headline );
-		baseElem.appendChild( this.content.getContent() );
+		baseElem.appendChild( this.body.getContent() );
 
 		baseElem.addEventListener('btn-settings', function (event) {
 			self.addEvents(event);
@@ -339,10 +340,10 @@ BrowCard = (function () {
 	 * @param			{String} type
 	 * @return 			{HTMLElement}
 	 */	
-	BrowCard.prototype.createContent = function (type) {
+	BrowCard.prototype.createContent = function () {
 		var cardContent = null;
 	
-		switch (type) {
+		switch (this.type) {
 			case 'basic':
 				cardContent = new BrowCardBasic( this );
 				break;
@@ -401,7 +402,7 @@ BrowCard = (function () {
 		// config
 		Brow.isEditMode = true;
 		this.isEditMode = true;
-		this.content.edit();
+		this.body.edit();
 
 		// visual
 		this.config.elem.classList.add('editmode');
@@ -420,7 +421,8 @@ BrowCard = (function () {
 		// config
 		Brow.isEditMode = false;
 		this.isEditMode = false;
-		this.content.save();
+		this.body.save();
+		Brow.Settings.checkCustom();
 
 		// visual
 		this.config.elem.classList.remove('editmode');
@@ -471,8 +473,13 @@ BrowCardBasic = (function () {
 	 */	
 	BrowCardBasic.prototype.previewContent = function () {
 		let defaultContent	= Brow.Data.Content('basic')['default'];
+		let storedContent		= this.parent.content.text;
 		
+		if (storedContent) {
+			this.content.innerHTML = storedContent;
+		}
 		this.content.setAttribute('data-basic-preview', defaultContent);
+
 		return this.content;
 	};
 
@@ -488,7 +495,7 @@ BrowCardBasic = (function () {
 	BrowCardBasic.prototype.updateStorage = function () {
 		this.parent.storage['title'] = this.parent.headline.textContent;
 		this.parent.storage['content'] = {
-			text: this.content.textContent
+			text: this.content.innerHTML
 		};
 		localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
 	};
@@ -533,7 +540,7 @@ Brow.Settings = (function (Brow) {
 
 	/* Constants */
 	const BROW_KEY			= 'BROW_THEME';
-	const BROW_CUSTOM		= 'BROW_CUSTOM';
+	const BROW_CARDS		= 'BROW_CARDS';
 	const DEFAULT_THEME	= 'blue-a400';
 
 	/* Variables */
@@ -590,12 +597,36 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Object} storage
 	 */
 	const _validateBrowCards = function (storage) {
-		if (!localStorage[BROW_CUSTOM]) {
+		if (!localStorage[BROW_CARDS]) {
 			let defaultCard = new BrowCard({ type: 'basic' });
 			browElements['CONTENT'].appendChild( defaultCard );
 		} else {
-			console.log('lolool found lots of cards!');
-			//_parseCardsFromStorage();
+			for (let i = localStorage.length; i--;) {
+				_parseCardsFromStorage(i);
+			}
+		}
+	};
+
+	/**
+	 * @description	Checks if custom key is set, if not: do it.
+	 * @public
+	 */
+	const _checkIfCustomBrowCards = function () {
+		if (!localStorage[BROW_CARDS]) {
+			localStorage[BROW_CARDS] = true;
+		}
+	};
+
+	const _parseCardsFromStorage = function (index) {
+		let storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
+		if (storageItem['module']) {
+			let browCard = new BrowCard({
+				type: storageItem['type'],
+				guid: storageItem['guid'],
+				title: storageItem['title'],
+				content: storageItem['content']
+			});
+			browElements['CONTENT'].appendChild( browCard );
 		}
 	};
 
@@ -673,7 +704,8 @@ Brow.Settings = (function (Brow) {
 		useElements : useElements,
 		getElem : getElem,
 		start : initialiseAndStartApp,
-		BROW_KEY : BROW_KEY
+		checkCustom : _checkIfCustomBrowCards,
+		BROW_KEY : BROW_KEY,
 	};	
 })(Brow);
 (function (window) {

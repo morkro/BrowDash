@@ -21,8 +21,13 @@ BrowCardBasic = (function () {
 	 */	
 	BrowCardBasic.prototype.previewContent = function () {
 		let defaultContent	= Brow.Data.Content('basic')['default'];
+		let storedContent		= this.parent.content.text;
 		
+		if (storedContent) {
+			this.content.innerHTML = storedContent;
+		}
 		this.content.setAttribute('data-basic-preview', defaultContent);
+
 		return this.content;
 	};
 
@@ -38,7 +43,7 @@ BrowCardBasic = (function () {
 	BrowCardBasic.prototype.updateStorage = function () {
 		this.parent.storage['title'] = this.parent.headline.textContent;
 		this.parent.storage['content'] = {
-			text: this.content.textContent
+			text: this.content.innerHTML
 		};
 		localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
 	};

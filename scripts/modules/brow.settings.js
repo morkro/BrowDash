@@ -14,7 +14,7 @@ Brow.Settings = (function (Brow) {
 
 	/* Constants */
 	const BROW_KEY			= 'BROW_THEME';
-	const BROW_CUSTOM		= 'BROW_CUSTOM';
+	const BROW_CARDS		= 'BROW_CARDS';
 	const DEFAULT_THEME	= 'blue-a400';
 
 	/* Variables */
@@ -71,12 +71,36 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Object} storage
 	 */
 	const _validateBrowCards = function (storage) {
-		if (!localStorage[BROW_CUSTOM]) {
+		if (!localStorage[BROW_CARDS]) {
 			let defaultCard = new BrowCard({ type: 'basic' });
 			browElements['CONTENT'].appendChild( defaultCard );
 		} else {
-			console.log('lolool found lots of cards!');
-			//_parseCardsFromStorage();
+			for (let i = localStorage.length; i--;) {
+				_parseCardsFromStorage(i);
+			}
+		}
+	};
+
+	/**
+	 * @description	Checks if custom key is set, if not: do it.
+	 * @public
+	 */
+	const _checkIfCustomBrowCards = function () {
+		if (!localStorage[BROW_CARDS]) {
+			localStorage[BROW_CARDS] = true;
+		}
+	};
+
+	const _parseCardsFromStorage = function (index) {
+		let storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
+		if (storageItem['module']) {
+			let browCard = new BrowCard({
+				type: storageItem['type'],
+				guid: storageItem['guid'],
+				title: storageItem['title'],
+				content: storageItem['content']
+			});
+			browElements['CONTENT'].appendChild( browCard );
 		}
 	};
 
@@ -154,6 +178,7 @@ Brow.Settings = (function (Brow) {
 		useElements : useElements,
 		getElem : getElem,
 		start : initialiseAndStartApp,
-		BROW_KEY : BROW_KEY
+		checkCustom : _checkIfCustomBrowCards,
+		BROW_KEY : BROW_KEY,
 	};	
 })(Brow);
