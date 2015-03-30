@@ -1,14 +1,23 @@
+/**
+ * @name				BrowCard
+ * @description	/
+ */
 BrowCard = (function () {
 	'use strict';
 
 	function BrowCard (config) {
 		if (!config) config = {};
 
-		this.type	= (config.type) ? config.type : 'basic';
-		this.title	= (config.title) ? config.title : Brow.Data.Header(config.type);
-		this.guid	= (config.guid) ? config.guid : Brow.GUID();
-		this.config = { settings: null, edit: null, save: null, remove: null, elem: null };
-		this.isEditMode = false;
+		this.isEditMode	= false;
+		this.type			= (config.type) ? config.type : 'basic';
+		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
+		this.guid			= (config.guid) ? config.guid : Brow.GUID();
+		this.config			= { settings: null, edit: null, save: null, remove: null, elem: null };
+		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: null };
+		this.headline		= this.createHeadline( this.title );
+		this.content		= this.createContent( this.type );
+		
+		console.log(this);
 
 		return this.createCard();
 	}
@@ -24,8 +33,8 @@ BrowCard = (function () {
 
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
-		baseElem.appendChild( this.createHeadline( this.title ) );
-		baseElem.appendChild( this.createContent( this.type ) );
+		baseElem.appendChild( this.headline );
+		baseElem.appendChild( this.content.getContent() );
 
 		baseElem.addEventListener('btn-settings', function (event) {
 			self.addEvents(event);
@@ -56,19 +65,19 @@ BrowCard = (function () {
 	
 		switch (type) {
 			case 'basic':
-				cardContent = new BrowCardBasic();
+				cardContent = new BrowCardBasic( this );
 				break;
 			case 'weather':
-				cardContent = new BrowCardWeather();
+				cardContent = new BrowCardWeather( this );
 				break;
 			case 'notification':
-				cardContent = new BrowCardNotify();
+				cardContent = new BrowCardNotify( this );
 				break;
 			case 'todo':
-				cardContent = new BrowCardToDo();
+				cardContent = new BrowCardToDo( this );
 				break;
 			default:
-				cardContent = new BrowCardBasic();
+				cardContent = new BrowCardBasic( this );
 				break;
 		}
 
@@ -110,14 +119,16 @@ BrowCard = (function () {
 	 * @param			{Object} event
 	 */
 	BrowCard.prototype.activateEditMode = function (event) {
+		// config
 		Brow.isEditMode = true;
 		this.isEditMode = true;
+		this.content.edit();
 
+		// visual
 		this.config.elem.classList.add('editmode');
 		this.config.edit.parentNode.classList.add('hidden');
 		this.config.save.parentNode.classList.remove('hidden');
 		this.config.settings.style.display = null;
-
 		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
 	};
 
@@ -127,14 +138,16 @@ BrowCard = (function () {
 	 * @param			{Object} event
 	 */
 	BrowCard.prototype.saveCardChanges = function (event) {
+		// config
 		Brow.isEditMode = false;
 		this.isEditMode = false;
+		this.content.save();
 
+		// visual
 		this.config.elem.classList.remove('editmode');
 		this.config.edit.parentNode.classList.remove('hidden');
 		this.config.save.parentNode.classList.add('hidden');
 		this.config.settings.style.display = null;
-
 		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
 	};
 
