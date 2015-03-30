@@ -17,8 +17,7 @@ BrowCard = (function () {
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
 		this.body			= this.createContent();
-		
-		console.log(this);
+		//console.log(this);
 
 		return this.createCard();
 	}

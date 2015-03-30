@@ -51,9 +51,12 @@ Brow.Dialog = (function (Brow) {
 	 */
 	const _chooseTheme = function (event) {
 		event.preventDefault();
-		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-		localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
-		Brow.Settings.setTheme(_themeColor);
+
+		if (event.target.hasAttribute('data-settings-theme')) {
+			let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
+			localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
+			Brow.Settings.setTheme(_themeColor);
+		}
 	};
 
 	/**

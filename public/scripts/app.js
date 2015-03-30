@@ -224,9 +224,12 @@ Brow.Dialog = (function (Brow) {
 	 */
 	const _chooseTheme = function (event) {
 		event.preventDefault();
-		let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-		localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
-		Brow.Settings.setTheme(_themeColor);
+
+		if (event.target.hasAttribute('data-settings-theme')) {
+			let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
+			localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
+			Brow.Settings.setTheme(_themeColor);
+		}
 	};
 
 	/**
@@ -296,8 +299,7 @@ BrowCard = (function () {
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
 		this.body			= this.createContent();
-		
-		console.log(this);
+		//console.log(this);
 
 		return this.createCard();
 	}

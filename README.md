@@ -1,5 +1,6 @@
 # BrowDash
 A simple and customisable "new tab" Chrome extension using Google Material Design.
+_This extension isn't downloadable until version 1.0.0. Until then, I prepared a preview link to see the current status._
 
 ### Goals
 
