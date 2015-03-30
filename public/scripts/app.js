@@ -291,7 +291,7 @@ BrowCard = (function () {
 		this.type			= (config.type) ? config.type : 'basic';
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
-		this.content		= (config.content) ? config.content : null;
+		this.content		= (config.content) ? config.content : {};
 		this.config			= { settings: null, edit: null, save: null, remove: null, elem: null };
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
@@ -330,7 +330,7 @@ BrowCard = (function () {
 	 */	
 	BrowCard.prototype.createHeadline = function (title) {
 		let headElem = document.createElement('h1');
-		headElem.textContent = title;
+		headElem.innerHTML = title;
 		return headElem;
 	};
 
@@ -475,9 +475,7 @@ BrowCardBasic = (function () {
 		let defaultContent	= Brow.Data.Content('basic')['default'];
 		let storedContent		= this.parent.content.text;
 		
-		if (storedContent) {
-			this.content.innerHTML = storedContent;
-		}
+		if (storedContent) this.content.innerHTML = storedContent;
 		this.content.setAttribute('data-basic-preview', defaultContent);
 
 		return this.content;
@@ -493,7 +491,7 @@ BrowCardBasic = (function () {
 	};
 
 	BrowCardBasic.prototype.updateStorage = function () {
-		this.parent.storage['title'] = this.parent.headline.textContent;
+		this.parent.storage['title'] = this.parent.headline.innerHTML;
 		this.parent.storage['content'] = {
 			text: this.content.innerHTML
 		};

@@ -23,9 +23,7 @@ BrowCardBasic = (function () {
 		let defaultContent	= Brow.Data.Content('basic')['default'];
 		let storedContent		= this.parent.content.text;
 		
-		if (storedContent) {
-			this.content.innerHTML = storedContent;
-		}
+		if (storedContent) this.content.innerHTML = storedContent;
 		this.content.setAttribute('data-basic-preview', defaultContent);
 
 		return this.content;
@@ -41,7 +39,7 @@ BrowCardBasic = (function () {
 	};
 
 	BrowCardBasic.prototype.updateStorage = function () {
-		this.parent.storage['title'] = this.parent.headline.textContent;
+		this.parent.storage['title'] = this.parent.headline.innerHTML;
 		this.parent.storage['content'] = {
 			text: this.content.innerHTML
 		};
