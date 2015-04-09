@@ -220,9 +220,6 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
 .btn:focus { outline: none; }
 .btn svg { fill: #ffffff; }
 
-.header__settings:hover svg { fill: rgba(0, 0, 0, 0.54); }
-.header__settings svg { fill: rgba(0, 0, 0, 0.26); transition: all 150ms ease-in-out; }
-
 .btn--round { border-radius: 50%; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.48); padding: 14px 16px; }
 .btn--round svg { fill: #ffffff; }
 
@@ -234,7 +231,7 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
 #brow__dialog.show { display: flex; }
 #brow__dialog.show .dialog__inner { opacity: 1; display: block; }
 
-.dialog__inner { max-width: 600px; width: 85%; height: 70%; min-height: 300px; opacity: 0; display: none; overflow: hidden; }
+.dialog__inner { width: 65vw; height: 80vh; min-height: 300px; opacity: 0; display: none; overflow: hidden; }
 .dialog__inner.module { padding: 0; }
 .dialog__inner .dialog__sidebar, .dialog__inner .dialog__content { height: calc(100% - 60px); }
 
@@ -248,9 +245,9 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
 .dialog__content span { font-style: italic; color: #9e9e9e; }
 .dialog__content a:hover { text-decoration: underline; }
 
-.dialog__heading { padding: 20px; width: 100%; height: 60px; border-bottom: 1px solid #e0e0e0; background: #e0e0e0; color: #616161; box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3); position: relative; }
-.dialog__heading h3 { float: left; }
-.dialog__heading button { float: right; }
+.dialog__heading { padding: 20px; width: 100%; border-bottom: 1px solid #e0e0e0; background: #e0e0e0; color: #616161; box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3); position: relative; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+.dialog__heading h3 { font-size: 24px; }
+.dialog__heading button { align-self: center; }
 
 .dialog__sidebar { border-right: 1px solid #e0e0e0; }
 
@@ -294,7 +291,10 @@ card-base[data-module-type="basic"] p:empty:not(:focus):after { cursor: text; co
 
 .header__timer { line-height: 30px; text-align: center; }
 
-.header__settings { position: absolute; top: 19px; right: 16px; }
+.header__nav { position: absolute; top: 18px; right: 15px; }
+.header__nav li { float: left; list-style: none; margin-left: 10px; }
+.header__nav .btn:hover svg { fill: white; }
+.header__nav .btn svg { fill: rgba(255, 255, 255, 0.54); transition: all 150ms ease-in-out; }
 
 /* CONTENT */
 #brow__content { position: relative; max-width: 1280px; padding: 0; width: 90%; height: auto; margin: 84px auto 0 auto; transition: all 150ms ease-in-out; z-index: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around; }

@@ -11,14 +11,3 @@
 
 	svg { fill: $white; }
 }
-
-.header__settings {
-	&:hover {
-		svg { fill: rgba(0, 0, 0, .54); }
-	}
-
-	svg { 
-		fill: rgba(0, 0, 0, .26);
-		transition: all 150ms ease-in-out;
-	}
-}

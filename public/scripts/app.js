@@ -42,7 +42,7 @@ Brow.Data = (function (Brow) {
 
 	/* Constants */
 	const _cardDefaultTitles = {
-		'basic': 'Storage all the things!',
+		'basic': 'Store all the things!',
 		'todo': 'Task list',
 		'weather': 'Weather'
 	};
@@ -208,11 +208,14 @@ Brow.Dialog = (function (Brow) {
 	 */
 	const _closeSettings = function (event) {
 		let _curTarget			= event.target;
+		let _curKeyCode		= event.keyCode;
+		let _dialogIsShown	= dialogElem.classList.contains('show');
 		let _isCloseBtn		= _curTarget.classList.contains('dialog__close');
-		let _isOutsideDialog	= _curTarget === this && this.classList.contains('show');
+		let _isOutsideDialog	= _curTarget === dialogElem && _dialogIsShown;
+		let _isESCKey			= _curKeyCode === 27;
 
-		if (_isCloseBtn || _isOutsideDialog) {
-			this.classList.remove('show');
+		if (_isCloseBtn || _isOutsideDialog || _isESCKey && _dialogIsShown) {
+			dialogElem.classList.remove('show');
 			dialogOverlay.classList.remove('show');
 		}
 	};
@@ -273,6 +276,7 @@ Brow.Dialog = (function (Brow) {
 		dialogElem.addEventListener('click', _closeSettings);
 		dialogSidebar.addEventListener('click', _updateSettingsContent);
 		dialogTheme.addEventListener('click', _chooseTheme);
+		window.addEventListener('keydown', _closeSettings);
 	};
 	
 	/* Public API */

@@ -10,7 +10,7 @@ Brow.Data = (function (Brow) {
 
 	/* Constants */
 	const _cardDefaultTitles = {
-		'basic': 'Storage all the things!',
+		'basic': 'Store all the things!',
 		'todo': 'Task list',
 		'weather': 'Weather'
 	};
