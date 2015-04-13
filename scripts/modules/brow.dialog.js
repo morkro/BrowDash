@@ -13,6 +13,7 @@ Brow.Dialog = (function (Brow) {
 	
 	var dialogOverlay		= null;
 	var dialogElem			= null;
+	var dialogContainer	= null;
 	var dialogTheme		= null;
 	var dialogThemeList	= null;
 	var dialogSidebar		= null;
@@ -24,6 +25,11 @@ Brow.Dialog = (function (Brow) {
 	 */
 	const _showSettings = function (event) {
 		event.preventDefault();
+		
+		let dialogContent = this.getAttribute('data-dialog');
+		let dialogContentPath = `/views/dialog-${dialogContent}.html`;
+
+		_loadDialogContent(dialogContentPath);
 		dialogElem.classList.add('show');
 		dialogOverlay.classList.add('show');
 	};
@@ -42,9 +48,25 @@ Brow.Dialog = (function (Brow) {
 		let _isESCKey			= _curKeyCode === 27;
 
 		if (_isCloseBtn || _isOutsideDialog || _isESCKey && _dialogIsShown) {
+			dialogContainer.innerHTML = null;
 			dialogElem.classList.remove('show');
 			dialogOverlay.classList.remove('show');
 		}
+	};
+
+	/**
+	 *	@description	Loads the dialog content and appends it.
+	 * @private
+	 * @param			{String} path
+	 */
+	const _loadDialogContent = function (path) {
+		fetch(path)
+			.then(function (response) {
+				return response.text();
+			})
+			.then(function (body) {
+				dialogContainer.innerHTML = body;
+			});
 	};
 
 	/**
@@ -63,46 +85,24 @@ Brow.Dialog = (function (Brow) {
 	};
 
 	/**
-	 * @description	/
-	 * @private
-	 * @param			{Object} settings
-	 */
-	const _updateSettingsContent = function (event) {
-		let _sidebarElem		= event.target;
-		let _contentName		= _sidebarElem.getAttribute('href').split('-')[1];
-		let _contentElem		= dialogElem.querySelector('.dialog__content__' + _contentName);
-		let _curActiveElems	= dialogElem.querySelectorAll('.active');
-
-		// if link is clicked
-		if (_sidebarElem.classList.contains('sidebar__list__item')) {
-			event.preventDefault();
-			if (!_contentElem.classList.contains('active')) {
-				[].forEach.call(_curActiveElems, function(elem) {
-					elem.classList.remove('active');
-				});
-				_contentElem.classList.add('active');
-				_sidebarElem.classList.add('active');
-			}
-		}
-	};
-
-	/**
 	 * @name				Brow.Dialog.start
 	 *	@description	Adds events
 	 * @public
 	 * @param			{HTMLElement} elem
 	 */
 	const addEvents = function () {
-		settingsBtn		= Brow.Settings.getElem()['onClickSettings'];
-		dialogElem		= Brow.Settings.getElem()['DIALOG'];
-		dialogOverlay	= Brow.Settings.getElem()['DIALOG_OVERLAY'];
-		dialogSidebar	= dialogElem.querySelector('.dialog__sidebar__list');
-		dialogTheme		= dialogElem.querySelector('.settings__theme');
+		settingsBtn			= Brow.Settings.getElem()['onClickDialog'];
+		dialogElem			= Brow.Settings.getElem()['DIALOG'];
+		dialogOverlay		= Brow.Settings.getElem()['DIALOG_OVERLAY'];
+		dialogContainer	= dialogElem.querySelector('.dialog__inner');
+		dialogSidebar		= dialogElem.querySelector('.dialog__sidebar__list');
+		dialogTheme			= dialogElem.querySelector('.settings__theme');
 		
-		settingsBtn.addEventListener('click', _showSettings);
+		[].forEach.call(settingsBtn, function (btn) {
+			btn.addEventListener('click', _showSettings);
+		});
 		dialogElem.addEventListener('click', _closeSettings);
-		dialogSidebar.addEventListener('click', _updateSettingsContent);
-		dialogTheme.addEventListener('click', _chooseTheme);
+		//dialogTheme.addEventListener('click', _chooseTheme);
 		window.addEventListener('keydown', _closeSettings);
 	};
 	

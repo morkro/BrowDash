@@ -48,6 +48,8 @@ module.exports = function(grunt) {
 				}
 			},
 			scripts: [
+				/* Libraries */
+				'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
 				/* Modules */
 				'<%= app.directory.build.scripts %>/modules/brow.core.js',
 				'<%= app.directory.build.scripts %>/modules/brow.data.js',
@@ -68,8 +70,21 @@ module.exports = function(grunt) {
 		copy: {
 			html: {
 				expand	: true,
-				src		: '<%= app.directory.build.views %>/*.*',
+				src		: [
+					'<%= app.directory.build.views %>/index.html',
+					'<%= app.directory.build.views %>/card-base.html'
+				],
 				dest		: '<%= app.directory.dest.public %>/',
+				flatten	: true,
+				filter	: 'isFile'
+			},
+			views: {
+				expand	: true,
+				src		: [
+					'<%= app.directory.build.views %>/dialog-about.html',
+					'<%= app.directory.build.views %>/dialog-settings.html'
+				],
+				dest		: '<%= app.directory.dest.public %>/views',
 				flatten	: true,
 				filter	: 'isFile'
 			},
@@ -182,7 +197,7 @@ module.exports = function(grunt) {
 					'*.html',
 					'<%= app.directory.build.views %>/**/*.html'
 				],
-				tasks: ['newer:copy:html']
+				tasks: ['copy:html']
 			},
 			css: {
 				files: [

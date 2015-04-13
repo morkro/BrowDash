@@ -19,7 +19,7 @@ Brow.Settings = (function (Brow) {
 
 	/* Variables */
 	var browElements = {
-		onClickSettings : null,
+		onClickDialog : null,
 		onClickNewCard : null,
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
@@ -33,6 +33,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addEvents = function () {
 		browElements.onClickNewCard.addEventListener('click', _createNewCard);
+		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 	};
 
 	/**
@@ -91,6 +92,11 @@ Brow.Settings = (function (Brow) {
 		}
 	};
 
+	/**
+	 * @description	Gets localStorage, parses available cards and creates them.
+	 * @private
+	 * @param			{Number|String} index
+	 */	
 	const _parseCardsFromStorage = function (index) {
 		let storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
 		if (storageItem['module']) {
@@ -104,11 +110,22 @@ Brow.Settings = (function (Brow) {
 		}
 	};
 
+	/**
+	 * @description	Creates a new card module.
+	 * @private
+	 * @param			{Object} event
+	 */
 	const _createNewCard = function (event) {
 		event.preventDefault();
 		if (!Brow.isEditMode) {
 			let defaultCard = new BrowCard({ type: 'basic' });
 			browElements['CONTENT'].appendChild( defaultCard );
+		}
+	};
+
+	const _checkCardMode = function (event) {
+		if (Brow.isEditMode && Brow.activeCard.isEditMode) {
+			Brow.activeCard.saveState();
 		}
 	};
 
@@ -142,7 +159,7 @@ Brow.Settings = (function (Brow) {
 		}
 
 		browElements = {
-			onClickSettings : config.onClickSettings,
+			onClickDialog : config.onClickDialog,
 			onClickNewCard : config.onClickNewCard,
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
@@ -180,5 +197,5 @@ Brow.Settings = (function (Brow) {
 		start : initialiseAndStartApp,
 		checkCustom : _checkIfCustomBrowCards,
 		BROW_KEY : BROW_KEY,
-	};	
+	};
 })(Brow);

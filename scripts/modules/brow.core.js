@@ -6,10 +6,17 @@ var Brow = window.Brow = {};
 
 /**
  * @name				Brow.isEditMode
- * @description	/
+ * @description	Saves the current application state.
  * @public
  */
 Brow.isEditMode = false;
+
+/**
+ * @name				Brow.activeCard
+ * @description	/
+ * @public
+ */
+Brow.activeCard = null;
 
 /**
  * @name				Brow.GUID

@@ -35,10 +35,6 @@
 			transition: all 150ms ease-in-out;
 		}
 
-		&:nth-of-type(4n) {
-			margin-right: 0;
-		}
-
 		&[data-settings-theme="blue-a400"] {
 			background: $blue-a200;
 			&:hover { background: $blue-a400; }

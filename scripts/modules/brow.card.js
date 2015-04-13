@@ -13,10 +13,11 @@ BrowCard = (function () {
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
 		this.content		= (config.content) ? config.content : {};
-		this.config			= { settings: null, edit: null, save: null, remove: null, elem: null };
+		this.config			= { edit: null, save: null, remove: null, elem: null };
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
 		this.body			= this.createContent();
+		this.saveState		= this.saveCardChanges;
 		//console.log(this);
 
 		return this.createCard();
@@ -35,10 +36,7 @@ BrowCard = (function () {
 		baseElem.setAttribute('data-module-type', this.type);
 		baseElem.appendChild( this.headline );
 		baseElem.appendChild( this.body.getContent() );
-
-		baseElem.addEventListener('btn-settings', function (event) {
-			self.addEvents(event);
-		});
+		this.addEvents(baseElem);
 
 		return baseElem;
 	};
@@ -89,26 +87,27 @@ BrowCard = (function () {
 	 * @private
 	 * @param			{Object} event
 	 */
-	BrowCard.prototype.addEvents = function (event) {
+	BrowCard.prototype.addEvents = function (elem) {
 		let self = this;
 
-		this.config.elem		= event.target;
-		this.config.settings	= event.target.settings;
-		this.config.edit		= event.target.edit;
-		this.config.save		= event.target.save;
-		this.config.remove	= event.target.remove;
+		elem.addEventListener('btn-settings', function (event) {
+			if (self.config.elem === null) {
+				self.config.elem = event.target;
+				self.config.edit = event.target.edit;
+				self.config.save = event.target.save;
+				self.config.remove = event.target.remove;
+			}
+		});
 
-		this.config.settings.style.display = 'block';
-		this.config.edit.addEventListener('click', function (event) {
-			event.preventDefault();
+		elem.addEventListener('btn-edit', function (event) {
 			self.activateEditMode(event);
 		});
-		this.config.save.addEventListener('click', function (event) {
-			event.preventDefault();
+
+		elem.addEventListener('btn-save', function (event) {
 			self.saveCardChanges(event);
 		});
-		this.config.remove.addEventListener('click', function (event) {
-			event.preventDefault();
+
+		elem.addEventListener('btn-remove', function (event) {
 			self.removeCard(event);
 		});
 	};
@@ -121,6 +120,7 @@ BrowCard = (function () {
 	BrowCard.prototype.activateEditMode = function (event) {
 		// config
 		Brow.isEditMode = true;
+		Brow.activeCard = this;
 		this.isEditMode = true;
 		this.body.edit();
 
@@ -128,7 +128,6 @@ BrowCard = (function () {
 		this.config.elem.classList.add('editmode');
 		this.config.edit.parentNode.classList.add('hidden');
 		this.config.save.parentNode.classList.remove('hidden');
-		this.config.settings.style.display = null;
 		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
 	};
 
@@ -140,6 +139,7 @@ BrowCard = (function () {
 	BrowCard.prototype.saveCardChanges = function (event) {
 		// config
 		Brow.isEditMode = false;
+		Brow.activeCard = null;
 		this.isEditMode = false;
 		this.body.save();
 		Brow.Settings.checkCustom();
@@ -148,7 +148,6 @@ BrowCard = (function () {
 		this.config.elem.classList.remove('editmode');
 		this.config.edit.parentNode.classList.remove('hidden');
 		this.config.save.parentNode.classList.add('hidden');
-		this.config.settings.style.display = null;
 		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
 	};
 

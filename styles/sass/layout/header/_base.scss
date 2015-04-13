@@ -4,12 +4,7 @@
 	position: fixed;
 	top: 0;
 	padding: 16px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
+	//box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
 	z-index: z($modals, header);
-	color: $white;
-}
-
-.header__timer {
-	line-height: 30px;
-	text-align: center;
+	color: $grey-700;	
 }

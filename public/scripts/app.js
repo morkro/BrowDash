@@ -1,3 +1,348 @@
+/* jshint asi:true */
+(function() {
+	'use strict';
+
+	if (self.fetch) {
+		return;
+	}
+
+	function normalizeName(name) {
+		if (typeof name !== 'string') {
+			name = name.toString();
+		}
+		if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+			throw new TypeError('Invalid character in header field name');
+		}
+		return name.toLowerCase();
+	}
+
+	function normalizeValue(value) {
+		if (typeof value !== 'string') {
+			value = value.toString();
+		}
+		return value;
+	}
+
+	function Headers(headers) {
+		this.map = {};
+
+		var self = this;
+		if (headers instanceof Headers) {
+			headers.forEach(function(name, values) {
+				values.forEach(function(value) {
+					self.append(name, value);
+				});
+			});
+
+		} else if (headers) {
+			Object.getOwnPropertyNames(headers).forEach(function(name) {
+				self.append(name, headers[name]);
+			});
+		}
+	}
+
+	Headers.prototype.append = function(name, value) {
+		name = normalizeName(name);
+		value = normalizeValue(value);
+		var list = this.map[name];
+		if (!list) {
+			list = [];
+			this.map[name] = list;
+		}
+		list.push(value);
+	};
+
+	Headers.prototype['delete'] = function(name) {
+		delete this.map[normalizeName(name)];
+	};
+
+	Headers.prototype.get = function(name) {
+		var values = this.map[normalizeName(name)];
+		return values ? values[0] : null;
+	};
+
+	Headers.prototype.getAll = function(name) {
+		return this.map[normalizeName(name)] || [];
+	};
+
+	Headers.prototype.has = function(name) {
+		return this.map.hasOwnProperty(normalizeName(name));
+	};
+
+	Headers.prototype.set = function(name, value) {
+		this.map[normalizeName(name)] = [normalizeValue(value)];
+	};
+
+	// Instead of iterable for now.
+	Headers.prototype.forEach = function(callback) {
+		var self = this;
+		Object.getOwnPropertyNames(this.map).forEach(function(name) {
+			callback(name, self.map[name]);
+		});
+	};
+
+	function consumed(body) {
+		if (body.bodyUsed) {
+			return Promise.reject(new TypeError('Already read'))
+		}
+		body.bodyUsed = true;
+	}
+
+	function fileReaderReady(reader) {
+		return new Promise(function(resolve, reject) {
+			reader.onload = function() {
+				resolve(reader.result);
+			}
+			reader.onerror = function() {
+				reject(reader.error);
+			}
+		});
+	}
+
+	function readBlobAsArrayBuffer(blob) {
+		var reader = new FileReader();
+		reader.readAsArrayBuffer(blob);
+		return fileReaderReady(reader);
+	}
+
+	function readBlobAsText(blob) {
+		var reader = new FileReader();
+		reader.readAsText(blob);
+		return fileReaderReady(reader);
+	}
+
+	var support = {
+		blob: 'FileReader' in self && 'Blob' in self && (function() {
+			try {
+				new Blob();
+				return true;
+			} catch(e) {
+				return false;
+			}
+		})(),
+		formData: 'FormData' in self
+	};
+
+	function Body() {
+		this.bodyUsed = false;
+
+		if (support.blob) {
+			this._initBody = function(body) {
+			this._bodyInit = body;
+		if (typeof body === 'string') {
+			this._bodyText = body;
+		} else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+			this._bodyBlob = body;
+		} else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+			this._bodyFormData = body;
+		} else if (!body) {
+			this._bodyText = '';
+		} else {
+			throw new Error('unsupported BodyInit type');
+		}
+	}
+
+	this.blob = function() {
+		var rejected = consumed(this);
+		if (rejected) {
+			return rejected;
+		}
+
+		if (this._bodyBlob) {
+			return Promise.resolve(this._bodyBlob);
+		} else if (this._bodyFormData) {
+			throw new Error('could not read FormData body as blob');
+		} else {
+			return Promise.resolve(new Blob([this._bodyText]));
+		}
+	};
+
+	this.arrayBuffer = function() {
+		return this.blob().then(readBlobAsArrayBuffer);
+	};
+
+	this.text = function() {
+		var rejected = consumed(this);
+		if (rejected) {
+			return rejected;
+		}
+
+	if (this._bodyBlob) {
+	return readBlobAsText(this._bodyBlob)
+	} else if (this._bodyFormData) {
+	throw new Error('could not read FormData body as text')
+	} else {
+	return Promise.resolve(this._bodyText)
+	}
+	}
+	} else {
+	this._initBody = function(body) {
+	this._bodyInit = body
+	if (typeof body === 'string') {
+	this._bodyText = body
+	} else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	this._bodyFormData = body
+	} else if (!body) {
+	this._bodyText = ''
+	} else {
+	throw new Error('unsupported BodyInit type')
+	}
+	}
+
+	this.text = function() {
+	var rejected = consumed(this)
+	return rejected ? rejected : Promise.resolve(this._bodyText)
+	}
+	}
+
+	if (support.formData) {
+	this.formData = function() {
+	return this.text().then(decode)
+	}
+	}
+
+	this.json = function() {
+	return this.text().then(JSON.parse)
+	}
+
+	return this
+	}
+
+	// HTTP methods whose capitalization should be normalized
+	var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+	function normalizeMethod(method) {
+	var upcased = method.toUpperCase()
+	return (methods.indexOf(upcased) > -1) ? upcased : method
+	}
+
+	function Request(url, options) {
+	options = options || {}
+	this.url = url
+
+	this.credentials = options.credentials || 'omit'
+	this.headers = new Headers(options.headers)
+	this.method = normalizeMethod(options.method || 'GET')
+	this.mode = options.mode || null
+	this.referrer = null
+
+	if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
+	throw new TypeError('Body not allowed for GET or HEAD requests')
+	}
+	this._initBody(options.body)
+	}
+
+	function decode(body) {
+	var form = new FormData()
+	body.trim().split('&').forEach(function(bytes) {
+	if (bytes) {
+	var split = bytes.split('=')
+	var name = split.shift().replace(/\+/g, ' ')
+	var value = split.join('=').replace(/\+/g, ' ')
+	form.append(decodeURIComponent(name), decodeURIComponent(value))
+	}
+	})
+	return form
+	}
+
+	function headers(xhr) {
+	var head = new Headers()
+	var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	pairs.forEach(function(header) {
+	var split = header.trim().split(':')
+	var key = split.shift().trim()
+	var value = split.join(':').trim()
+	head.append(key, value)
+	})
+	return head
+	}
+
+	Request.prototype.fetch = function() {
+	var self = this
+
+	return new Promise(function(resolve, reject) {
+	var xhr = new XMLHttpRequest()
+	if (self.credentials === 'cors') {
+	xhr.withCredentials = true;
+	}
+
+	function responseURL() {
+	if ('responseURL' in xhr) {
+	return xhr.responseURL
+	}
+
+	// Avoid security warnings on getResponseHeader when not allowed by CORS
+	if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	return xhr.getResponseHeader('X-Request-URL')
+	}
+
+	return;
+	}
+
+	xhr.onload = function() {
+	var status = (xhr.status === 1223) ? 204 : xhr.status
+	if (status < 100 || status > 599) {
+	reject(new TypeError('Network request failed'))
+	return
+	}
+	var options = {
+	status: status,
+	statusText: xhr.statusText,
+	headers: headers(xhr),
+	url: responseURL()
+	}
+	var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	resolve(new Response(body, options))
+	}
+
+	xhr.onerror = function() {
+	reject(new TypeError('Network request failed'))
+	}
+
+	xhr.open(self.method, self.url, true)
+
+	if ('responseType' in xhr && support.blob) {
+	xhr.responseType = 'blob'
+	}
+
+	self.headers.forEach(function(name, values) {
+	values.forEach(function(value) {
+	xhr.setRequestHeader(name, value)
+	})
+	})
+
+	xhr.send(typeof self._bodyInit === 'undefined' ? null : self._bodyInit)
+	})
+	}
+
+	Body.call(Request.prototype)
+
+	function Response(bodyInit, options) {
+	if (!options) {
+	options = {}
+	}
+
+	this._initBody(bodyInit)
+	this.type = 'default'
+	this.url = null
+	this.status = options.status
+	this.ok = this.status >= 200 && this.status < 300
+	this.statusText = options.statusText
+	this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	this.url = options.url || ''
+	}
+
+	Body.call(Response.prototype)
+
+	self.Headers = Headers;
+	self.Request = Request;
+	self.Response = Response;
+
+	self.fetch = function (url, options) {
+	return new Request(url, options).fetch()
+	}
+	self.fetch.polyfill = true
+})();
 /**
  * @description	Initialise Brow object.
  * @type 			{Object}
@@ -6,10 +351,17 @@ var Brow = window.Brow = {};
 
 /**
  * @name				Brow.isEditMode
- * @description	/
+ * @description	Saves the current application state.
  * @public
  */
 Brow.isEditMode = false;
+
+/**
+ * @name				Brow.activeCard
+ * @description	/
+ * @public
+ */
+Brow.activeCard = null;
 
 /**
  * @name				Brow.GUID
@@ -186,6 +538,7 @@ Brow.Dialog = (function (Brow) {
 	
 	var dialogOverlay		= null;
 	var dialogElem			= null;
+	var dialogContainer	= null;
 	var dialogTheme		= null;
 	var dialogThemeList	= null;
 	var dialogSidebar		= null;
@@ -197,6 +550,11 @@ Brow.Dialog = (function (Brow) {
 	 */
 	const _showSettings = function (event) {
 		event.preventDefault();
+		
+		let dialogContent = this.getAttribute('data-dialog');
+		let dialogContentPath = `/views/dialog-${dialogContent}.html`;
+
+		_loadDialogContent(dialogContentPath);
 		dialogElem.classList.add('show');
 		dialogOverlay.classList.add('show');
 	};
@@ -215,9 +573,25 @@ Brow.Dialog = (function (Brow) {
 		let _isESCKey			= _curKeyCode === 27;
 
 		if (_isCloseBtn || _isOutsideDialog || _isESCKey && _dialogIsShown) {
+			dialogContainer.innerHTML = null;
 			dialogElem.classList.remove('show');
 			dialogOverlay.classList.remove('show');
 		}
+	};
+
+	/**
+	 *	@description	Loads the dialog content and appends it.
+	 * @private
+	 * @param			{String} path
+	 */
+	const _loadDialogContent = function (path) {
+		fetch(path)
+			.then(function (response) {
+				return response.text();
+			})
+			.then(function (body) {
+				dialogContainer.innerHTML = body;
+			});
 	};
 
 	/**
@@ -236,46 +610,24 @@ Brow.Dialog = (function (Brow) {
 	};
 
 	/**
-	 * @description	/
-	 * @private
-	 * @param			{Object} settings
-	 */
-	const _updateSettingsContent = function (event) {
-		let _sidebarElem		= event.target;
-		let _contentName		= _sidebarElem.getAttribute('href').split('-')[1];
-		let _contentElem		= dialogElem.querySelector('.dialog__content__' + _contentName);
-		let _curActiveElems	= dialogElem.querySelectorAll('.active');
-
-		// if link is clicked
-		if (_sidebarElem.classList.contains('sidebar__list__item')) {
-			event.preventDefault();
-			if (!_contentElem.classList.contains('active')) {
-				[].forEach.call(_curActiveElems, function(elem) {
-					elem.classList.remove('active');
-				});
-				_contentElem.classList.add('active');
-				_sidebarElem.classList.add('active');
-			}
-		}
-	};
-
-	/**
 	 * @name				Brow.Dialog.start
 	 *	@description	Adds events
 	 * @public
 	 * @param			{HTMLElement} elem
 	 */
 	const addEvents = function () {
-		settingsBtn		= Brow.Settings.getElem()['onClickSettings'];
-		dialogElem		= Brow.Settings.getElem()['DIALOG'];
-		dialogOverlay	= Brow.Settings.getElem()['DIALOG_OVERLAY'];
-		dialogSidebar	= dialogElem.querySelector('.dialog__sidebar__list');
-		dialogTheme		= dialogElem.querySelector('.settings__theme');
+		settingsBtn			= Brow.Settings.getElem()['onClickDialog'];
+		dialogElem			= Brow.Settings.getElem()['DIALOG'];
+		dialogOverlay		= Brow.Settings.getElem()['DIALOG_OVERLAY'];
+		dialogContainer	= dialogElem.querySelector('.dialog__inner');
+		dialogSidebar		= dialogElem.querySelector('.dialog__sidebar__list');
+		dialogTheme			= dialogElem.querySelector('.settings__theme');
 		
-		settingsBtn.addEventListener('click', _showSettings);
+		[].forEach.call(settingsBtn, function (btn) {
+			btn.addEventListener('click', _showSettings);
+		});
 		dialogElem.addEventListener('click', _closeSettings);
-		dialogSidebar.addEventListener('click', _updateSettingsContent);
-		dialogTheme.addEventListener('click', _chooseTheme);
+		//dialogTheme.addEventListener('click', _chooseTheme);
 		window.addEventListener('keydown', _closeSettings);
 	};
 	
@@ -299,10 +651,11 @@ BrowCard = (function () {
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
 		this.content		= (config.content) ? config.content : {};
-		this.config			= { settings: null, edit: null, save: null, remove: null, elem: null };
+		this.config			= { edit: null, save: null, remove: null, elem: null };
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
 		this.headline		= this.createHeadline( this.title );
 		this.body			= this.createContent();
+		this.saveState		= this.saveCardChanges;
 		//console.log(this);
 
 		return this.createCard();
@@ -321,10 +674,7 @@ BrowCard = (function () {
 		baseElem.setAttribute('data-module-type', this.type);
 		baseElem.appendChild( this.headline );
 		baseElem.appendChild( this.body.getContent() );
-
-		baseElem.addEventListener('btn-settings', function (event) {
-			self.addEvents(event);
-		});
+		this.addEvents(baseElem);
 
 		return baseElem;
 	};
@@ -375,26 +725,27 @@ BrowCard = (function () {
 	 * @private
 	 * @param			{Object} event
 	 */
-	BrowCard.prototype.addEvents = function (event) {
+	BrowCard.prototype.addEvents = function (elem) {
 		let self = this;
 
-		this.config.elem		= event.target;
-		this.config.settings	= event.target.settings;
-		this.config.edit		= event.target.edit;
-		this.config.save		= event.target.save;
-		this.config.remove	= event.target.remove;
+		elem.addEventListener('btn-settings', function (event) {
+			if (self.config.elem === null) {
+				self.config.elem = event.target;
+				self.config.edit = event.target.edit;
+				self.config.save = event.target.save;
+				self.config.remove = event.target.remove;
+			}
+		});
 
-		this.config.settings.style.display = 'block';
-		this.config.edit.addEventListener('click', function (event) {
-			event.preventDefault();
+		elem.addEventListener('btn-edit', function (event) {
 			self.activateEditMode(event);
 		});
-		this.config.save.addEventListener('click', function (event) {
-			event.preventDefault();
+
+		elem.addEventListener('btn-save', function (event) {
 			self.saveCardChanges(event);
 		});
-		this.config.remove.addEventListener('click', function (event) {
-			event.preventDefault();
+
+		elem.addEventListener('btn-remove', function (event) {
 			self.removeCard(event);
 		});
 	};
@@ -407,6 +758,7 @@ BrowCard = (function () {
 	BrowCard.prototype.activateEditMode = function (event) {
 		// config
 		Brow.isEditMode = true;
+		Brow.activeCard = this;
 		this.isEditMode = true;
 		this.body.edit();
 
@@ -414,7 +766,6 @@ BrowCard = (function () {
 		this.config.elem.classList.add('editmode');
 		this.config.edit.parentNode.classList.add('hidden');
 		this.config.save.parentNode.classList.remove('hidden');
-		this.config.settings.style.display = null;
 		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
 	};
 
@@ -426,6 +777,7 @@ BrowCard = (function () {
 	BrowCard.prototype.saveCardChanges = function (event) {
 		// config
 		Brow.isEditMode = false;
+		Brow.activeCard = null;
 		this.isEditMode = false;
 		this.body.save();
 		Brow.Settings.checkCustom();
@@ -434,7 +786,6 @@ BrowCard = (function () {
 		this.config.elem.classList.remove('editmode');
 		this.config.edit.parentNode.classList.remove('hidden');
 		this.config.save.parentNode.classList.add('hidden');
-		this.config.settings.style.display = null;
 		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
 	};
 
@@ -549,7 +900,7 @@ Brow.Settings = (function (Brow) {
 
 	/* Variables */
 	var browElements = {
-		onClickSettings : null,
+		onClickDialog : null,
 		onClickNewCard : null,
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
@@ -563,6 +914,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addEvents = function () {
 		browElements.onClickNewCard.addEventListener('click', _createNewCard);
+		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 	};
 
 	/**
@@ -621,6 +973,11 @@ Brow.Settings = (function (Brow) {
 		}
 	};
 
+	/**
+	 * @description	Gets localStorage, parses available cards and creates them.
+	 * @private
+	 * @param			{Number|String} index
+	 */	
 	const _parseCardsFromStorage = function (index) {
 		let storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
 		if (storageItem['module']) {
@@ -634,11 +991,22 @@ Brow.Settings = (function (Brow) {
 		}
 	};
 
+	/**
+	 * @description	Creates a new card module.
+	 * @private
+	 * @param			{Object} event
+	 */
 	const _createNewCard = function (event) {
 		event.preventDefault();
 		if (!Brow.isEditMode) {
 			let defaultCard = new BrowCard({ type: 'basic' });
 			browElements['CONTENT'].appendChild( defaultCard );
+		}
+	};
+
+	const _checkCardMode = function (event) {
+		if (Brow.isEditMode && Brow.activeCard.isEditMode) {
+			Brow.activeCard.saveState();
 		}
 	};
 
@@ -672,7 +1040,7 @@ Brow.Settings = (function (Brow) {
 		}
 
 		browElements = {
-			onClickSettings : config.onClickSettings,
+			onClickDialog : config.onClickDialog,
 			onClickNewCard : config.onClickNewCard,
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
@@ -710,7 +1078,7 @@ Brow.Settings = (function (Brow) {
 		start : initialiseAndStartApp,
 		checkCustom : _checkIfCustomBrowCards,
 		BROW_KEY : BROW_KEY,
-	};	
+	};
 })(Brow);
 (function (window) {
 	'use strict';
@@ -718,7 +1086,7 @@ Brow.Settings = (function (Brow) {
 	const TIMER		= new BrowTimer( document.querySelector('.trigger-timer') );
 	const BROW		= Brow.Settings;
 	const SETTINGS	= BROW.useElements({
-		onClickSettings : document.querySelector('.trigger-settings'),
+		onClickDialog : document.querySelectorAll('.open-dialog'),
 		onClickNewCard : document.querySelector('.trigger-newcard'),
 		CONTENT : document.querySelector('.trigger-content'),
 		CONTENT_OVERLAY : document.querySelector('.content__overlay'),

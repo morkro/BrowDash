@@ -35,35 +35,3 @@
 		height: calc(100% - 60px);
 	}
 }
-
-.dialog__sidebar {
-	float: left;
-	width: 30%;
-}
-
-.dialog__content {
-	float: right;
-	width: 70%;
-	padding: 15px;
-
-	> div {
-		display: none;
-
-		&.active { display: block; }
-	}
-
-	h4 {
-		margin-bottom: 20px;
-
-		&:not(:first-of-type) { 
-			margin-top: 20px; 
-		}
-	}
-
-	span {
-		font-style: italic;
-		color: $grey;
-	}
-
-	a:hover { text-decoration: underline; }
-}

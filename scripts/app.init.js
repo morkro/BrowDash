@@ -4,7 +4,7 @@
 	const TIMER		= new BrowTimer( document.querySelector('.trigger-timer') );
 	const BROW		= Brow.Settings;
 	const SETTINGS	= BROW.useElements({
-		onClickSettings : document.querySelector('.trigger-settings'),
+		onClickDialog : document.querySelectorAll('.open-dialog'),
 		onClickNewCard : document.querySelector('.trigger-newcard'),
 		CONTENT : document.querySelector('.trigger-content'),
 		CONTENT_OVERLAY : document.querySelector('.content__overlay'),
