@@ -1,4 +1,16 @@
 #footer__add {
+	position: absolute;
+	z-index: z($footer, button);
+	top: 50%;
+	left: 50%;
+	width: 56px;
+	height: 55px;
+	transform: translate(-50%, -50%);
+
+	&[data-tooltip]:before {
+		width: 150%;
+	}
+
 	&.editmode {
 		cursor: not-allowed;
 		opacity: 0.6;

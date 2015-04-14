@@ -13,7 +13,7 @@ Brow.isEditMode = false;
 
 /**
  * @name				Brow.activeCard
- * @description	/
+ * @description	Holds current state of an active card.
  * @public
  */
 Brow.activeCard = null;

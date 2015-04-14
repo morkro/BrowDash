@@ -358,7 +358,7 @@ Brow.isEditMode = false;
 
 /**
  * @name				Brow.activeCard
- * @description	/
+ * @description	Holds current state of an active card.
  * @public
  */
 Brow.activeCard = null;
@@ -650,6 +650,7 @@ BrowCard = (function () {
 		this.type			= (config.type) ? config.type : 'basic';
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
+		this.order			= (config.order) ? config.order : 0;
 		this.content		= (config.content) ? config.content : {};
 		this.config			= { edit: null, save: null, remove: null, elem: null };
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
@@ -672,6 +673,9 @@ BrowCard = (function () {
 
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
+		baseElem.setAttribute('data-module-order', this.order);
+		baseElem.style.order = baseElem.getAttribute('data-module-order');
+
 		baseElem.appendChild( this.headline );
 		baseElem.appendChild( this.body.getContent() );
 		this.addEvents(baseElem);
@@ -800,7 +804,7 @@ BrowCard = (function () {
 
 		this.config.elem.classList.add('deletemode');
 		this.config.elem.addEventListener('transitionend', function (event) {
-			// Only listen to the transform transition.
+			// Only listen to the last transition.
 			if (event.propertyName === 'transform') {
 				Brow.isEditMode = false;
 				this.isEditMode = false;
@@ -812,78 +816,6 @@ BrowCard = (function () {
 	};
 
 	return BrowCard;
-})();
-/**
- * @name				BrowCardBasic
- * @description	/
- */
-BrowCardBasic = (function () {
-	'use strict';
-
-	function BrowCardBasic (card) {
-		this.parent		= card;
-		this.content	= document.createElement('p');
-		this.wrapper	= document.createElement('div');
-
-		this.wrapper.classList.add('content__basic');
-		this.wrapper.appendChild( this.previewContent() );
-	}
-
-	/**
-	 * @description	Sets the preview content
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.previewContent = function () {
-		let defaultContent	= Brow.Data.Content('basic')['default'];
-		let storedContent		= this.parent.content.text;
-		
-		if (storedContent) this.content.innerHTML = storedContent;
-		this.content.setAttribute('data-basic-preview', defaultContent);
-
-		return this.content;
-	};
-
-	/**
-	 * @description	Returns the entire module wrapper element.
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.getContent = function () {
-		return this.wrapper;
-	};
-
-	BrowCardBasic.prototype.updateStorage = function () {
-		this.parent.storage['title'] = this.parent.headline.innerHTML;
-		this.parent.storage['content'] = {
-			text: this.content.innerHTML
-		};
-		localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-	};
-
-	/**
-	 * @description	Sets 'contenteditable="true"' to all elements.
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.edit = function () {
-		this.content.setAttribute('contenteditable', true);
-		this.parent.headline.setAttribute('contenteditable', true);
-	};
-
-	/**
-	 * @description	Removes attributes, updates Object and saves it to localStorage.
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.save = function () {
-		this.content.removeAttribute('contenteditable');
-		this.parent.headline.removeAttribute('contenteditable');
-		this.parent.title = this.parent.headline.textContent;
-		this.updateStorage();
-	};
-
-	return BrowCardBasic;
 })();
 /**
  * @name				Brow.Settings
@@ -908,19 +840,26 @@ Brow.Settings = (function (Brow) {
 	var browElements = {
 		onClickDialog : null,
 		onClickNewCard : null,
+		onClickSelectionList : null,
+		SELECTION : null,
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
 		DIALOG : null,
 		DIALOG_OVERLAY : null
 	};
+	var isSelectionState = false;
 
 	/**
 	 * @description	Adds event listener.
 	 * @private
 	 */
 	const _addEvents = function () {
-		browElements.onClickNewCard.addEventListener('click', _createNewCard);
+		browElements.onClickSelectionList.addEventListener('click', _showCardList);
 		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
+		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
+		[].forEach.call(browElements.onClickNewCard, function (item) {
+			item.addEventListener('click', _addNewCard);
+		});
 	};
 
 	/**
@@ -998,16 +937,37 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @description	Creates a new card module.
+	 * @description	Displays list of cards.
 	 * @private
 	 * @param			{Object} event
 	 */
-	const _createNewCard = function (event) {
+	const _showCardList = function (event) {
 		event.preventDefault();
+
 		if (!Brow.isEditMode) {
-			let defaultCard = new BrowCard({ type: 'basic' });
-			browElements['CONTENT'].appendChild( defaultCard );
+			isSelectionState = true;
+			browElements['SELECTION'].classList.add('show');
 		}
+	};
+
+	/**
+	 * @description	Hides list of cards on mouseout.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _closeCardList = function (event) {
+		let movedOut = event.toElement === document.documentElement;
+		let selectionIsVisible = browElements['SELECTION'].classList.contains('show');
+
+		if (movedOut && isSelectionState) {
+			browElements['SELECTION'].classList.remove('show');			
+		}
+	};
+
+	const _addNewCard = function (event) {
+		event.preventDefault();
+		let selectedCard = this.getAttribute('data-create-card');
+		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
 	};
 
 	const _checkCardMode = function (event) {
@@ -1048,6 +1008,8 @@ Brow.Settings = (function (Brow) {
 		browElements = {
 			onClickDialog : config.onClickDialog,
 			onClickNewCard : config.onClickNewCard,
+			onClickSelectionList : config.onClickSelectionList,
+			SELECTION : config.SELECTION,
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
 			DIALOG : config.DIALOG,
@@ -1086,6 +1048,98 @@ Brow.Settings = (function (Brow) {
 		BROW_KEY : BROW_KEY,
 	};
 })(Brow);
+/**
+ * @name				BrowCardBasic
+ * @description	/
+ */
+BrowCardBasic = (function () {
+	'use strict';
+
+	function BrowCardBasic (card) {
+		this.parent		= card;
+		this.content	= document.createElement('p');
+		this.wrapper	= document.createElement('div');
+
+		this.wrapper.classList.add('content__basic');
+		this.wrapper.appendChild( this.createEditor() );
+		this.wrapper.appendChild( this.previewContent() );
+	}
+
+	/**
+	 * @description	Sets the preview content
+	 * @public
+	 * @return 			{HTMLElement}
+	 */	
+	BrowCardBasic.prototype.previewContent = function () {
+		let defaultContent	= Brow.Data.Content('basic')['default'];
+		let storedContent		= this.parent.content.text;
+		
+		if (storedContent) this.content.innerHTML = storedContent;
+		this.content.setAttribute('data-basic-preview', defaultContent);
+
+		return this.content;
+	};
+
+	/**
+	 * @description	Returns the entire module wrapper element.
+	 * @public
+	 * @return 			{HTMLElement}
+	 */	
+	BrowCardBasic.prototype.getContent = function () {
+		return this.wrapper;
+	};
+
+	/**
+	 * @description	Saves current content to localStorage.
+	 * @public
+	 */	
+	BrowCardBasic.prototype.updateStorage = function () {
+		this.parent.storage['title'] = this.parent.headline.innerHTML;
+		this.parent.storage['content'] = {
+			text: this.content.innerHTML
+		};
+		localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
+	};
+
+	/**
+	 * @description	Creates a simple editor to style text.
+	 * @public
+	 * @todo 			Create everything: bold, italic, unstyle, links.
+	 */	
+	BrowCardBasic.prototype.createEditor = function () {
+		let editWrap = document.createElement('div');
+		let editList = document.createElement('ul');
+
+		editWrap.classList.add('content__basic__editor');
+		editWrap.appendChild( editList );
+
+		return editWrap;
+	};
+
+	/**
+	 * @description	Sets 'contenteditable="true"' to all elements.
+	 * @public
+	 * @return 			{HTMLElement}
+	 */	
+	BrowCardBasic.prototype.edit = function () {
+		this.content.setAttribute('contenteditable', true);
+		this.parent.headline.setAttribute('contenteditable', true);
+	};
+
+	/**
+	 * @description	Removes attributes, updates Object and saves it to localStorage.
+	 * @public
+	 * @return 			{HTMLElement}
+	 */	
+	BrowCardBasic.prototype.save = function () {
+		this.content.removeAttribute('contenteditable');
+		this.parent.headline.removeAttribute('contenteditable');
+		this.parent.title = this.parent.headline.textContent;
+		this.updateStorage();
+	};
+
+	return BrowCardBasic;
+})();
 (function (window) {
 	'use strict';
 
@@ -1093,7 +1147,9 @@ Brow.Settings = (function (Brow) {
 	const BROW		= Brow.Settings;
 	const SETTINGS	= BROW.useElements({
 		onClickDialog : document.querySelectorAll('.open-dialog'),
-		onClickNewCard : document.querySelector('.trigger-newcard'),
+		onClickNewCard : document.querySelectorAll('.trigger-newcard'),
+		onClickSelectionList : document.querySelector('.trigger-selection'),
+		SELECTION : document.querySelector('.trigger-cardlist'),
 		CONTENT : document.querySelector('.trigger-content'),
 		CONTENT_OVERLAY : document.querySelector('.content__overlay'),
 		DIALOG : document.querySelector('.trigger-dialog'),

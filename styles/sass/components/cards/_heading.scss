@@ -9,6 +9,7 @@ card-base h1 {
 	&:read-write:focus,
 	&:read-write:hover { 
 		outline: none; 
+		border-radius: 2px;
 		background: $grey-200;
 		color: rgba(0, 0, 0, .7);
 	}

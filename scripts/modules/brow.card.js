@@ -12,6 +12,7 @@ BrowCard = (function () {
 		this.type			= (config.type) ? config.type : 'basic';
 		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
 		this.guid			= (config.guid) ? config.guid : Brow.GUID();
+		this.order			= (config.order) ? config.order : 0;
 		this.content		= (config.content) ? config.content : {};
 		this.config			= { edit: null, save: null, remove: null, elem: null };
 		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
@@ -34,6 +35,9 @@ BrowCard = (function () {
 
 		baseElem.setAttribute('data-module-guid', this.guid);
 		baseElem.setAttribute('data-module-type', this.type);
+		baseElem.setAttribute('data-module-order', this.order);
+		baseElem.style.order = baseElem.getAttribute('data-module-order');
+
 		baseElem.appendChild( this.headline );
 		baseElem.appendChild( this.body.getContent() );
 		this.addEvents(baseElem);
@@ -162,7 +166,7 @@ BrowCard = (function () {
 
 		this.config.elem.classList.add('deletemode');
 		this.config.elem.addEventListener('transitionend', function (event) {
-			// Only listen to the transform transition.
+			// Only listen to the last transition.
 			if (event.propertyName === 'transform') {
 				Brow.isEditMode = false;
 				this.isEditMode = false;

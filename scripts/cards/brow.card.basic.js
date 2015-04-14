@@ -11,6 +11,7 @@ BrowCardBasic = (function () {
 		this.wrapper	= document.createElement('div');
 
 		this.wrapper.classList.add('content__basic');
+		this.wrapper.appendChild( this.createEditor() );
 		this.wrapper.appendChild( this.previewContent() );
 	}
 
@@ -38,12 +39,31 @@ BrowCardBasic = (function () {
 		return this.wrapper;
 	};
 
+	/**
+	 * @description	Saves current content to localStorage.
+	 * @public
+	 */	
 	BrowCardBasic.prototype.updateStorage = function () {
 		this.parent.storage['title'] = this.parent.headline.innerHTML;
 		this.parent.storage['content'] = {
 			text: this.content.innerHTML
 		};
 		localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
+	};
+
+	/**
+	 * @description	Creates a simple editor to style text.
+	 * @public
+	 * @todo 			Create everything: bold, italic, unstyle, links.
+	 */	
+	BrowCardBasic.prototype.createEditor = function () {
+		let editWrap = document.createElement('div');
+		let editList = document.createElement('ul');
+
+		editWrap.classList.add('content__basic__editor');
+		editWrap.appendChild( editList );
+
+		return editWrap;
 	};
 
 	/**

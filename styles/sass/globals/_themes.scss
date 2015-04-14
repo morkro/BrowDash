@@ -6,6 +6,7 @@
 		&:hover { background-color: $red-600; }
 	}
 	a { color: $blue-a400; }
+	.colored-bg { background: $red; }
 }
 
 // Indigo
@@ -16,6 +17,7 @@
 		&:hover { background-color: $pink-600; }
 	}
 	a { color: $indigo-400; }
+	.colored-bg { background: $pink; }
 }
 
 // Teal
@@ -26,6 +28,7 @@
 		&:hover { background-color: $pink-600; }
 	}
 	a { color: $teal-400; }
+	.colored-bg { background: $pink; }
 }
 
 // Pink
@@ -36,6 +39,7 @@
 		&:hover { background-color: $cyan-600; }
 	}
 	a { color: $pink-400; }
+	.colored-bg { background: $cyan; }
 }
 
 // Red
@@ -46,4 +50,5 @@
 		&:hover { background-color: $blue-a400; }
 	}
 	a { color: $red; }
+	.colored-bg { background: $blue-a400; }
 }

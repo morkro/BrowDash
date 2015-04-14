@@ -3,7 +3,8 @@ card-base[data-module-type="basic"] {
 		transition: all 150ms ease-in-out;
 
 		&:focus, &:read-write:hover { 
-			outline: none; 
+			outline: none;
+			border-radius: 2px;
 			background: $grey-200;
 			color: rgba(0, 0, 0, .7);
 		}

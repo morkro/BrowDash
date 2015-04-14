@@ -55,12 +55,29 @@
 	<!-- Dashboard Footer -->
 	<footer id="brow__footer">
 		<!-- Select card type -->
-		<div class="footer__select">
-
+		<div class="footer__select colored-bg trigger-cardlist">
+			<ul class="footer__select__list">
+				<li data-tooltip="Add a simple card" data-tooltip-pos="top">
+					<button class="btn trigger-newcard" data-create-card="basic">
+						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+							<path d="M0 0h24v24h-24z" fill="none"/>
+							<path d="M17 10h-10v2h10v-2zm2-7h-1v-2h-2v2h-8v-2h-2v2h-1c-1.11 0-1.99.9-1.99 2l-.01 14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2zm0 16h-14v-11h14v11zm-5-5h-7v2h7v-2z"/>
+						</svg>
+					</button>
+				</li>
+				<li data-tooltip="Add a weather card" data-tooltip-pos="top">
+					<button class="btn trigger-newcard" data-create-card="weather">
+						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+							<path d="M0 0h24v24h-24z" fill="none"/>
+							<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zm-2.76 5.66h-3v2h3v-2zm9-9.95h-2v2.95h2v-2.95zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zm2.76-7.66v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2v-2.95h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
+						</svg>
+					</button>
+				</li>
+			</ul>
 		</div><!-- /Select card type -->
 
 		<!-- Button -->
-		<button id="footer__add" data-tooltip="Add a new card" data-tooltip-pos="top" class="btn btn--round trigger-newcard">
+		<button id="footer__add" class="btn btn--round trigger-selection" data-tooltip="Add a card" data-tooltip-pos="top">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 				<path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/>
 				<path d="M0 0h24v24h-24z" fill="none"/>

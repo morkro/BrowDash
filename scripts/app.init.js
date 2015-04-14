@@ -5,7 +5,9 @@
 	const BROW		= Brow.Settings;
 	const SETTINGS	= BROW.useElements({
 		onClickDialog : document.querySelectorAll('.open-dialog'),
-		onClickNewCard : document.querySelector('.trigger-newcard'),
+		onClickNewCard : document.querySelectorAll('.trigger-newcard'),
+		onClickSelectionList : document.querySelector('.trigger-selection'),
+		SELECTION : document.querySelector('.trigger-cardlist'),
 		CONTENT : document.querySelector('.trigger-content'),
 		CONTENT_OVERLAY : document.querySelector('.content__overlay'),
 		DIALOG : document.querySelector('.trigger-dialog'),

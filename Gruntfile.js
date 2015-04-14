@@ -56,8 +56,9 @@ module.exports = function(grunt) {
 				'<%= app.directory.build.scripts %>/modules/brow.timer.js',
 				'<%= app.directory.build.scripts %>/modules/brow.dialog.js',
 				'<%= app.directory.build.scripts %>/modules/brow.card.js',
-				'<%= app.directory.build.scripts %>/modules/brow.card.basic.js',
 				'<%= app.directory.build.scripts %>/modules/brow.settings.js',
+				/* Cards */
+				'<%= app.directory.build.scripts %>/cards/brow.card.basic.js',
 				/* App initialisation */
 				'<%= app.directory.build.scripts %>/app.init.js'
 			]
@@ -210,6 +211,7 @@ module.exports = function(grunt) {
 				files: [
 					'!<%= app.directory.build.scripts %>/components/*.js',
 					'<%= app.directory.build.scripts %>/modules/*.js',
+					'<%= app.directory.build.scripts %>/cards/*.js',
 					'<%= app.directory.build.scripts %>/app.init.js'
 				],
 				tasks: ['newer:jshint', 'newer:concat']

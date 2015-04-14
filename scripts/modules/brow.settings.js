@@ -21,19 +21,26 @@ Brow.Settings = (function (Brow) {
 	var browElements = {
 		onClickDialog : null,
 		onClickNewCard : null,
+		onClickSelectionList : null,
+		SELECTION : null,
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
 		DIALOG : null,
 		DIALOG_OVERLAY : null
 	};
+	var isSelectionState = false;
 
 	/**
 	 * @description	Adds event listener.
 	 * @private
 	 */
 	const _addEvents = function () {
-		browElements.onClickNewCard.addEventListener('click', _createNewCard);
+		browElements.onClickSelectionList.addEventListener('click', _showCardList);
 		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
+		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
+		[].forEach.call(browElements.onClickNewCard, function (item) {
+			item.addEventListener('click', _addNewCard);
+		});
 	};
 
 	/**
@@ -111,16 +118,37 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @description	Creates a new card module.
+	 * @description	Displays list of cards.
 	 * @private
 	 * @param			{Object} event
 	 */
-	const _createNewCard = function (event) {
+	const _showCardList = function (event) {
 		event.preventDefault();
+
 		if (!Brow.isEditMode) {
-			let defaultCard = new BrowCard({ type: 'basic' });
-			browElements['CONTENT'].appendChild( defaultCard );
+			isSelectionState = true;
+			browElements['SELECTION'].classList.add('show');
 		}
+	};
+
+	/**
+	 * @description	Hides list of cards on mouseout.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _closeCardList = function (event) {
+		let movedOut = event.toElement === document.documentElement;
+		let selectionIsVisible = browElements['SELECTION'].classList.contains('show');
+
+		if (movedOut && isSelectionState) {
+			browElements['SELECTION'].classList.remove('show');			
+		}
+	};
+
+	const _addNewCard = function (event) {
+		event.preventDefault();
+		let selectedCard = this.getAttribute('data-create-card');
+		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
 	};
 
 	const _checkCardMode = function (event) {
@@ -161,6 +189,8 @@ Brow.Settings = (function (Brow) {
 		browElements = {
 			onClickDialog : config.onClickDialog,
 			onClickNewCard : config.onClickNewCard,
+			onClickSelectionList : config.onClickSelectionList,
+			SELECTION : config.SELECTION,
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
 			DIALOG : config.DIALOG,
