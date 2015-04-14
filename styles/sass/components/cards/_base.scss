@@ -13,6 +13,13 @@ card-base, .module {
 		transform: translateY(-5px);
 		box-shadow: $shadow-z4;
 	}
+
+	&.deletemode {
+		transition: opacity 150ms ease-in-out, transform 150ms ease-in-out 150ms;
+		transform: scale(0);
+
+		> * { opacity: 0; }
+	}
 }
 
 .module--longshadow {

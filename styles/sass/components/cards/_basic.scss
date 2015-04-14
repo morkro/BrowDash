@@ -1,6 +1,8 @@
 card-base[data-module-type="basic"] {
 	p {
-		&:focus { 
+		transition: all 150ms ease-in-out;
+
+		&:focus, &:read-write:hover { 
 			outline: none; 
 			background: $grey-200;
 			color: rgba(0, 0, 0, .7);

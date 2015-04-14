@@ -394,14 +394,14 @@ Brow.Data = (function (Brow) {
 
 	/* Constants */
 	const _cardDefaultTitles = {
-		'basic': 'Store all the things!',
+		'basic': 'Save any content you want!',
 		'todo': 'Task list',
 		'weather': 'Weather'
 	};
 
 	const _cardDefaultContents = {
 		'basic': {
-			'default': 'What do you want to save?'
+			'default': 'No matter if simple or rich text (e.g. links or images).'
 		}
 	};
 
@@ -796,13 +796,19 @@ BrowCard = (function () {
 	 */
 	BrowCard.prototype.removeCard = function (event) {
 		let curCardGUI = this.config.elem.getAttribute('data-module-guid');
+		let self = this;
 
-		Brow.isEditMode = false;
-		this.isEditMode = false;
-
-		localStorage.removeItem(curCardGUI);
-		Brow.Settings.getElem()['CONTENT'].removeChild( this.config.elem );
-		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+		this.config.elem.classList.add('deletemode');
+		this.config.elem.addEventListener('transitionend', function (event) {
+			// Only listen to the transform transition.
+			if (event.propertyName === 'transform') {
+				Brow.isEditMode = false;
+				this.isEditMode = false;
+				localStorage.removeItem(curCardGUI);
+				Brow.Settings.getElem()['CONTENT'].removeChild( self.config.elem );
+				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+			}
+		});
 	};
 
 	return BrowCard;
