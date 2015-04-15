@@ -441,88 +441,50 @@ Brow.Data = (function (Brow) {
 BrowTimer = (function() {
 	'use strict';
 
-	function BrowTimer (elem) {
-		if (!(elem && elem.nodeName)) {
-			throw new Error('You haven\'t passed a valid HTMLElement!');
+	class BrowTimer {
+		constructor (elem) {
+			if (!(elem && elem.nodeName)) {
+				throw new Error('You haven\'t passed a valid HTMLElement!');
+			}
+
+			this.update	= 1000;
+			this.elem	= elem;
 		}
 
-		this.update	= 1000;
-		this.elem	= elem;
+		/**
+		 * @name 			BrowTimer.getTime
+		 * @description	Creates a string with current time in HH:MM:SS
+		 * @return			{String}
+		 */
+		getTime () {
+			let _date			= new Date();
+			let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
+			let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
+			let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
+
+			return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
+		}
+
+		/**
+		 * @name				BrowTimer.run
+		 * @description	Sets the element in which the time should be displayed.
+		 * @param			{Element} elem
+		 * @return 			{HTMLElement}
+		 */
+		run () {
+			let _this = this;
+			
+			this.elem.textContent = this.getTime();
+			setInterval(function () {
+				_this.elem.textContent = _this.getTime();
+			}, this.update);
+
+			return this.elem;
+		}
 	}
-
-	/**
-	 * @name 			BrowTimer.getTime
-	 * @description	Creates a string with current time in HH:MM:SS
-	 * @return			{String}
-	 */
-	BrowTimer.prototype.getTime = function () {
-		let _date			= new Date();
-		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
-		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
-		let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
-
-		return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
-	};
-
-	/**
-	 * @name				BrowTimer.run
-	 * @description	Sets the element in which the time should be displayed.
-	 * @param			{Element} elem
-	 * @return 			{HTMLElement}
-	 */
-	BrowTimer.prototype.run = function () {
-		let _this = this;
-		
-		this.elem.textContent = this.getTime();
-		setInterval(function () {
-			_this.elem.textContent = _this.getTime();
-		}, this.update);
-
-		return this.elem;
-	};
 
 	return BrowTimer;
 })();
-
-/* ACTIVATE WHEN CHROME 42 IS AVAILABLE */
-// class BrowTimer {
-// 	constructor (elem) {
-// 		if (!(elem && elem.nodeName)) {
-// 			throw new Error('You haven\'t passed a valid HTMLElement!');
-// 		}
-
-// 		this.elem = elem;
-// 		this.update = 1000;
-// 	}
-
-// 	/**
-// 	 * @name 			BrowTimer.getTime
-// 	 * @description	Creates a string with current time in HH:MM:SS
-// 	 * @public
-// 	 * @return			{String}
-// 	 */
-// 	getTime() {
-// 		const _date			= new Date();
-// 		let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
-// 		let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
-// 		let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
-
-// 		return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
-// 	}
-
-// 	/**
-// 	 * @name				BrowTimer.run
-// 	 * @description	Sets the element in which the time should be displayed.
-// 	 * @public
-// 	 * @param			{Element} elem
-// 	 */
-// 	run() {
-// 		this.elem.textContent = this.getTime();
-// 		setInterval(function () {
-// 			this.elem.textContent = this.getTime();
-// 		}, this.update);
-// 	}
-// }
 /**
  * @name				Brow.Dialog
  * @description	Shows/hides the dialog. Sets new theme.
@@ -643,177 +605,179 @@ Brow.Dialog = (function (Brow) {
 BrowCard = (function () {
 	'use strict';
 
-	function BrowCard (config) {
-		if (!config) config = {};
+	class BrowCard {
+		constructor (config) {
+			if (!config) config = {};
 
-		this.isEditMode	= false;
-		this.type			= (config.type) ? config.type : 'basic';
-		this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
-		this.guid			= (config.guid) ? config.guid : Brow.GUID();
-		this.order			= (config.order) ? config.order : 0;
-		this.content		= (config.content) ? config.content : {};
-		this.config			= { edit: null, save: null, remove: null, elem: null };
-		this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
-		this.headline		= this.createHeadline( this.title );
-		this.body			= this.createContent();
-		this.saveState		= this.saveCardChanges;
-		//console.log(this);
+			this.isEditMode	= false;
+			this.type			= (config.type) ? config.type : 'basic';
+			this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
+			this.guid			= (config.guid) ? config.guid : Brow.GUID();
+			this.order			= (config.order) ? config.order : 0;
+			this.content		= (config.content) ? config.content : {};
+			this.config			= { edit: null, save: null, remove: null, elem: null };
+			this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
+			this.headline		= this.createHeadline( this.title );
+			this.body			= this.createContent();
+			this.saveState		= this.saveCardChanges;
+			//console.log(this);
 
-		return this.createCard();
-	}
-
-	/**
-	 * @name				BrowCard.createCard
-	 * @description	Creates a new card module
-	 * @public
-	 */
-	BrowCard.prototype.createCard = function () {
-		let baseElem = document.createElement('card-base');
-		let self = this;
-
-		baseElem.setAttribute('data-module-guid', this.guid);
-		baseElem.setAttribute('data-module-type', this.type);
-		baseElem.setAttribute('data-module-order', this.order);
-		baseElem.style.order = baseElem.getAttribute('data-module-order');
-
-		baseElem.appendChild( this.headline );
-		baseElem.appendChild( this.body.getContent() );
-		this.addEvents(baseElem);
-
-		return baseElem;
-	};
-
-	/**
-	 * @description	Creates the heading
-	 * @private
-	 * @param			{String} title
-	 */	
-	BrowCard.prototype.createHeadline = function (title) {
-		let headElem = document.createElement('h1');
-		headElem.innerHTML = title;
-		return headElem;
-	};
-
-	/**
-	 * @description	Creates content and calls new classes based on the type.
-	 * @private
-	 * @param			{String} type
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCard.prototype.createContent = function () {
-		var cardContent = null;
-	
-		switch (this.type) {
-			case 'basic':
-				cardContent = new BrowCardBasic( this );
-				break;
-			case 'weather':
-				cardContent = new BrowCardWeather( this );
-				break;
-			case 'notification':
-				cardContent = new BrowCardNotify( this );
-				break;
-			case 'todo':
-				cardContent = new BrowCardToDo( this );
-				break;
-			default:
-				cardContent = new BrowCardBasic( this );
-				break;
+			return this.createCard();
 		}
 
-		return cardContent;
-	};
+		/**
+		 * @name				BrowCard.createCard
+		 * @description	Creates a new card module
+		 * @public
+		 */
+		createCard () {
+			let baseElem = document.createElement('card-base');
+			let self = this;
 
-	/**
-	 * @description	Sets eventListener on current card element.
-	 * @private
-	 * @param			{Object} event
-	 */
-	BrowCard.prototype.addEvents = function (elem) {
-		let self = this;
+			baseElem.setAttribute('data-module-guid', this.guid);
+			baseElem.setAttribute('data-module-type', this.type);
+			baseElem.setAttribute('data-module-order', this.order);
+			baseElem.style.order = baseElem.getAttribute('data-module-order');
 
-		elem.addEventListener('btn-settings', function (event) {
-			if (self.config.elem === null) {
-				self.config.elem = event.target;
-				self.config.edit = event.target.edit;
-				self.config.save = event.target.save;
-				self.config.remove = event.target.remove;
+			baseElem.appendChild( this.headline );
+			baseElem.appendChild( this.body.getContent() );
+			this.addEvents(baseElem);
+
+			return baseElem;
+		}
+
+		/**
+		 * @description	Creates the heading
+		 * @private
+		 * @param			{String} title
+		 */	
+		createHeadline (title) {
+			let headElem = document.createElement('h1');
+			headElem.innerHTML = title;
+			return headElem;
+		}
+
+		/**
+		 * @description	Creates content and calls new classes based on the type.
+		 * @private
+		 * @param			{String} type
+		 * @return 			{HTMLElement}
+		 */	
+		createContent () {
+			var cardContent = null;
+		
+			switch (this.type) {
+				case 'basic':
+					cardContent = new BrowCardBasic( this );
+					break;
+				case 'weather':
+					cardContent = new BrowCardWeather( this );
+					break;
+				case 'notification':
+					cardContent = new BrowCardNotify( this );
+					break;
+				case 'todo':
+					cardContent = new BrowCardToDo( this );
+					break;
+				default:
+					cardContent = new BrowCardBasic( this );
+					break;
 			}
-		});
 
-		elem.addEventListener('btn-edit', function (event) {
-			self.activateEditMode(event);
-		});
+			return cardContent;
+		}
 
-		elem.addEventListener('btn-save', function (event) {
-			self.saveCardChanges(event);
-		});
+		/**
+		 * @description	Sets eventListener on current card element.
+		 * @private
+		 * @param			{Object} event
+		 */
+		addEvents (elem) {
+			let self = this;
 
-		elem.addEventListener('btn-remove', function (event) {
-			self.removeCard(event);
-		});
-	};
+			elem.addEventListener('btn-settings', function (event) {
+				if (self.config.elem === null) {
+					self.config.elem = event.target;
+					self.config.edit = event.target.edit;
+					self.config.save = event.target.save;
+					self.config.remove = event.target.remove;
+				}
+			});
 
-	/**
-	 * @description	Shows the save button and makes editing possible.
-	 * @private
-	 * @param			{Object} event
-	 */
-	BrowCard.prototype.activateEditMode = function (event) {
-		// config
-		Brow.isEditMode = true;
-		Brow.activeCard = this;
-		this.isEditMode = true;
-		this.body.edit();
+			elem.addEventListener('btn-edit', function (event) {
+				self.activateEditMode(event);
+			});
 
-		// visual
-		this.config.elem.classList.add('editmode');
-		this.config.edit.parentNode.classList.add('hidden');
-		this.config.save.parentNode.classList.remove('hidden');
-		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
-	};
+			elem.addEventListener('btn-save', function (event) {
+				self.saveCardChanges(event);
+			});
 
-	/**
-	 * @description	Shows the edit button and saves the content to localStorage.
-	 * @private
-	 * @param			{Object} event
-	 */
-	BrowCard.prototype.saveCardChanges = function (event) {
-		// config
-		Brow.isEditMode = false;
-		Brow.activeCard = null;
-		this.isEditMode = false;
-		this.body.save();
-		Brow.Settings.checkCustom();
+			elem.addEventListener('btn-remove', function (event) {
+				self.removeCard(event);
+			});
+		}
 
-		// visual
-		this.config.elem.classList.remove('editmode');
-		this.config.edit.parentNode.classList.remove('hidden');
-		this.config.save.parentNode.classList.add('hidden');
-		Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
-	};
+		/**
+		 * @description	Shows the save button and makes editing possible.
+		 * @private
+		 * @param			{Object} event
+		 */
+		activateEditMode (event) {
+			// config
+			Brow.isEditMode = true;
+			Brow.activeCard = this;
+			this.isEditMode = true;
+			this.body.edit();
 
-	/**
-	 * @description	Removes a card from localStorage.
-	 * @private
-	 * @param			{Object} event
-	 */
-	BrowCard.prototype.removeCard = function (event) {
-		let curCardGUI = this.config.elem.getAttribute('data-module-guid');
-		let self = this;
+			// visual
+			this.config.elem.classList.add('editmode');
+			this.config.edit.parentNode.classList.add('hidden');
+			this.config.save.parentNode.classList.remove('hidden');
+			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
+		}
 
-		this.config.elem.classList.add('deletemode');
-		this.config.elem.addEventListener('transitionend', function (event) {
-			// Only listen to the last transition.
-			if (event.propertyName === 'transform') {
-				Brow.isEditMode = false;
-				this.isEditMode = false;
-				localStorage.removeItem(curCardGUI);
-				Brow.Settings.getElem()['CONTENT'].removeChild( self.config.elem );
-				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
-			}
-		});
-	};
+		/**
+		 * @description	Shows the edit button and saves the content to localStorage.
+		 * @private
+		 * @param			{Object} event
+		 */
+		saveCardChanges (event) {
+			// config
+			Brow.isEditMode = false;
+			Brow.activeCard = null;
+			this.isEditMode = false;
+			this.body.save();
+			Brow.Settings.checkCustom();
+
+			// visual
+			this.config.elem.classList.remove('editmode');
+			this.config.edit.parentNode.classList.remove('hidden');
+			this.config.save.parentNode.classList.add('hidden');
+			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+		}
+
+		/**
+		 * @description	Removes a card from localStorage.
+		 * @private
+		 * @param			{Object} event
+		 */
+		removeCard (event) {
+			let curCardGUI = this.config.elem.getAttribute('data-module-guid');
+			let self = this;
+
+			this.config.elem.classList.add('deletemode');
+			this.config.elem.addEventListener('transitionend', function (event) {
+				// Only listen to the last transition.
+				if (event.propertyName === 'transform') {
+					Brow.isEditMode = false;
+					this.isEditMode = false;
+					localStorage.removeItem(curCardGUI);
+					Brow.Settings.getElem()['CONTENT'].removeChild( self.config.elem );
+					Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+				}
+			});
+		}
+	}
 
 	return BrowCard;
 })();
@@ -1055,88 +1019,90 @@ Brow.Settings = (function (Brow) {
 BrowCardBasic = (function () {
 	'use strict';
 
-	function BrowCardBasic (card) {
-		this.parent		= card;
-		this.content	= document.createElement('p');
-		this.wrapper	= document.createElement('div');
+	class BrowCardBasic {
+		constructor (card) {
+			this.parent		= card;
+			this.content	= document.createElement('p');
+			this.wrapper	= document.createElement('div');
 
-		this.wrapper.classList.add('content__basic');
-		this.wrapper.appendChild( this.createEditor() );
-		this.wrapper.appendChild( this.previewContent() );
+			this.wrapper.classList.add('content__basic');
+			this.wrapper.appendChild( this.createEditor() );
+			this.wrapper.appendChild( this.previewContent() );
+		}
+
+		/**
+		 * @description	Sets the preview content
+		 * @public
+		 * @return 			{HTMLElement}
+		 */
+		previewContent () {
+			let defaultContent	= Brow.Data.Content('basic')['default'];
+			let storedContent		= this.parent.content.text;
+			
+			if (storedContent) this.content.innerHTML = storedContent;
+			this.content.setAttribute('data-basic-preview', defaultContent);
+
+			return this.content;
+		}
+
+		/**
+		 * @description	Returns the entire module wrapper element.
+		 * @public
+		 * @return 			{HTMLElement}
+		 */	
+		getContent () {
+			return this.wrapper;
+		}
+
+		/**
+		 * @description	Saves current content to localStorage.
+		 * @public
+		 */	
+		updateStorage () {
+			this.parent.storage['title'] = this.parent.headline.innerHTML;
+			this.parent.storage['content'] = {
+				text: this.content.innerHTML
+			};
+			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
+		}
+
+		/**
+		 * @description	Creates a simple editor to style text.
+		 * @public
+		 * @todo 			Create everything: bold, italic, unstyle, links.
+		 */	
+		createEditor () {
+			let editWrap = document.createElement('div');
+			let editList = document.createElement('ul');
+
+			editWrap.classList.add('content__basic__editor');
+			editWrap.appendChild( editList );
+
+			return editWrap;
+		}
+
+		/**
+		 * @description	Sets 'contenteditable="true"' to all elements.
+		 * @public
+		 * @return 			{HTMLElement}
+		 */	
+		edit () {
+			this.content.setAttribute('contenteditable', true);
+			this.parent.headline.setAttribute('contenteditable', true);
+		}
+
+		/**
+		 * @description	Removes attributes, updates Object and saves it to localStorage.
+		 * @public
+		 * @return 			{HTMLElement}
+		 */	
+		save () {
+			this.content.removeAttribute('contenteditable');
+			this.parent.headline.removeAttribute('contenteditable');
+			this.parent.title = this.parent.headline.textContent;
+			this.updateStorage();
+		}
 	}
-
-	/**
-	 * @description	Sets the preview content
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.previewContent = function () {
-		let defaultContent	= Brow.Data.Content('basic')['default'];
-		let storedContent		= this.parent.content.text;
-		
-		if (storedContent) this.content.innerHTML = storedContent;
-		this.content.setAttribute('data-basic-preview', defaultContent);
-
-		return this.content;
-	};
-
-	/**
-	 * @description	Returns the entire module wrapper element.
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.getContent = function () {
-		return this.wrapper;
-	};
-
-	/**
-	 * @description	Saves current content to localStorage.
-	 * @public
-	 */	
-	BrowCardBasic.prototype.updateStorage = function () {
-		this.parent.storage['title'] = this.parent.headline.innerHTML;
-		this.parent.storage['content'] = {
-			text: this.content.innerHTML
-		};
-		localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-	};
-
-	/**
-	 * @description	Creates a simple editor to style text.
-	 * @public
-	 * @todo 			Create everything: bold, italic, unstyle, links.
-	 */	
-	BrowCardBasic.prototype.createEditor = function () {
-		let editWrap = document.createElement('div');
-		let editList = document.createElement('ul');
-
-		editWrap.classList.add('content__basic__editor');
-		editWrap.appendChild( editList );
-
-		return editWrap;
-	};
-
-	/**
-	 * @description	Sets 'contenteditable="true"' to all elements.
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.edit = function () {
-		this.content.setAttribute('contenteditable', true);
-		this.parent.headline.setAttribute('contenteditable', true);
-	};
-
-	/**
-	 * @description	Removes attributes, updates Object and saves it to localStorage.
-	 * @public
-	 * @return 			{HTMLElement}
-	 */	
-	BrowCardBasic.prototype.save = function () {
-		this.content.removeAttribute('contenteditable');
-		this.parent.headline.removeAttribute('contenteditable');
-		this.parent.title = this.parent.headline.textContent;
-		this.updateStorage();
-	};
 
 	return BrowCardBasic;
 })();
