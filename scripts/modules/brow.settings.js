@@ -35,7 +35,7 @@ Brow.Settings = (function (Brow) {
 	 * @private
 	 */
 	const _addEvents = function () {
-		browElements.onClickSelectionList.addEventListener('click', _showCardList);
+		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
 		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
 		[].forEach.call(browElements.onClickNewCard, function (item) {
