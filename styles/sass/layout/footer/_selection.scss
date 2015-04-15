@@ -8,12 +8,16 @@
 	transition: width 150ms ease-in-out;
 
 	&.show {
+		transition: width 150ms ease-in-out 150ms;
 		transform: translateY(0%);
 		width: 100%;
 
-		ul { 
-			opacity: 1; 
-		}
+		ul { opacity: 1; }
+	}
+
+	&.hide {
+		width: 0%;
+		ul { opacity: 0; }
 	}
 
 	ul {

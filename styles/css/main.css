@@ -334,8 +334,10 @@ card-base[data-module-type="basic"] p:empty:not(:focus):after { cursor: text; co
 #footer__add.editmode { cursor: not-allowed; opacity: 0.6; }
 
 .footer__select { position: relative; width: 0%; height: 100%; margin: 0 auto; z-index: 2; transform: translateY(100%); transition: width 150ms ease-in-out; }
-.footer__select.show { transform: translateY(0%); width: 100%; }
+.footer__select.show { transition: width 150ms ease-in-out 150ms; transform: translateY(0%); width: 100%; }
 .footer__select.show ul { opacity: 1; }
+.footer__select.hide { width: 0%; }
+.footer__select.hide ul { opacity: 0; }
 .footer__select ul { opacity: 0; transition: opacity 150ms ease-in-out 150ms; }
 
 .footer__select__list { list-style: none; width: 90px; height: 32px; margin: 0 auto; position: relative; top: 50%; transform: translateY(-50%); }

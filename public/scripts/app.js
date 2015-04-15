@@ -907,6 +907,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _showCardList = function (event) {
 		event.preventDefault();
+		browElements.SELECTION.removeEventListener(_closeCardList);
 
 		if (!Brow.isEditMode) {
 			isSelectionState = true;
@@ -923,8 +924,13 @@ Brow.Settings = (function (Brow) {
 		let movedOut = event.toElement === document.documentElement;
 		let selectionIsVisible = browElements['SELECTION'].classList.contains('show');
 
+		browElements.onClickSelectionList.removeEventListener(_showCardList);
+
 		if (movedOut && isSelectionState) {
-			browElements['SELECTION'].classList.remove('show');			
+			browElements['SELECTION'].classList.add('hide');
+			setTimeout(function () {
+				browElements['SELECTION'].classList.remove('show', 'hide');
+			}, 300);
 		}
 	};
 
