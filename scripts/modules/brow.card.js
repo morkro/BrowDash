@@ -20,7 +20,6 @@ BrowCard = (function () {
 			this.headline		= this.createHeadline( this.title );
 			this.body			= this.createContent();
 			this.saveState		= this.saveCardChanges;
-			//console.log(this);
 
 			return this.createCard();
 		}

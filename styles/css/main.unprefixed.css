@@ -146,7 +146,6 @@ td, th { padding: 0; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Light.ttf") format('truetype'); font-weight: 200; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-LightItalic.ttf") format('truetype'); font-weight: 200; font-style: italic; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Regular.ttf") format('truetype'); font-weight: 300; }
-@font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-RegularItalic.ttf") format('truetype'); font-weight: 300; font-style: italic; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Medium.ttf") format('truetype'); font-weight: 400; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-MediumItalic.ttf") format('truetype'); font-weight: 400; font-style: italic; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Bold.ttf") format('truetype'); font-weight: 500; }
@@ -324,14 +323,14 @@ card-base[data-module-type="basic"] p:empty:not(:focus):after { cursor: text; co
 .settings__theme li[data-settings-theme="red"]:before { background: #2979ff; }
 
 /* FOOTER */
-#brow__footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 2; height: 80px; width: 100%; }
+#brow__footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 2; height: 100px; width: 100%; }
 
 #footer__add { position: absolute; z-index: 1; top: 50%; left: 50%; width: 56px; height: 55px; transform: translate(-50%, -50%); }
 #footer__add[data-tooltip]:before { width: 150%; }
 #footer__add.editmode { cursor: not-allowed; opacity: 0.6; }
 
-.footer__select { position: relative; width: 0%; height: 100%; margin: 0 auto; top: 100%; z-index: 2; transition: width 150ms ease-in-out; }
-.footer__select.show { top: 0; width: 100%; }
+.footer__select { position: relative; width: 0%; height: 100%; margin: 0 auto; z-index: 2; transform: translateY(100%); transition: width 150ms ease-in-out; }
+.footer__select.show { transform: translateY(0%); width: 100%; }
 .footer__select.show ul { opacity: 1; }
 .footer__select ul { opacity: 0; transition: opacity 150ms ease-in-out 150ms; }
 

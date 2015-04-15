@@ -3,12 +3,12 @@
 	width: 0%;
 	height: 100%;
 	margin: 0 auto;
-	top: 100%;
 	z-index: z($footer, selection);
+	transform: translateY(100%);
 	transition: width 150ms ease-in-out;
 
 	&.show {
-		top: 0;
+		transform: translateY(0%);
 		width: 100%;
 
 		ul { 

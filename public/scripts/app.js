@@ -513,8 +513,9 @@ Brow.Dialog = (function (Brow) {
 	const _showSettings = function (event) {
 		event.preventDefault();
 		
+		let currentLocation = window.location.href.slice(0, -1);
 		let dialogContent = this.getAttribute('data-dialog');
-		let dialogContentPath = `/views/dialog-${dialogContent}.html`;
+		let dialogContentPath = `${currentLocation}/views/dialog-${dialogContent}.html`;
 
 		_loadDialogContent(dialogContentPath);
 		dialogElem.classList.add('show');
@@ -620,7 +621,6 @@ BrowCard = (function () {
 			this.headline		= this.createHeadline( this.title );
 			this.body			= this.createContent();
 			this.saveState		= this.saveCardChanges;
-			//console.log(this);
 
 			return this.createCard();
 		}
@@ -928,12 +928,22 @@ Brow.Settings = (function (Brow) {
 		}
 	};
 
+	/**
+	 * @description	Checks clicked card type and appends it to the DOM.
+	 * @private
+	 * @param			{Object} event
+	 */
 	const _addNewCard = function (event) {
 		event.preventDefault();
 		let selectedCard = this.getAttribute('data-create-card');
 		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
 	};
 
+	/**
+	 * @description	Saves state of active card.
+	 * @private
+	 * @param			{Object} event
+	 */
 	const _checkCardMode = function (event) {
 		if (Brow.isEditMode && Brow.activeCard.isEditMode) {
 			Brow.activeCard.saveState();
