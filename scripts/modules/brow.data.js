@@ -10,14 +10,14 @@ Brow.Data = (function (Brow) {
 
 	/* Constants */
 	const _cardDefaultTitles = {
-		'basic': 'Save any content you want!',
+		'basic': 'Save any content you want.',
 		'todo': 'Task list',
 		'weather': 'Weather'
 	};
 
 	const _cardDefaultContents = {
 		'basic': {
-			'default': 'No matter if simple or rich text (e.g. links or images).'
+			'default': 'Just click the edit button and enter any content you want. No matter if simple or rich text.'
 		}
 	};
 

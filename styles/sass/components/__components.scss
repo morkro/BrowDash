@@ -19,7 +19,9 @@
  */
 @import "cards/_base";
 @import "cards/_heading";
-@import "cards/_basic";
+// Basic
+@import "cards/basic/_basic";
+@import "cards/basic/_editor";
 
 /*
  * TOOLTIPS

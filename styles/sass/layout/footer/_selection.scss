@@ -35,9 +35,7 @@
 	top: 50%;
 	transform: translateY(-50%);
 
-	[data-tooltip]:before {
-		width: 450%;
-	}
+	[data-tooltip]:before { width: 450%; }
 
 	li {
 		position: relative;

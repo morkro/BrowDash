@@ -39,7 +39,7 @@ BrowCard = (function () {
 			baseElem.style.order = baseElem.getAttribute('data-module-order');
 
 			baseElem.appendChild( this.headline );
-			baseElem.appendChild( this.body.getContent() );
+			baseElem.appendChild( this.body.getContent );
 			this.addEvents(baseElem);
 
 			return baseElem;
@@ -67,19 +67,19 @@ BrowCard = (function () {
 		
 			switch (this.type) {
 				case 'basic':
-					cardContent = new BrowCardBasic( this );
+					cardContent = new BasicCard( this );
 					break;
 				case 'weather':
-					cardContent = new BrowCardWeather( this );
+					cardContent = new WeatherCard( this );
 					break;
 				case 'notification':
-					cardContent = new BrowCardNotify( this );
+					cardContent = new NotifyCard( this );
 					break;
 				case 'todo':
-					cardContent = new BrowCardToDo( this );
+					cardContent = new ToDoCard( this );
 					break;
 				default:
-					cardContent = new BrowCardBasic( this );
+					cardContent = new BasicCard( this );
 					break;
 			}
 
