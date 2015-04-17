@@ -1098,6 +1098,7 @@ BasicCard = (function () {
 			});
 			editWrap.classList.add('content__basic__editor');
 			editWrap.appendChild( editList );
+			editWrap.addEventListener('click', this.executeEditorOptions);
 
 			return editWrap;
 		}
@@ -1115,10 +1116,24 @@ BasicCard = (function () {
 			editorCtrl.setAttribute('data-tooltip', `${tooltipName}`);
 			editorCtrl.setAttribute('data-tooltip-pos', 'bottom');
 			editorCtrl.classList.add(`editor__${item}`);
-			editorCtrlBtn.classList.add('btn');
+			editorCtrlBtn.setAttribute('data-editor-option', `${item}`);
+			editorCtrlBtn.classList.add('btn', 'editor__option');
 			editorCtrl.appendChild( editorCtrlBtn );
 
 			return editorCtrl;
+		}
+
+		executeEditorOptions (event) {
+			event.preventDefault();
+			let isOption = event.target.classList.contains('editor__option');
+			let optionType = null;
+
+			// This is dirty and only a very first draft.
+			if (isOption) {
+				optionType = event.target.getAttribute('data-editor-option');
+				if (optionType === 'unstyle') optionType = 'removeFormat';
+				document.execCommand(`${optionType}`, null, true);
+			}
 		}
 
 		/**

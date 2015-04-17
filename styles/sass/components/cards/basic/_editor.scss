@@ -44,30 +44,48 @@
 
 .editor__bold {
 	&[data-tooltip]:before { width: 200%; }
-	button { background: url(../assets/icons/editor_bold.svg); }
+
+	[data-editor-option="bold"] {
+		background: url(../assets/icons/editor_bold.svg);
+	}
 }
 
 .editor__italic {
 	&[data-tooltip]:before { width: 215%; }
-	button { background: url(../assets/icons/editor_italic.svg); }
+
+	[data-editor-option="italic"] {
+		background: url(../assets/icons/editor_italic.svg);
+	}
 }
 
 .editor__underline {
 	&[data-tooltip]:before { width: 332%; }
-	button { background: url(../assets/icons/editor_underline.svg); }
+
+	[data-editor-option="underline"] {
+		background: url(../assets/icons/editor_underline.svg);
+	}
 }
 
 .editor__strikethrough {
 	&[data-tooltip]:before { width: 427%; }
-	button { background: url(../assets/icons/editor_strikethrough.svg); }
+
+	[data-editor-option="strikethrough"] {
+		background: url(../assets/icons/editor_strikethrough.svg);
+	}
 }
 
 .editor__link {
 	&[data-tooltip]:before { width: 200%; }
-	button { background: url(../assets/icons/editor_link.svg); }
+
+	[data-editor-option="link"] {
+		background: url(../assets/icons/editor_link.svg);
+	}
 }
 
 .editor__unstyle {
 	&[data-tooltip]:before { width: 293%; }
-	button { background: url(../assets/icons/editor_clear.svg); }
+
+	[data-editor-option="unstyle"] {
+		background: url(../assets/icons/editor_clear.svg);
+	}
 }
