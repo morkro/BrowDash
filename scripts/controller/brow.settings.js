@@ -79,8 +79,8 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Object} storage
 	 */
 	const _validateBrowCards = function (storage) {
-		if (!localStorage[BROW_CARDS]) {
-			let defaultCard = new BrowCard({ type: 'basic' });
+		if (!localStorage[BROW_CARDS] || localStorage.length <= 1) {
+			let defaultCard = new BrowCard({ type: 'text' });
 			browElements['CONTENT'].appendChild( defaultCard );
 		} else {
 			for (let i = localStorage.length; i--;) {

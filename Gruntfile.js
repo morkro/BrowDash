@@ -36,7 +36,8 @@ module.exports = function(grunt) {
 					'public'	: 'public',
 					'assets'	: '<%= app.directory.dest.public %>/assets',
 					'scripts': '<%= app.directory.dest.public %>/scripts',
-					'css'		: '<%= app.directory.dest.public %>/css',
+					'markup'	: '<%= app.directory.dest.public %>/markup',
+					'css'		: '<%= app.directory.dest.public %>/css'
 				},
 				build: {
 					'sass'	: 'styles/sass',
@@ -44,21 +45,21 @@ module.exports = function(grunt) {
 					'assets'	: 'assets',	
 					'fonts'	: '<%= app.directory.build.assets %>/fonts',
 					'scripts': 'scripts',
-					'views'	: 'views'
+					'markup'	: 'markup'
 				}
 			},
 			scripts: [
 				/* Libraries */
 				'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
-				/* Modules */
-				'<%= app.directory.build.scripts %>/modules/brow.core.js',
-				'<%= app.directory.build.scripts %>/modules/brow.data.js',
-				'<%= app.directory.build.scripts %>/modules/brow.timer.js',
-				'<%= app.directory.build.scripts %>/modules/brow.dialog.js',
-				'<%= app.directory.build.scripts %>/modules/brow.card.js',
-				'<%= app.directory.build.scripts %>/modules/brow.settings.js',
-				/* Cards */
-				'<%= app.directory.build.scripts %>/cards/brow.card.basic.js',
+				/* Application */
+				'<%= app.directory.build.scripts %>/controller/brow.core.js',
+				'<%= app.directory.build.scripts %>/model/brow.data.js',
+				'<%= app.directory.build.scripts %>/controller/brow.dialog.js',
+				'<%= app.directory.build.scripts %>/controller/brow.settings.js',
+				'<%= app.directory.build.scripts %>/controller/brow.timer.js',
+				'<%= app.directory.build.scripts %>/controller/brow.card.js',
+				'<%= app.directory.build.scripts %>/controller/brow.card.text.js',
+				'<%= app.directory.build.scripts %>/controller/brow.card.weather.js',
 				/* App initialisation */
 				'<%= app.directory.build.scripts %>/app.init.js'
 			]
@@ -69,23 +70,37 @@ module.exports = function(grunt) {
 		 * ==============================
 		 */
 		copy: {
-			html: {
+			index: {
+				src		: '<%= app.directory.build.markup %>/views/index.html',
+				dest		: '<%= app.directory.dest.public %>/index.html',
+			},
+			componentsmarkup: {
 				expand	: true,
 				src		: [
-					'<%= app.directory.build.views %>/index.html',
-					'<%= app.directory.build.views %>/card-base.html'
+					'<%= app.directory.build.markup %>/components/card-base.html',
+					'<%= app.directory.build.markup %>/components/text-card.html'
 				],
-				dest		: '<%= app.directory.dest.public %>/',
+				dest		: '<%= app.directory.dest.markup %>/',
+				flatten	: true,
+				filter	: 'isFile'
+			},
+			componentsscript: {
+				expand	: true,
+				src		: [
+					'<%= app.directory.build.scripts %>/components/card-base.js',
+					'<%= app.directory.build.scripts %>/components/text-card.js'
+				],
+				dest		: '<%= app.directory.dest.scripts %>',
 				flatten	: true,
 				filter	: 'isFile'
 			},
 			views: {
 				expand	: true,
 				src		: [
-					'<%= app.directory.build.views %>/dialog-about.html',
-					'<%= app.directory.build.views %>/dialog-settings.html'
+					'<%= app.directory.build.markup %>/views/dialog-about.html',
+					'<%= app.directory.build.markup %>/views/dialog-settings.html'
 				],
-				dest		: '<%= app.directory.dest.public %>/views',
+				dest		: '<%= app.directory.dest.markup %>',
 				flatten	: true,
 				filter	: 'isFile'
 			},
@@ -97,10 +112,6 @@ module.exports = function(grunt) {
 			manifest: {
 				src		: 'manifest.json',
 				dest		: '<%= app.directory.dest.public %>/manifest.json'
-			},
-			components: {
-				src		: '<%= app.directory.build.scripts %>/components/card.js',
-				dest		: '<%= app.directory.dest.scripts %>/card.js'
 			}
 		},
 
@@ -194,11 +205,8 @@ module.exports = function(grunt) {
 		 */
 		watch: {
 			markup: {
-				files: [
-					'*.html',
-					'<%= app.directory.build.views %>/**/*.html'
-				],
-				tasks: ['copy:html']
+				files: ['<%= app.directory.build.markup %>/**/*.html'],
+				tasks: ['copy:index', 'copy:componentsmarkup', 'copy:views']
 			},
 			css: {
 				files: [
@@ -209,16 +217,14 @@ module.exports = function(grunt) {
 			},
 			js: {
 				files: [
-					'!<%= app.directory.build.scripts %>/components/*.js',
-					'<%= app.directory.build.scripts %>/modules/*.js',
-					'<%= app.directory.build.scripts %>/cards/*.js',
-					'<%= app.directory.build.scripts %>/app.init.js'
+					'!<%= app.directory.build.scripts %>/libs/*.js',
+					'<%= app.directory.build.scripts %>/**/*.js'
 				],
 				tasks: ['newer:jshint', 'newer:concat']
 			},
 			components: {
 				files: '<%= app.directory.build.scripts %>/components/*.js',
-				tasks: ['newer:copy:components']
+				tasks: ['copy:componentsscript']
 			},
 			assets: {
 				files: '<%= app.directory.build.assets %>/**/*.*',

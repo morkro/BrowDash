@@ -10,14 +10,14 @@ Brow.Data = (function (Brow) {
 
 	/* Constants */
 	const _cardDefaultTitles = {
-		'basic': 'Save any content you want.',
-		'todo': 'Task list',
-		'weather': 'Weather'
+		'text': 'Save any content you want.',
+		'todo': 'Task list'
 	};
 
 	const _cardDefaultContents = {
-		'basic': {
-			'default': 'Just click the edit button and enter any content you want. No matter if simple or rich text.'
+		'text': {
+			'default': `Just click the edit button and enter any content you want.
+							It's possible to remove all styles of your copied text using the "unstyle"-button.`
 		}
 	};
 

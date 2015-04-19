@@ -28,7 +28,7 @@ Brow.Dialog = (function (Brow) {
 		
 		let currentLocation = window.location.href.slice(0, -1);
 		let dialogContent = this.getAttribute('data-dialog');
-		let dialogContentPath = `${currentLocation}/views/dialog-${dialogContent}.html`;
+		let dialogContentPath = `${currentLocation}/markup/dialog-${dialogContent}.html`;
 
 		_loadDialogContent(dialogContentPath);
 		dialogElem.classList.add('show');

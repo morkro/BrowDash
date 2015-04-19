@@ -1,10 +1,6 @@
-card-base, .module {
+card-base, text-card, weather-card {
 	position: relative;
 	z-index: z($content, cards);
-	background: white;
-	display: inline-block;
-	box-shadow: $shadow-base;
-	border-radius: 2px;
 	margin-bottom: 25px;
 	transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
 

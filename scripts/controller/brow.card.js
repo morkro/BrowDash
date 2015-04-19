@@ -10,16 +10,13 @@ BrowCard = (function () {
 			if (!config) config = {};
 
 			this.isEditMode	= false;
-			this.type			= (config.type) ? config.type : 'basic';
-			this.title			= (config.title) ? config.title : Brow.Data.Header(config.type);
+			this.type			= (config.type) ? config.type : 'text';
 			this.guid			= (config.guid) ? config.guid : Brow.GUID();
-			this.order			= (config.order) ? config.order : 0;
 			this.content		= (config.content) ? config.content : {};
-			this.config			= { edit: null, save: null, remove: null, elem: null };
-			this.storage		= { module: true, type: this.type, title: this.title, guid: this.guid, content: this.content };
-			this.headline		= this.createHeadline( this.title );
-			this.body			= this.createContent();
+			this.config			= { elem: null };
+			this.storage		= { module: true, type: this.type, guid: this.guid, content: this.content };
 			this.saveState		= this.saveCardChanges;
+			this.wrapper		= null;
 
 			return this.createCard();
 		}
@@ -30,60 +27,23 @@ BrowCard = (function () {
 		 * @public
 		 */
 		createCard () {
-			let baseElem = document.createElement('card-base');
-			let self = this;
-
-			baseElem.setAttribute('data-module-guid', this.guid);
-			baseElem.setAttribute('data-module-type', this.type);
-			baseElem.setAttribute('data-module-order', this.order);
-			baseElem.style.order = baseElem.getAttribute('data-module-order');
-
-			baseElem.appendChild( this.headline );
-			baseElem.appendChild( this.body.getContent );
-			this.addEvents(baseElem);
-
-			return baseElem;
-		}
-
-		/**
-		 * @description	Creates the heading
-		 * @private
-		 * @param			{String} title
-		 */	
-		createHeadline (title) {
-			let headElem = document.createElement('h1');
-			headElem.innerHTML = title;
-			return headElem;
-		}
-
-		/**
-		 * @description	Creates content and calls new classes based on the type.
-		 * @private
-		 * @param			{String} type
-		 * @return 			{HTMLElement}
-		 */	
-		createContent () {
-			var cardContent = null;
-		
 			switch (this.type) {
-				case 'basic':
-					cardContent = new BasicCard( this );
+				case 'text':
+					this.wrapper = new TextCard( this );
 					break;
 				case 'weather':
-					cardContent = new WeatherCard( this );
-					break;
-				case 'notification':
-					cardContent = new NotifyCard( this );
-					break;
-				case 'todo':
-					cardContent = new ToDoCard( this );
+					this.wrapper = new WeatherCard( this );
 					break;
 				default:
-					cardContent = new BasicCard( this );
+					this.wrapper = new TextCard( this );
 					break;
 			}
 
-			return cardContent;
+			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
+			this.wrapper.getContent.setAttribute('data-module-type', this.type);
+			this.addEvents( this.wrapper.getContent );
+
+			return this.wrapper.getContent;
 		}
 
 		/**
@@ -94,24 +54,18 @@ BrowCard = (function () {
 		addEvents (elem) {
 			let self = this;
 
-			elem.addEventListener('btn-settings', function (event) {
+			elem.addEventListener('card-settings', function (event) {
 				if (self.config.elem === null) {
 					self.config.elem = event.target;
-					self.config.edit = event.target.edit;
-					self.config.save = event.target.save;
-					self.config.remove = event.target.remove;
 				}
 			});
-
-			elem.addEventListener('btn-edit', function (event) {
+			elem.addEventListener('card-edit', function (event) {
 				self.activateEditMode(event);
 			});
-
-			elem.addEventListener('btn-save', function (event) {
+			elem.addEventListener('card-save', function (event) {
 				self.saveCardChanges(event);
 			});
-
-			elem.addEventListener('btn-remove', function (event) {
+			elem.addEventListener('card-remove', function (event) {
 				self.removeCard(event);
 			});
 		}
@@ -126,12 +80,10 @@ BrowCard = (function () {
 			Brow.isEditMode = true;
 			Brow.activeCard = this;
 			this.isEditMode = true;
-			this.body.edit();
+			this.wrapper.edit();
 
 			// visual
 			this.config.elem.classList.add('editmode');
-			this.config.edit.parentNode.classList.add('hidden');
-			this.config.save.parentNode.classList.remove('hidden');
 			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
 		}
 
@@ -145,13 +97,11 @@ BrowCard = (function () {
 			Brow.isEditMode = false;
 			Brow.activeCard = null;
 			this.isEditMode = false;
-			this.body.save();
+			this.wrapper.save();
 			Brow.Settings.checkCustom();
 
 			// visual
 			this.config.elem.classList.remove('editmode');
-			this.config.edit.parentNode.classList.remove('hidden');
-			this.config.save.parentNode.classList.add('hidden');
 			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
 		}
 
