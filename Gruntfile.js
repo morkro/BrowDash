@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 			},
 			scripts: [
 				/* Libraries */
-				'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
+				//'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
 				/* Application */
 				'<%= app.directory.build.scripts %>/controller/brow.core.js',
 				'<%= app.directory.build.scripts %>/model/brow.data.js',

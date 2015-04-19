@@ -1,348 +1,3 @@
-/* jshint asi:true */
-(function() {
-	'use strict';
-
-	if (self.fetch) {
-		return;
-	}
-
-	function normalizeName(name) {
-		if (typeof name !== 'string') {
-			name = name.toString();
-		}
-		if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
-			throw new TypeError('Invalid character in header field name');
-		}
-		return name.toLowerCase();
-	}
-
-	function normalizeValue(value) {
-		if (typeof value !== 'string') {
-			value = value.toString();
-		}
-		return value;
-	}
-
-	function Headers(headers) {
-		this.map = {};
-
-		var self = this;
-		if (headers instanceof Headers) {
-			headers.forEach(function(name, values) {
-				values.forEach(function(value) {
-					self.append(name, value);
-				});
-			});
-
-		} else if (headers) {
-			Object.getOwnPropertyNames(headers).forEach(function(name) {
-				self.append(name, headers[name]);
-			});
-		}
-	}
-
-	Headers.prototype.append = function(name, value) {
-		name = normalizeName(name);
-		value = normalizeValue(value);
-		var list = this.map[name];
-		if (!list) {
-			list = [];
-			this.map[name] = list;
-		}
-		list.push(value);
-	};
-
-	Headers.prototype['delete'] = function(name) {
-		delete this.map[normalizeName(name)];
-	};
-
-	Headers.prototype.get = function(name) {
-		var values = this.map[normalizeName(name)];
-		return values ? values[0] : null;
-	};
-
-	Headers.prototype.getAll = function(name) {
-		return this.map[normalizeName(name)] || [];
-	};
-
-	Headers.prototype.has = function(name) {
-		return this.map.hasOwnProperty(normalizeName(name));
-	};
-
-	Headers.prototype.set = function(name, value) {
-		this.map[normalizeName(name)] = [normalizeValue(value)];
-	};
-
-	// Instead of iterable for now.
-	Headers.prototype.forEach = function(callback) {
-		var self = this;
-		Object.getOwnPropertyNames(this.map).forEach(function(name) {
-			callback(name, self.map[name]);
-		});
-	};
-
-	function consumed(body) {
-		if (body.bodyUsed) {
-			return Promise.reject(new TypeError('Already read'))
-		}
-		body.bodyUsed = true;
-	}
-
-	function fileReaderReady(reader) {
-		return new Promise(function(resolve, reject) {
-			reader.onload = function() {
-				resolve(reader.result);
-			}
-			reader.onerror = function() {
-				reject(reader.error);
-			}
-		});
-	}
-
-	function readBlobAsArrayBuffer(blob) {
-		var reader = new FileReader();
-		reader.readAsArrayBuffer(blob);
-		return fileReaderReady(reader);
-	}
-
-	function readBlobAsText(blob) {
-		var reader = new FileReader();
-		reader.readAsText(blob);
-		return fileReaderReady(reader);
-	}
-
-	var support = {
-		blob: 'FileReader' in self && 'Blob' in self && (function() {
-			try {
-				new Blob();
-				return true;
-			} catch(e) {
-				return false;
-			}
-		})(),
-		formData: 'FormData' in self
-	};
-
-	function Body() {
-		this.bodyUsed = false;
-
-		if (support.blob) {
-			this._initBody = function(body) {
-			this._bodyInit = body;
-		if (typeof body === 'string') {
-			this._bodyText = body;
-		} else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
-			this._bodyBlob = body;
-		} else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-			this._bodyFormData = body;
-		} else if (!body) {
-			this._bodyText = '';
-		} else {
-			throw new Error('unsupported BodyInit type');
-		}
-	}
-
-	this.blob = function() {
-		var rejected = consumed(this);
-		if (rejected) {
-			return rejected;
-		}
-
-		if (this._bodyBlob) {
-			return Promise.resolve(this._bodyBlob);
-		} else if (this._bodyFormData) {
-			throw new Error('could not read FormData body as blob');
-		} else {
-			return Promise.resolve(new Blob([this._bodyText]));
-		}
-	};
-
-	this.arrayBuffer = function() {
-		return this.blob().then(readBlobAsArrayBuffer);
-	};
-
-	this.text = function() {
-		var rejected = consumed(this);
-		if (rejected) {
-			return rejected;
-		}
-
-	if (this._bodyBlob) {
-	return readBlobAsText(this._bodyBlob)
-	} else if (this._bodyFormData) {
-	throw new Error('could not read FormData body as text')
-	} else {
-	return Promise.resolve(this._bodyText)
-	}
-	}
-	} else {
-	this._initBody = function(body) {
-	this._bodyInit = body
-	if (typeof body === 'string') {
-	this._bodyText = body
-	} else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
-	this._bodyFormData = body
-	} else if (!body) {
-	this._bodyText = ''
-	} else {
-	throw new Error('unsupported BodyInit type')
-	}
-	}
-
-	this.text = function() {
-	var rejected = consumed(this)
-	return rejected ? rejected : Promise.resolve(this._bodyText)
-	}
-	}
-
-	if (support.formData) {
-	this.formData = function() {
-	return this.text().then(decode)
-	}
-	}
-
-	this.json = function() {
-	return this.text().then(JSON.parse)
-	}
-
-	return this
-	}
-
-	// HTTP methods whose capitalization should be normalized
-	var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
-
-	function normalizeMethod(method) {
-	var upcased = method.toUpperCase()
-	return (methods.indexOf(upcased) > -1) ? upcased : method
-	}
-
-	function Request(url, options) {
-	options = options || {}
-	this.url = url
-
-	this.credentials = options.credentials || 'omit'
-	this.headers = new Headers(options.headers)
-	this.method = normalizeMethod(options.method || 'GET')
-	this.mode = options.mode || null
-	this.referrer = null
-
-	if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
-	throw new TypeError('Body not allowed for GET or HEAD requests')
-	}
-	this._initBody(options.body)
-	}
-
-	function decode(body) {
-	var form = new FormData()
-	body.trim().split('&').forEach(function(bytes) {
-	if (bytes) {
-	var split = bytes.split('=')
-	var name = split.shift().replace(/\+/g, ' ')
-	var value = split.join('=').replace(/\+/g, ' ')
-	form.append(decodeURIComponent(name), decodeURIComponent(value))
-	}
-	})
-	return form
-	}
-
-	function headers(xhr) {
-	var head = new Headers()
-	var pairs = xhr.getAllResponseHeaders().trim().split('\n')
-	pairs.forEach(function(header) {
-	var split = header.trim().split(':')
-	var key = split.shift().trim()
-	var value = split.join(':').trim()
-	head.append(key, value)
-	})
-	return head
-	}
-
-	Request.prototype.fetch = function() {
-	var self = this
-
-	return new Promise(function(resolve, reject) {
-	var xhr = new XMLHttpRequest()
-	if (self.credentials === 'cors') {
-	xhr.withCredentials = true;
-	}
-
-	function responseURL() {
-	if ('responseURL' in xhr) {
-	return xhr.responseURL
-	}
-
-	// Avoid security warnings on getResponseHeader when not allowed by CORS
-	if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-	return xhr.getResponseHeader('X-Request-URL')
-	}
-
-	return;
-	}
-
-	xhr.onload = function() {
-	var status = (xhr.status === 1223) ? 204 : xhr.status
-	if (status < 100 || status > 599) {
-	reject(new TypeError('Network request failed'))
-	return
-	}
-	var options = {
-	status: status,
-	statusText: xhr.statusText,
-	headers: headers(xhr),
-	url: responseURL()
-	}
-	var body = 'response' in xhr ? xhr.response : xhr.responseText;
-	resolve(new Response(body, options))
-	}
-
-	xhr.onerror = function() {
-	reject(new TypeError('Network request failed'))
-	}
-
-	xhr.open(self.method, self.url, true)
-
-	if ('responseType' in xhr && support.blob) {
-	xhr.responseType = 'blob'
-	}
-
-	self.headers.forEach(function(name, values) {
-	values.forEach(function(value) {
-	xhr.setRequestHeader(name, value)
-	})
-	})
-
-	xhr.send(typeof self._bodyInit === 'undefined' ? null : self._bodyInit)
-	})
-	}
-
-	Body.call(Request.prototype)
-
-	function Response(bodyInit, options) {
-	if (!options) {
-	options = {}
-	}
-
-	this._initBody(bodyInit)
-	this.type = 'default'
-	this.url = null
-	this.status = options.status
-	this.ok = this.status >= 200 && this.status < 300
-	this.statusText = options.statusText
-	this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
-	this.url = options.url || ''
-	}
-
-	Body.call(Response.prototype)
-
-	self.Headers = Headers;
-	self.Request = Request;
-	self.Response = Response;
-
-	self.fetch = function (url, options) {
-	return new Request(url, options).fetch()
-	}
-	self.fetch.polyfill = true
-})();
 /**
  * @description	Initialise Brow object.
  * @type 			{Object}
@@ -1079,25 +734,16 @@ WeatherCard = (function () {
 
 	class WeatherCard {
 		constructor (card) {
-			this.parent			= card;
-			this.elem			= document.createElement('weather-card');
-			this.temperatur	= this.createTemperatur();
-			this.content		= this.createContent();
-			this.degrees		= { 'celsius' : '°C', 'fahrenheit' : '°F' };
-			
-			//this.coord		= { 'latitude': 0, 'longitude': 0, 'accuracy': 0 };
-			// navigator.geolocation.getCurrentPosition(
-			// 	this.geolocationSuccess,
-			// 	this.geolocationError
-			// );
-			
-			let self = this;
-			
-			this.elem.setAttribute('weather', 'cloudy');
-			this.elem.appendChild( this.temperatur );
-			this.content.forEach(function (elem) {
-				self.elem.appendChild( elem );
-			});
+			this.parent		= card;
+			this.elem		= document.createElement('weather-card');
+			this.coord		= { 'latitude': 0, 'longitude': 0, 'accuracy': 0 };
+			this.city		= null;
+			this.degrees	= null;
+			this.weather	= 'cloudy';
+
+			this.elem.setAttribute('loading', null);
+			this.elem.setAttribute('weather', `${this.weather}`);
+			this.getGeolocation();
 		}
 
 		/**
@@ -1109,36 +755,97 @@ WeatherCard = (function () {
 			return this.elem;
 		}
 
-		createTemperatur () {
-			let degrees = document.createElement('span');
+		/**
+		 * @description	Returns an element containing current degrees.
+		 * @public
+		 * @return 			{HTMLElement}
+		 */	
+		createTemperatur (degrees) {
+			let degreeElem = document.createElement('span');
+			degreeElem.classList.add('weather__degrees');
+			degreeElem.innerText = `${degrees}°C`;
 
-			degrees.classList.add('weather__degrees');
-			degrees.innerText = '11°C';
-
-			return degrees;
-		}
-
-		geolocationSuccess (position) {
-			this.coord['latitude'] = position.coords.latitude;
-			this.coord['longitude'] = position.coords.longitude;
-			this.coord['accuracy'] = position.coords.accuracy;
-
-			console.log(this);
-			console.log('Your current position is:');
-			console.log('Latitude : ' + position.coords.latitude);
-			console.log('Longitude: ' + position.coords.longitude);
-			console.log('More or less ' + position.coords.accuracy + ' meters.');
+			return degreeElem;
 		}
 
 		createContent () {
 			let city = document.createElement('h1');
 			let location = document.createElement('h2');
+			let temperatur = this.createTemperatur(this.degrees);
+			// City
 			city.classList.add('weather__city');
-			city.innerText = 'Berlin';
+			city.innerText = this.city;
+			// Location
 			location.classList.add('weather__place');
 			location.innerText = 'Current location';
 
-			return [city, location];
+			this.elem.appendChild( temperatur );
+			this.elem.appendChild( city );
+			this.elem.appendChild( location );
+			this.elem.removeAttribute('loading');
+		}
+
+		/**
+		 * @description	Gets current geolocation and saves the values.
+		 * @private
+		 * @todo 			Add error callback.
+		 */	
+		getGeolocation () {
+			let self = this;
+			navigator.geolocation.getCurrentPosition(
+				// Success
+				function (position) {
+					self.coord['latitude']	= position.coords.latitude;
+					self.coord['longitude']	= position.coords.longitude;
+					self.coord['accuracy']	= position.coords.accuracy;
+					self.getWeatherFromAPI();
+				},
+				// Error
+				function (error) {
+					console.log(error);
+				}
+			);
+		}
+
+		/**
+		 * @description	Uses OpenWeatherMap.org to fetch the weather data.
+		 * @private
+		 */	
+		getWeatherFromAPI () {
+			let weatherURL = `http://api.openweathermap.org/data/2.5/weather?lat=${this.coord.latitude}&lon=${this.coord.longitude}`;
+			let self = this;
+
+			fetch(weatherURL)
+			.then(function (response) { return response.text(); })
+			.then(function (response) {
+				let weatherResponse = JSON.parse(response);
+				console.log(weatherResponse);
+				// Set values
+				self.city = weatherResponse.name;
+				self.kelvinCalculator( weatherResponse.main.temp );
+				self.validateWeather( weatherResponse.weather[0].main );
+				// Create content
+				self.createContent();
+			});
+		}
+
+		kelvinCalculator (temp) {
+			console.log(temp);
+			let absZeroTempInC	= 273.15; // -273.15 °C
+			let absZeroTempInF	= 459.67; // -459.67 °F
+			let calcCelcius		= Math.floor(temp - absZeroTempInC);
+			this.degrees = calcCelcius;
+		}
+
+		validateWeather (weather) {
+			weather = weather.toString().toLowerCase();
+
+			switch (weather) {
+				case 'clear':
+					this.weather = weather;
+					this.elem.setAttribute('weather', `${this.weather}`);
+					break;
+			}
 		}
 
 		/**

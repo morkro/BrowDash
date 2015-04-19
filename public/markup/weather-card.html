@@ -1,16 +1,32 @@
 <template id="weather-card">
 	<style>
-		:host { position: relative; }
-		:host /deep/ .module { color:white; }
+		:host { 
+			position: relative;
+		}
+		:host /deep/ .module { 
+			color: white;
+			min-height: 141px;
+			transition: background 150ms ease-in-out;
+		}
+		/* Night */
+		:host-context([weather="night"]) .night { display: block; }
+		:host-context([weather="night"]) /deep/ .module,
+		:host-context([weather="night"]) .weather__loading { background: #616161; }
 		/* Cloudy */
-		:host-context([weather="cloudy"]) /deep/ .module { background: #448aff; }
 		:host-context([weather="cloudy"]) .cloudy { display: block; }
+		:host-context([weather="cloudy"]) /deep/ .module,
+		:host-context([weather="cloudy"]) .weather__loading { background: #448aff; }
 		/* Sunny */
-		:host-context([weather="sunny"]) .sunny { display: block; }
-		:host-context([weather="sunny"]) /deep/ .module { background: #ff9800; }
+		:host-context([weather="sunny"]) .sunny,
+		:host-context([weather="clear"]) .sunny { display: block; }
+		:host-context([weather="sunny"]) /deep/ .module,
+		:host-context([weather="clear"]) /deep/ .module,
+		:host-context([weather="sunny"]) .weather__loading,
+		:host-context([weather="clear"]) .weather__loading { background: #ff9800; }
 		/* Snowy */
 		:host-context([weather="snowy"]) .snowy { display: block; }
-		:host-context([weather="snowy"]) /deep/ .module { background: silver; }
+		:host-context([weather="snowy"]) /deep/ .module,
+		:host-context([weather="snowy"]) .weather__loading { background: silver; }
 		.weather__temperature {
 			position: absolute;
 			top: 22px;
@@ -40,14 +56,38 @@
 			font-size: 18px;
 			color: rgba(255, 255, 255, .75);
 		}
+		/* Loader */
+		:host-context([loading]) .weather__loading {
+			display: block;
+		}
+		.weather__loading {
+			display: none;
+			position: absolute;
+			border-radius: 2px;
+			z-index: 1;
+			width: 100%;
+			height: 100%;
+			top: 0; bottom: 0;
+			left: 0; right: 0;
+		}
 	</style>
 	<card-base>
+		<div class="weather__loading">
+			<svg width="32px" height="32px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+				<circle class="circle" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+			</svg>
+		</div>
+
 		<div class="weather__temperature">
 			<content select=".weather__degrees"></content>
 		</div>
 
 		<div class="weather__location">
 			<div class="weather__icon">
+				<!-- Night -->
+				<svg class="night" viewBox="0 0 24 24">
+					<path fill="#ffc107" d="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z" />
+				</svg>
 				<!-- Cloudy -->
 				<svg class="cloudy" viewBox="0 0 24 24">
 					<path fill="#ffffff" d="M6,19A5,5 0 0,1 1,14A5,5 0 0,1 6,9C7,6.65 9.3,5 12,5C15.43,5 18.24,7.66 18.5,11.03L19,11A4,4 0 0,1 23,15A4,4 0 0,1 19,19H6M19,13H17V12A5,5 0 0,0 12,7C9.5,7 7.45,8.82 7.06,11.19C6.73,11.07 6.37,11 6,11A3,3 0 0,0 3,14A3,3 0 0,0 6,17H19A2,2 0 0,0 21,15A2,2 0 0,0 19,13Z" />
