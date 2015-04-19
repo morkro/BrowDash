@@ -1080,19 +1080,24 @@ WeatherCard = (function () {
 	class WeatherCard {
 		constructor (card) {
 			this.parent			= card;
-			this.wrapper		= document.createElement('div');
+			this.elem			= document.createElement('weather-card');
 			this.temperatur	= this.createTemperatur();
+			this.content		= this.createContent();
 			this.degrees		= { 'celsius' : '°C', 'fahrenheit' : '°F' };
 			
 			//this.coord		= { 'latitude': 0, 'longitude': 0, 'accuracy': 0 };
-
-			this.wrapper.classList.add('content__weather');
-			this.wrapper.appendChild( this.temperatur );
-
 			// navigator.geolocation.getCurrentPosition(
 			// 	this.geolocationSuccess,
 			// 	this.geolocationError
 			// );
+			
+			let self = this;
+			
+			this.elem.setAttribute('weather', 'cloudy');
+			this.elem.appendChild( this.temperatur );
+			this.content.forEach(function (elem) {
+				self.elem.appendChild( elem );
+			});
 		}
 
 		/**
@@ -1101,17 +1106,16 @@ WeatherCard = (function () {
 		 * @return 			{HTMLElement}
 		 */	
 		get getContent () {
-			return [ this.wrapper ];
+			return this.elem;
 		}
 
 		createTemperatur () {
-			let elem = document.createElement('span');
-			let wrap = document.createElement('div');
+			let degrees = document.createElement('span');
 
-			elem.innerText = '11°C';
-			wrap.appendChild(elem);
+			degrees.classList.add('weather__degrees');
+			degrees.innerText = '11°C';
 
-			return wrap;
+			return degrees;
 		}
 
 		geolocationSuccess (position) {
@@ -1124,6 +1128,17 @@ WeatherCard = (function () {
 			console.log('Latitude : ' + position.coords.latitude);
 			console.log('Longitude: ' + position.coords.longitude);
 			console.log('More or less ' + position.coords.accuracy + ' meters.');
+		}
+
+		createContent () {
+			let city = document.createElement('h1');
+			let location = document.createElement('h2');
+			city.classList.add('weather__city');
+			city.innerText = 'Berlin';
+			location.classList.add('weather__place');
+			location.innerText = 'Current location';
+
+			return [city, location];
 		}
 
 		/**

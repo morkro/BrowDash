@@ -78,7 +78,8 @@ module.exports = function(grunt) {
 				expand	: true,
 				src		: [
 					'<%= app.directory.build.markup %>/components/card-base.html',
-					'<%= app.directory.build.markup %>/components/text-card.html'
+					'<%= app.directory.build.markup %>/components/text-card.html',
+					'<%= app.directory.build.markup %>/components/weather-card.html'
 				],
 				dest		: '<%= app.directory.dest.markup %>/',
 				flatten	: true,
@@ -88,7 +89,8 @@ module.exports = function(grunt) {
 				expand	: true,
 				src		: [
 					'<%= app.directory.build.scripts %>/components/card-base.js',
-					'<%= app.directory.build.scripts %>/components/text-card.js'
+					'<%= app.directory.build.scripts %>/components/text-card.js',
+					'<%= app.directory.build.scripts %>/components/weather-card.js'
 				],
 				dest		: '<%= app.directory.dest.scripts %>',
 				flatten	: true,
