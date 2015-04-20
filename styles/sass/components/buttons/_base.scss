@@ -7,8 +7,30 @@
 	transition: all 150ms ease-in-out;
 	font-size: 14px;
 	font-weight: 400;
+	position: relative;
 
 	&:focus { outline: none; }
 
 	svg { fill: $white; }
+}
+
+.btn--fx {
+	&:before {
+		content: "";
+		position: absolute;
+		background: rgba(0, 0, 0, .2);
+		opacity: 0;
+		border-radius: 50%;
+		top: 50%;
+		left: 50%;
+		width: 42px;
+		height: 42px;
+		transform: translate(-51%, -54%);
+		transition: opacity 150ms ease-in-out;
+	}
+
+	&:active:before {
+		transition: opacity 150ms ease-in-out;
+		opacity: 1;
+	}
 }

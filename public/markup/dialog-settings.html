@@ -1,5 +1,5 @@
 <!-- Headings -->
-<header class="dialog__heading">
+<header class="dialog__heading colored-bg">
 	<h1>Settings</h1>
 	<button role="button" class="btn btn--text dialog__close">Close</button>
 </header><!-- /Headings -->
@@ -20,26 +20,34 @@
 			<li data-settings-theme="red"></li>
 		</ul>
 	</section><!-- /Theme -->
-	<section><!-- Layout -->
-		<h2 class="content__heading">
-			<img src="/assets/icons/view_column.svg">
-			Layout
-		</h2>
-		<ul>
-			<li><p>3 Columns</p></li>
-			<li><p>4 Columns</p></li>
-		</ul>
-	</section><!-- /Layout -->
-	<section><!-- Time -->
-		<h2 class="content__heading">
-			<img src="/assets/icons/schedule.svg">
-			Dateformat
-		</h2>
-		<label for="settings--dateformat">
-			<input type="checkbox" id="settings--dateformat"> Use 24h clock
-		</label>
-		<label for="settings--ampm">
-			<input type="checkbox" id="settings--ampm"> Show AM/PM
-		</label>
-	</section><!-- /Time -->
+	<div class="dialog__block">
+		<section class="content__layout"><!-- Layout -->
+			<h2 class="content__heading">
+				<img src="/assets/icons/view_column.svg">
+				Layout
+			</h2>
+			<div class="dialog__content">
+				<ul>
+					<li><p>3 Columns</p></li>
+					<li><p>4 Columns</p></li>
+				</ul>
+			</div>
+		</section><!-- /Layout -->
+		<section class="content__time"><!-- Time -->
+			<h2 class="content__heading">
+				<img src="/assets/icons/schedule.svg">
+				Dateformat
+			</h2>
+			<div class="dialog__content">
+				<ul class="content__time__list">
+					<li><label for="settings--dateformat">
+						<input type="checkbox" id="settings--dateformat" checked> Use 24h clock
+					</label></li>
+					<li><label for="settings--ampm">
+						<input type="checkbox" id="settings--ampm" disabled> Show AM/PM
+					</label></li>
+				</ul>
+			</div>
+		</section><!-- /Time -->
+	</div>
 </div><!-- /Content -->

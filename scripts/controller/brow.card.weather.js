@@ -13,9 +13,8 @@ WeatherCard = (function () {
 			this.city		= null;
 			this.degrees	= null;
 			this.weather	= 'cloudy';
-			this.conditions = ['thunderstorm', 'drizzle', 'rain', 'snow', 'atmosphere', 'clouds', 'extreme', 'additional', 'clear'];
 
-			this.elem.setAttribute('loading', null);
+			this.elem.setAttribute('loading', '');
 			this.elem.setAttribute('weather', `${this.weather}`);
 			this.getGeolocation();
 		}
@@ -104,7 +103,6 @@ WeatherCard = (function () {
 		}
 
 		kelvinCalculator (temp) {
-			console.log(temp);
 			let absZeroTempInC	= 273.15; // -273.15 °C
 			let absZeroTempInF	= 459.67; // -459.67 °F
 			let calcCelcius		= Math.floor(temp - absZeroTempInC);
@@ -113,10 +111,10 @@ WeatherCard = (function () {
 
 		validateWeather (weather) {
 			weather = weather.toString().toLowerCase();
+			this.weather = weather;
 
 			switch (weather) {
 				case 'clear':
-					this.weather = weather;
 					this.elem.setAttribute('weather', `${this.weather}`);
 					break;
 			}

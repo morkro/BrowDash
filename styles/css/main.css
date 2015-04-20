@@ -187,6 +187,11 @@ b, strong { font-weight: 400; }
 /** Images This is experimental and not fully supported in most browsers. Anyway, I want to test this feature. */
 img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-interpolation-mode: bicubic; }
 
+/** Forms */
+label { cursor: pointer; }
+
+input[type="checkbox"] { margin-right: 20px; }
+
 .theme-blue-a400 .btn--round { background-color: #f44336; }
 .theme-blue-a400 .btn--round:hover { background-color: #e53935; }
 .theme-blue-a400 a { color: #2979ff; }
@@ -221,9 +226,12 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
   100% { display: block; opacity: 1; } }
 /* COMPONENTS */
 /* BUTTONS */
-.btn { background: transparent; border: none; padding: 0; display: inline-block; text-transform: uppercase; transition: all 150ms ease-in-out; font-size: 14px; font-weight: 400; }
+.btn { background: transparent; border: none; padding: 0; display: inline-block; text-transform: uppercase; transition: all 150ms ease-in-out; font-size: 14px; font-weight: 400; position: relative; }
 .btn:focus { outline: none; }
 .btn svg { fill: #ffffff; }
+
+.btn--fx:before { content: ""; position: absolute; background: rgba(0, 0, 0, 0.2); opacity: 0; border-radius: 50%; top: 50%; left: 50%; width: 42px; height: 42px; transform: translate(-51%, -54%); transition: opacity 150ms ease-in-out; }
+.btn--fx:active:before { transition: opacity 150ms ease-in-out; opacity: 1; }
 
 .btn--round { border-radius: 50%; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.48); padding: 14px 16px; }
 .btn--round svg { fill: #ffffff; }
@@ -243,7 +251,8 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
 .dialog__inner.module { padding: 0; }
 .dialog__inner .dialog__sidebar, .dialog__inner .dialog__content { height: calc(100% - 60px); }
 
-.dialog__heading { padding: 20px; width: 100%; border-bottom: 1px solid #e0e0e0; background: #e0e0e0; color: #616161; box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3); position: relative; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+.dialog__heading { padding: 20px; width: 100%; color: #ffffff; box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.3); position: relative; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; }
+.dialog__heading h1 { font-weight: 400; }
 .dialog__heading button { align-self: center; }
 
 .dialog__sidebar { border-right: 1px solid #e0e0e0; }
@@ -259,6 +268,9 @@ img[src$=".jpg"], img[src$=".png"] { image-rendering: optimizeQuality; -ms-inter
 .dialog__content span { font-style: italic; color: #9e9e9e; }
 .dialog__content section:not(:last-of-type) { margin-bottom: 40px; }
 .dialog__content a:hover { text-decoration: underline; }
+
+.dialog__block { display: flex; }
+.dialog__block > section { flex-basis: 50%; }
 
 /* Cards */
 card-base, text-card, weather-card { position: relative; z-index: 1; margin-bottom: 25px; transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out; }
@@ -304,6 +316,8 @@ card-base:nth-of-type(4n) { margin-right: 0; }*/ }
 .content__overlay.show { opacity: 1; display: block; }
 
 /* DIALOG */
+.dialog__content__theme { display: none; }
+
 .settings__theme { list-style: none; margin-bottom: 10px; }
 .settings__theme li { width: 86px; height: 86px; margin-right: 11px; margin-bottom: 15px; display: inline-block; cursor: pointer; border-radius: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24); transition: all 150ms ease-in-out; position: relative; }
 .settings__theme li:hover { box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.48); transform: translateY(-2px); }
@@ -324,6 +338,11 @@ card-base:nth-of-type(4n) { margin-right: 0; }*/ }
 .settings__theme li[data-settings-theme="red"] { background: #f44336; }
 .settings__theme li[data-settings-theme="red"]:hover { background: #e53935; }
 .settings__theme li[data-settings-theme="red"]:before { background: #2979ff; }
+
+.content__time .dialog__content { padding: 0 20px 20px 40px; }
+
+.content__time__list { list-style: none; }
+.content__time__list li { margin-bottom: 20px; }
 
 /* FOOTER */
 #brow__footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 2; height: 100px; width: 100%; }

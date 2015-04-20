@@ -70,3 +70,13 @@ img[src$=".jpg"], img[src$=".png"] {
 	image-rendering: optimizeQuality;
 	-ms-interpolation-mode: bicubic;
 }
+
+/**
+ * Forms
+ */
+label {
+	cursor: pointer;
+}
+input[type="checkbox"] {
+	margin-right: 20px;
+}

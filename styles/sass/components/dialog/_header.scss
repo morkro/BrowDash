@@ -1,15 +1,17 @@
 .dialog__heading {
 	padding: 20px;
 	width: 100%;
-	border-bottom: 1px solid $grey-300;
-	background: $grey-300;
-	color: $grey-700;
+	color: $white;
 	box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, .3);
 	position: relative;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-between;
+
+	h1 {
+		font-weight: 400;
+	}
 
 	button {
 		align-self: center;

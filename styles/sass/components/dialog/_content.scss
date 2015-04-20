@@ -16,3 +16,11 @@
 
 	a:hover { text-decoration: underline; }
 }
+
+.dialog__block {
+	display: flex;
+
+	> section {
+		flex-basis: 50%;
+	}
+}
