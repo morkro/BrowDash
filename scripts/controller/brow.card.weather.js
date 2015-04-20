@@ -13,6 +13,7 @@ WeatherCard = (function () {
 			this.city		= null;
 			this.degrees	= null;
 			this.weather	= 'cloudy';
+			this.conditions = ['thunderstorm', 'drizzle', 'rain', 'snow', 'atmosphere', 'clouds', 'extreme', 'additional', 'clear'];
 
 			this.elem.setAttribute('loading', null);
 			this.elem.setAttribute('weather', `${this.weather}`);

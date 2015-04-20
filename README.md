@@ -44,9 +44,11 @@ This projected is licensed under the terms of the [MIT license][1].
 - [Node.js][3] - JavaScript platform. Mainly used for Grunt.
 - [Google Material Design][4] - The complete projects layout is based on Google's design principles.
 - [Sass][5] - CSS preprocessor language.
+- [SVG Loaders][6] by Sam herbert
 
 [1]: https://github.com/morkro/BrowDash/LICENSE
 [2]: http://gruntjs.com
 [3]: http://nodejs.org
 [4]: http://www.google.com/design
 [5]: http://sass-lang.com/
+[6]: http://samherbert.net/svg-loaders/
