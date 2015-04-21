@@ -16,6 +16,7 @@ WeatherCard = (function () {
 
 			this.elem.setAttribute('loading', '');
 			this.elem.setAttribute('weather', `${this.weather}`);
+			this.elem.setAttribute('time', 'day');
 			this.getGeolocation();
 		}
 

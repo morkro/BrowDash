@@ -76,7 +76,40 @@ img[src$=".jpg"], img[src$=".png"] {
  */
 label {
 	cursor: pointer;
+	position: relative;
+	transition: all 150ms ease-in-out;
 }
+
 input[type="checkbox"] {
 	margin-right: 20px;
+	visibility: hidden;
+
+	& + label:before {
+		content: "";
+		position: absolute;
+		width: 14px;
+		height: 14px;
+		left: -40px;
+		top: 1px;
+		color: $white;
+		border: 2px solid $grey-700;
+		border-radius: 2px;
+		background: white;
+		font-size: 14px;
+		line-height: 14px;
+		transition: all 150ms ease-in-out;
+	}
+
+	&[disabled] + label {
+		color: $grey-400;
+		&:before { border-color: $grey-400; }
+	}
+
+	&:checked + label:before {
+		content: "✔";
+		padding-left: 1px;
+		width: 13px;
+		border-color: $green;
+		background: $green;
+	}
 }
