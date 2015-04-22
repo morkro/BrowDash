@@ -15,6 +15,7 @@ Brow.Settings = (function (Brow) {
 	/* Constants */
 	const BROW_KEY			= 'BROW_THEME';
 	const BROW_CARDS		= 'BROW_CARDS';
+	const BROW_SETTINGS	= 'BROW_SETTINGS';
 	const DEFAULT_THEME	= 'blue-a400';
 
 	/* Variables */
@@ -26,7 +27,8 @@ Brow.Settings = (function (Brow) {
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
 		DIALOG : null,
-		DIALOG_OVERLAY : null
+		DIALOG_OVERLAY : null,
+		TIMER : null
 	};
 	var isSelectionState = false;
 
@@ -192,6 +194,27 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
+	 *	@description	Validates the users timer settings.
+	 * @public
+	 */
+	const _validateBrowTimer = function ()  {
+		let timer = new BrowTimer(browElements['TIMER']);
+		let dateSettings = { dateFormat : null, abbreviations : false };
+
+		if (!localStorage[BROW_SETTINGS]) {
+			dateSettings['dateFormat'] = '24h';
+			timer.setDateFormat(dateSettings.dateFormat);
+			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
+		}
+		else {
+			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
+			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
+		}
+
+		timer.run();
+	};
+
+	/**
 	 * @name				Brow.Settings.useElements
 	 *	@description	Assigns app specific elements for further usage.
 	 * @public
@@ -210,7 +233,8 @@ Brow.Settings = (function (Brow) {
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
 			DIALOG : config.DIALOG,
-			DIALOG_OVERLAY : config.DIALOG_OVERLAY
+			DIALOG_OVERLAY : config.DIALOG_OVERLAY,
+			TIMER : config.TIMER
 		};
 	};
 
@@ -231,6 +255,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const initialiseAndStartApp = function () {
 		Brow.Dialog.addEvents();
+		_validateBrowTimer();
 		_addEvents();
 		_validateBrowCards();
 	};

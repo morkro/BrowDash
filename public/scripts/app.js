@@ -219,6 +219,7 @@ Brow.Settings = (function (Brow) {
 	/* Constants */
 	const BROW_KEY			= 'BROW_THEME';
 	const BROW_CARDS		= 'BROW_CARDS';
+	const BROW_SETTINGS	= 'BROW_SETTINGS';
 	const DEFAULT_THEME	= 'blue-a400';
 
 	/* Variables */
@@ -230,7 +231,8 @@ Brow.Settings = (function (Brow) {
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
 		DIALOG : null,
-		DIALOG_OVERLAY : null
+		DIALOG_OVERLAY : null,
+		TIMER : null
 	};
 	var isSelectionState = false;
 
@@ -396,6 +398,27 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
+	 *	@description	Validates the users timer settings.
+	 * @public
+	 */
+	const _validateBrowTimer = function ()  {
+		let timer = new BrowTimer(browElements['TIMER']);
+		let dateSettings = { dateFormat : null, abbreviations : false };
+
+		if (!localStorage[BROW_SETTINGS]) {
+			dateSettings['dateFormat'] = '24h';
+			timer.setDateFormat(dateSettings.dateFormat);
+			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
+		}
+		else {
+			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
+			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
+		}
+
+		timer.run();
+	};
+
+	/**
 	 * @name				Brow.Settings.useElements
 	 *	@description	Assigns app specific elements for further usage.
 	 * @public
@@ -414,7 +437,8 @@ Brow.Settings = (function (Brow) {
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
 			DIALOG : config.DIALOG,
-			DIALOG_OVERLAY : config.DIALOG_OVERLAY
+			DIALOG_OVERLAY : config.DIALOG_OVERLAY,
+			TIMER : config.TIMER
 		};
 	};
 
@@ -435,6 +459,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const initialiseAndStartApp = function () {
 		Brow.Dialog.addEvents();
+		_validateBrowTimer();
 		_addEvents();
 		_validateBrowCards();
 	};
@@ -479,6 +504,14 @@ BrowTimer = (function() {
 			let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
 
 			return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
+		}
+
+		/**
+		 *	@description	Needs to be written.
+		 * @param			{String} format
+		 */
+		setDateFormat (format) {
+			console.log(format);
 		}
 
 		/**
@@ -864,7 +897,6 @@ WeatherCard = (function () {
 (function (window) {
 	'use strict';
 
-	const TIMER		= new BrowTimer( document.querySelector('.trigger-timer') );
 	const BROW		= Brow.Settings;
 	const SETTINGS	= BROW.useElements({
 		onClickDialog : document.querySelectorAll('.open-dialog'),
@@ -874,10 +906,10 @@ WeatherCard = (function () {
 		CONTENT : document.querySelector('.trigger-content'),
 		CONTENT_OVERLAY : document.querySelector('.content__overlay'),
 		DIALOG : document.querySelector('.trigger-dialog'),
-		DIALOG_OVERLAY: document.querySelector('#brow__overlay')
+		DIALOG_OVERLAY: document.querySelector('#brow__overlay'),
+		TIMER: document.querySelector('.trigger-timer')
 	});
 
-	TIMER.run();
 	BROW.setTheme('blue-a400');
 	BROW.start();
 

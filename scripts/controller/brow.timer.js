@@ -31,6 +31,14 @@ BrowTimer = (function() {
 		}
 
 		/**
+		 *	@description	Needs to be written.
+		 * @param			{String} format
+		 */
+		setDateFormat (format) {
+			console.log(format);
+		}
+
+		/**
 		 * @name				BrowTimer.run
 		 * @description	Sets the element in which the time should be displayed.
 		 * @param			{Element} elem
