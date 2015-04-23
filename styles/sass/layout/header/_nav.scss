@@ -7,10 +7,8 @@
 		margin-left: 20px;
 	}
 
-	.btn {
-		svg { 
-			fill: $grey-700;
-			transition: all 150ms ease-in-out;
-		}
+	brow-icon { 
+		opacity: .6;
+		transition: all 150ms ease-in-out;
 	}
 }

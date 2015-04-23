@@ -45,11 +45,11 @@ BrowTimer = (function() {
 		 * @return 			{HTMLElement}
 		 */
 		run () {
-			let _this = this;
+			let self = this;
 			
 			this.elem.textContent = this.getTime();
 			setInterval(function () {
-				_this.elem.textContent = _this.getTime();
+				self.elem.textContent = self.getTime();
 			}, this.update);
 
 			return this.elem;
