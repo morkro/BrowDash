@@ -19,7 +19,9 @@ Brow.Settings = (function (Brow) {
 	const DEFAULT_THEME	= 'blue-a400';
 
 	/* Variables */
-	var browElements = {
+	var isSelectionState	= false;
+	var masonry				= null;
+	var browElements		= {
 		onClickDialog : null,
 		onClickNewCard : null,
 		onClickSelectionList : null,
@@ -30,7 +32,10 @@ Brow.Settings = (function (Brow) {
 		DIALOG_OVERLAY : null,
 		TIMER : null
 	};
-	var isSelectionState = false;
+
+	const _startMasonryLayout = function () {
+		masonry = new BrowMasonry( browElements.CONTENT );
+	};
 
 	/**
 	 * @description	Adds event listener.
@@ -77,7 +82,7 @@ Brow.Settings = (function (Brow) {
 
 	/**
 	 * @description	Checks localStorage and loads the users cards
-	 * @public
+	 * @private
 	 * @param			{Object} storage
 	 */
 	const _validateBrowCards = function (storage) {
@@ -93,7 +98,7 @@ Brow.Settings = (function (Brow) {
 
 	/**
 	 * @description	Checks if custom key is set, if not: do it.
-	 * @public
+	 * @private
 	 */
 	const _checkIfCustomBrowCards = function () {
 		if (!localStorage[BROW_CARDS]) {
@@ -162,6 +167,7 @@ Brow.Settings = (function (Brow) {
 		event.preventDefault();
 		let selectedCard = this.getAttribute('data-create-card');
 		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
+		masonry.update();
 	};
 
 	/**
@@ -173,6 +179,27 @@ Brow.Settings = (function (Brow) {
 		if (Brow.isEditMode && Brow.activeCard.isEditMode) {
 			Brow.activeCard.saveState();
 		}
+	};
+
+	/**
+	 *	@description	Validates the users timer settings.
+	 * @private
+	 */
+	const _validateBrowTimer = function ()  {
+		let timer = new BrowTimer(browElements['TIMER']);
+		let dateSettings = { dateFormat : null, abbreviations : false };
+
+		if (!localStorage[BROW_SETTINGS]) {
+			dateSettings['dateFormat'] = '24h';
+			timer.setDateFormat(dateSettings.dateFormat);
+			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
+		}
+		else {
+			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
+			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
+		}
+
+		timer.run();
 	};
 
 	/**
@@ -194,30 +221,9 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 *	@description	Validates the users timer settings.
-	 * @public
-	 */
-	const _validateBrowTimer = function ()  {
-		let timer = new BrowTimer(browElements['TIMER']);
-		let dateSettings = { dateFormat : null, abbreviations : false };
-
-		if (!localStorage[BROW_SETTINGS]) {
-			dateSettings['dateFormat'] = '24h';
-			timer.setDateFormat(dateSettings.dateFormat);
-			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
-		}
-		else {
-			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
-			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
-		}
-
-		timer.run();
-	};
-
-	/**
 	 * @name				Brow.Settings.useElements
 	 *	@description	Assigns app specific elements for further usage.
-	 * @public
+	 * @private
 	 * @param			{Object} config
 	 */
 	const useElements = function (config) {
@@ -258,6 +264,7 @@ Brow.Settings = (function (Brow) {
 		_validateBrowTimer();
 		_addEvents();
 		_validateBrowCards();
+		_startMasonryLayout();
 	};
 	
 	/* Public API */

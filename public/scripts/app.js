@@ -202,6 +202,57 @@ Brow.Dialog = (function (Brow) {
 		addEvents: addEvents
 	};
 })(Brow);
+BrowMasonry = (function (window, Brow) {
+	'use strict';
+
+	class BrowMasonry {
+		constructor (container) {
+			this.container	= container;
+			this.items		= null;
+			this.grid		= [];
+			this.rowCount	= 3;
+			
+			this.update();
+		}
+
+		update () {
+			this.items = this.container.querySelectorAll('.brow__content__module');
+			this.grid = [];
+
+			for (let i = 0; i < this.items.length; i += this.rowCount) {
+				let itemsRow = [];
+
+				if (!!this.items[i]) itemsRow.push(this.items[i].getAttribute('data-module-guid'));
+				if (!!this.items[i + 1]) itemsRow.push(this.items[i + 1].getAttribute('data-module-guid'));
+				if (!!this.items[i + 2]) itemsRow.push(this.items[i + 2].getAttribute('data-module-guid'));
+
+				this.grid.push( itemsRow );
+			}
+
+			this.organiseDashboard();
+		}
+
+		organiseDashboard () {
+			console.log(this);
+			for (let col = 0; col < this.grid.length; col++) {
+				for (let row = 0; row < this.grid[col].length; row++) {
+					let item = document.querySelector(`[data-module-guid="${this.grid[col][row]}"]`);
+					
+					if (col !== 0)  {
+						let itemAbove = document.querySelector(`[data-module-guid="${this.grid[col - 1][row]}"]`);
+						if (!!itemAbove) {
+							item.style.top = `${itemAbove.getBoundingClientRect().bottom - 35}px`;
+						}
+					}
+
+					item.setAttribute('data-module-column', `${row + 1}`);
+				}
+			}
+		}
+	}
+
+	return BrowMasonry;
+})(window, Brow);
 /**
  * @name				Brow.Settings
  * @description	Stores all necessary HTMLElements, sets the theme and 
@@ -223,7 +274,9 @@ Brow.Settings = (function (Brow) {
 	const DEFAULT_THEME	= 'blue-a400';
 
 	/* Variables */
-	var browElements = {
+	var isSelectionState	= false;
+	var masonry				= null;
+	var browElements		= {
 		onClickDialog : null,
 		onClickNewCard : null,
 		onClickSelectionList : null,
@@ -234,7 +287,10 @@ Brow.Settings = (function (Brow) {
 		DIALOG_OVERLAY : null,
 		TIMER : null
 	};
-	var isSelectionState = false;
+
+	const _startMasonryLayout = function () {
+		masonry = new BrowMasonry( browElements.CONTENT );
+	};
 
 	/**
 	 * @description	Adds event listener.
@@ -281,7 +337,7 @@ Brow.Settings = (function (Brow) {
 
 	/**
 	 * @description	Checks localStorage and loads the users cards
-	 * @public
+	 * @private
 	 * @param			{Object} storage
 	 */
 	const _validateBrowCards = function (storage) {
@@ -297,7 +353,7 @@ Brow.Settings = (function (Brow) {
 
 	/**
 	 * @description	Checks if custom key is set, if not: do it.
-	 * @public
+	 * @private
 	 */
 	const _checkIfCustomBrowCards = function () {
 		if (!localStorage[BROW_CARDS]) {
@@ -366,6 +422,7 @@ Brow.Settings = (function (Brow) {
 		event.preventDefault();
 		let selectedCard = this.getAttribute('data-create-card');
 		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
+		masonry.update();
 	};
 
 	/**
@@ -377,6 +434,27 @@ Brow.Settings = (function (Brow) {
 		if (Brow.isEditMode && Brow.activeCard.isEditMode) {
 			Brow.activeCard.saveState();
 		}
+	};
+
+	/**
+	 *	@description	Validates the users timer settings.
+	 * @private
+	 */
+	const _validateBrowTimer = function ()  {
+		let timer = new BrowTimer(browElements['TIMER']);
+		let dateSettings = { dateFormat : null, abbreviations : false };
+
+		if (!localStorage[BROW_SETTINGS]) {
+			dateSettings['dateFormat'] = '24h';
+			timer.setDateFormat(dateSettings.dateFormat);
+			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
+		}
+		else {
+			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
+			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
+		}
+
+		timer.run();
 	};
 
 	/**
@@ -398,30 +476,9 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 *	@description	Validates the users timer settings.
-	 * @public
-	 */
-	const _validateBrowTimer = function ()  {
-		let timer = new BrowTimer(browElements['TIMER']);
-		let dateSettings = { dateFormat : null, abbreviations : false };
-
-		if (!localStorage[BROW_SETTINGS]) {
-			dateSettings['dateFormat'] = '24h';
-			timer.setDateFormat(dateSettings.dateFormat);
-			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
-		}
-		else {
-			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
-			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
-		}
-
-		timer.run();
-	};
-
-	/**
 	 * @name				Brow.Settings.useElements
 	 *	@description	Assigns app specific elements for further usage.
-	 * @public
+	 * @private
 	 * @param			{Object} config
 	 */
 	const useElements = function (config) {
@@ -462,6 +519,7 @@ Brow.Settings = (function (Brow) {
 		_validateBrowTimer();
 		_addEvents();
 		_validateBrowCards();
+		_startMasonryLayout();
 	};
 	
 	/* Public API */
@@ -544,15 +602,21 @@ BrowCard = (function () {
 	class BrowCard {
 		constructor (config) {
 			if (!config) config = {};
-
+			
 			this.isEditMode	= false;
 			this.type			= (config.type) ? config.type : 'text';
 			this.guid			= (config.guid) ? config.guid : Brow.GUID();
 			this.content		= (config.content) ? config.content : {};
 			this.config			= { elem: null };
-			this.storage		= { module: true, type: this.type, guid: this.guid, content: this.content };
 			this.saveState		= this.saveCardChanges;
 			this.wrapper		= null;
+			this.storage		= { 
+				module: true, 
+				type: this.type, 
+				guid: this.guid, 
+				content: this.content,
+				style: { width: 1, sticky: false }
+			};
 
 			return this.createCard();
 		}
@@ -575,11 +639,17 @@ BrowCard = (function () {
 					break;
 			}
 
-			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
-			this.wrapper.getContent.setAttribute('data-module-type', this.type);
+			this.applyCardData();
 			this.addEvents( this.wrapper.getContent );
 
 			return this.wrapper.getContent;
+		}
+
+		applyCardData () {
+			this.wrapper.getContent.classList.add('brow__content__module');
+			this.wrapper.getContent.setAttribute('data-module-width', this.storage.style.width);
+			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
+			this.wrapper.getContent.setAttribute('data-module-type', this.type);
 		}
 
 		/**

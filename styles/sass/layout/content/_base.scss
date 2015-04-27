@@ -3,26 +3,23 @@
 	max-width: $max-width;
 	padding: 0;
 	width: 90%;
-	height: auto;
-	margin: 60px auto 0 auto;
-	transition: all 150ms ease-in-out;
+	height: auto; //calc(100vh - 120px);
+	margin: 60px auto;
+	transition: width 150ms ease-in-out;
 	z-index: z($modals, content);
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: space-around;
+}
 
-	&[data-column="3"] {
-		/*card-base { width: calc(100% / 3 - 17px); }
-		card-base:nth-of-type(3n) { margin-right: 0; }*/
-		[data-module-type] { flex-basis: 31%; }
-	}
+.brow__content__module {
+	position: absolute;
+	width: 31%;
 
-	&[data-column="4"] {
-		/*card-base { width: calc(100% / 4 - 25px); }
-		card-base:nth-of-type(4n) { margin-right: 0; }*/
-		[data-module-type] { flex-basis: 23%; }
-	}
+	&[data-module-width="1"] { width: 31%; }
+	&[data-module-width="2"] { width: 62%; }
+	&[data-module-width="3"] { width: 93%; }
+
+	&[data-module-column="1"] { left: 0; }
+	&[data-module-column="2"] { left: 34.5%; }
+	&[data-module-column="3"] { right: 0; }
 }
 
 @media #{$max-desktop} {

@@ -55,6 +55,7 @@ module.exports = function(grunt) {
 				'<%= app.directory.build.scripts %>/controller/brow.core.js',
 				'<%= app.directory.build.scripts %>/model/brow.data.js',
 				'<%= app.directory.build.scripts %>/controller/brow.dialog.js',
+				'<%= app.directory.build.scripts %>/controller/brow.masonry.js',
 				'<%= app.directory.build.scripts %>/controller/brow.settings.js',
 				'<%= app.directory.build.scripts %>/controller/brow.timer.js',
 				'<%= app.directory.build.scripts %>/controller/brow.card.js',

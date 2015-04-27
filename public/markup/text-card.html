@@ -1,5 +1,9 @@
 <template id="text-card">
 	<style>
+		:host {
+			width: 100%;
+			display: block;
+		}
 		/* Editmode */
 		:host(.editmode) .module__editor { 
 			height: 40px; 
@@ -11,10 +15,11 @@
 		/* Header */
 		.module__heading { 
 			padding: 20px; 
-			position: relative; 
+			display: block;
 		}
 		.module__heading ::content h1 { 
 			margin-right: 10px; 
+			display: block;
 		}
 		.module__heading ::content h1:read-write:focus,
 		.module__heading ::content h1:read-write:hover { 
@@ -26,6 +31,7 @@
 		/* Content */
 		.module__content {
 			padding: 0 20px 20px; 
+			display: block;
 		}
 		.module__content ::content p:focus,
 		.module__content ::content p:read-write:hover {

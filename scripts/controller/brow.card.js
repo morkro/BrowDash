@@ -8,15 +8,21 @@ BrowCard = (function () {
 	class BrowCard {
 		constructor (config) {
 			if (!config) config = {};
-
+			
 			this.isEditMode	= false;
 			this.type			= (config.type) ? config.type : 'text';
 			this.guid			= (config.guid) ? config.guid : Brow.GUID();
 			this.content		= (config.content) ? config.content : {};
 			this.config			= { elem: null };
-			this.storage		= { module: true, type: this.type, guid: this.guid, content: this.content };
 			this.saveState		= this.saveCardChanges;
 			this.wrapper		= null;
+			this.storage		= { 
+				module: true, 
+				type: this.type, 
+				guid: this.guid, 
+				content: this.content,
+				style: { width: 1, sticky: false }
+			};
 
 			return this.createCard();
 		}
@@ -39,11 +45,17 @@ BrowCard = (function () {
 					break;
 			}
 
-			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
-			this.wrapper.getContent.setAttribute('data-module-type', this.type);
+			this.applyCardData();
 			this.addEvents( this.wrapper.getContent );
 
 			return this.wrapper.getContent;
+		}
+
+		applyCardData () {
+			this.wrapper.getContent.classList.add('brow__content__module');
+			this.wrapper.getContent.setAttribute('data-module-width', this.storage.style.width);
+			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
+			this.wrapper.getContent.setAttribute('data-module-type', this.type);
 		}
 
 		/**

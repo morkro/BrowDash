@@ -305,13 +305,15 @@ card-base.deletemode > *, text-card.deletemode > *, weather-card.deletemode > * 
 .header__nav brow-icon { opacity: .6; transition: all 150ms ease-in-out; }
 
 /* CONTENT */
-#brow__content { position: relative; max-width: 1280px; padding: 0; width: 90%; height: auto; margin: 60px auto 0 auto; transition: all 150ms ease-in-out; z-index: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around; }
-#brow__content[data-column="3"] { /*card-base { width: calc(100% / 3 - 17px); }
-card-base:nth-of-type(3n) { margin-right: 0; }*/ }
-#brow__content[data-column="3"] [data-module-type] { flex-basis: 31%; }
-#brow__content[data-column="4"] { /*card-base { width: calc(100% / 4 - 25px); }
-card-base:nth-of-type(4n) { margin-right: 0; }*/ }
-#brow__content[data-column="4"] [data-module-type] { flex-basis: 23%; }
+#brow__content { position: relative; max-width: 1280px; padding: 0; width: 90%; height: auto; margin: 60px auto; transition: width 150ms ease-in-out; z-index: 1; }
+
+.brow__content__module { position: absolute; width: 31%; }
+.brow__content__module[data-module-width="1"] { width: 31%; }
+.brow__content__module[data-module-width="2"] { width: 62%; }
+.brow__content__module[data-module-width="3"] { width: 93%; }
+.brow__content__module[data-module-column="1"] { left: 0; }
+.brow__content__module[data-module-column="2"] { left: 34.5%; }
+.brow__content__module[data-module-column="3"] { right: 0; }
 
 @media all and (max-width: 1280px) { #brow__content { width: 95%; } }
 .content__heading brow-icon { margin-right: 10px; transform: translateY(-1px); }

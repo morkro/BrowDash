@@ -5,6 +5,9 @@
 			vertical-align: middle;
 		}
 		svg { display: none; }
+		:host-context([color="white"]) {
+			fill: #ffffff;
+		}
 		:host-context([icon="loader"]) .icon-loader {
 			display: block;
 		}
@@ -33,6 +36,15 @@
 			display: block;
 		}
 		:host-context([icon="settings"]) .icon-settings {
+			display: block;
+		}
+		:host-context([icon="balance-sunny"]) .icon-balance-sunny {
+			display: block;
+		}
+		:host-context([icon="calendar-text"]) .icon-calendar-text {
+			display: block;
+		}
+		:host-context([icon="plus"]) .icon-plus {
 			display: block;
 		}
 	</style>
@@ -98,6 +110,21 @@
 			<path d="M0 0h24v24h-24z" fill="none"/>
 			<path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65c-.03-.24-.24-.42-.49-.42h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-7.43 2.52c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
 		</symbol>
+		<!-- Balance Sunny -->
+		<symbol id="balance-sunny" viewBox="0 0 24 24">
+			<path d="M0 0h24v24h-24z" fill="none"/>
+			<path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zm-2.76 5.66h-3v2h3v-2zm9-9.95h-2v2.95h2v-2.95zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zm2.76-7.66v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2v-2.95h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/>
+		</symbol>
+		<!-- Calendar Text -->
+		<symbol id="calendar-text" viewBox="0 0 24 24">
+			<path d="M0 0h24v24h-24z" fill="none"/>
+			<path d="M17 10h-10v2h10v-2zm2-7h-1v-2h-2v2h-8v-2h-2v2h-1c-1.11 0-1.99.9-1.99 2l-.01 14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2zm0 16h-14v-11h14v11zm-5-5h-7v2h7v-2z"/>
+		</symbol>
+		<!-- Plus -->
+		<symbol id="plus" viewBox="0 0 24 24">
+			<path d="M19 13h-6v6h-2v-6h-6v-2h6v-6h2v6h6v2z"/>
+			<path d="M0 0h24v24h-24z" fill="none"/>
+		</symbol>
 	</svg>
 	
 	<svg class="icon-loader" height="44" width="44"><use xlink:href="#loader"></use></svg>
@@ -111,5 +138,8 @@
 	<svg class="icon-checkbox" height="24" width="24"><use xlink:href="#checkbox"></use></svg>
 	<svg class="icon-info" height="24" width="24"><use xlink:href="#info"></use></svg>
 	<svg class="icon-settings" height="24" width="24"><use xlink:href="#settings"></use></svg>
+	<svg class="icon-balance-sunny" height="32" width="32"><use xlink:href="#balance-sunny"></use></svg>
+	<svg class="icon-calendar-text" height="32" width="32"><use xlink:href="#calendar-text"></use></svg>
+	<svg class="icon-plus" height="24" width="24"><use xlink:href="#plus"></use></svg>
 </template>
 <script type="text/javascript" src="../scripts/brow-icon.js"></script>

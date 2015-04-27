@@ -1,9 +1,10 @@
 <template id="card-base">
 	<style>
-		.module { 
+		:host { display: block; }
+		.module  {
 			position: relative;
 			background: white;
-			display: inline-block;
+			display: block;
 			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
 			border-radius: 2px;
 			width: 100%;
@@ -51,7 +52,7 @@
 				outline: none; 
 			}
 		.card-content { 
-			height: 100%; 
+			height: 100%;
 		}
 		:host-context(.editmode) .hidden { 
 			display: block; 
