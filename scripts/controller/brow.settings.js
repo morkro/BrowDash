@@ -145,12 +145,12 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Object} event
 	 */
 	const _closeCardList = function (event) {
-		let movedOut = event.toElement === document.documentElement;
-		let selectionIsVisible = browElements['SELECTION'].classList.contains('show');
-
-		browElements.onClickSelectionList.removeEventListener(_showCardList);
+		let selectionTopPosition	= browElements['SELECTION'].parentNode.getBoundingClientRect().top - 1;
+		let selectionIsVisible		= browElements['SELECTION'].classList.contains('show');
+		let movedOut					= event.clientY <= selectionTopPosition;
 
 		if (movedOut && isSelectionState) {
+			browElements.onClickSelectionList.removeEventListener(_showCardList);
 			browElements['SELECTION'].classList.add('hide');
 			setTimeout(function () {
 				browElements['SELECTION'].classList.remove('show', 'hide');

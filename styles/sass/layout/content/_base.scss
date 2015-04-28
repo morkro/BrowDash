@@ -11,14 +11,14 @@
 
 .brow__content__module {
 	position: absolute;
-	width: 31%;
+	width: 32%;
 
-	&[data-module-width="1"] { width: 31%; }
-	&[data-module-width="2"] { width: 62%; }
-	&[data-module-width="3"] { width: 93%; }
+	&[data-module-width="1"] { width: 32%; }
+	&[data-module-width="2"] { width: 64%; }
+	&[data-module-width="3"] { width: 96%; }
 
 	&[data-module-column="1"] { left: 0; }
-	&[data-module-column="2"] { left: 34.5%; }
+	&[data-module-column="2"] { left: 34%; }
 	&[data-module-column="3"] { right: 0; }
 }
 

@@ -303,12 +303,12 @@ card-base.deletemode > *, text-card.deletemode > *, weather-card.deletemode > * 
 /* CONTENT */
 #brow__content { position: relative; max-width: 1280px; padding: 0; width: 90%; height: auto; margin: 60px auto; transition: width 150ms ease-in-out; z-index: 1; }
 
-.brow__content__module { position: absolute; width: 31%; }
-.brow__content__module[data-module-width="1"] { width: 31%; }
-.brow__content__module[data-module-width="2"] { width: 62%; }
-.brow__content__module[data-module-width="3"] { width: 93%; }
+.brow__content__module { position: absolute; width: 32%; }
+.brow__content__module[data-module-width="1"] { width: 32%; }
+.brow__content__module[data-module-width="2"] { width: 64%; }
+.brow__content__module[data-module-width="3"] { width: 96%; }
 .brow__content__module[data-module-column="1"] { left: 0; }
-.brow__content__module[data-module-column="2"] { left: 34.5%; }
+.brow__content__module[data-module-column="2"] { left: 34%; }
 .brow__content__module[data-module-column="3"] { right: 0; }
 
 @media all and (max-width: 1280px) { #brow__content { width: 95%; } }
