@@ -9,10 +9,10 @@ Having a full customisable dashboard with a set of different modules _(cards)_ u
 ### Available cards (first draft)
 
 - A basic one. Saves simple text
+- Weather card (uses current location but should be optional)
 
 ### Planned cards
 
-- Weather card (uses current location but should be optional)
 - Notifications card (like setting personal alarm messages)
 - Todo list card
 - Device statistics (like battery status and more)
