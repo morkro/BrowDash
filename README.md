@@ -1,32 +1,38 @@
 # BrowDash
 A simple and customisable "new tab" Chrome extension using Google Material Design.
-_This extension isn't downloadable until version 1.0.0. Until then, I prepared a preview link to see the current status._
+_This extension isn't downloadable before version 1.0.0. Until then, I prepared a preview link to see the current status._
 
 ### Goals
 
-Having a full customisable dashboard with a set of different modules _(cards)_ using bleeding edge technologies and Googles material design. The user can create new cards, change the order and theme of each card as well as the entire dashboards theme and delete cards.
+Having a full customisable dashboard with a set of different modules , called _(cards)_, using bleeding edge technologies _(such as the new ECMAScript 6 features)_ and Google's material design. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
 
-### Available cards (first draft)
+### Available features:
 
-- A basic one. Saves simple text
-- Weather card (uses current location but should be optional)
+- **TextCard:** the basic one; saves simple text. Options like *bold', _italic_, etc are available.
+- **WeatherCard:** displays the current weather based on your location.
+- **Timer:** changing the time to 12h _(including AM/PM)_ or 24h is possible. _Default: 24h._
 
-### Planned cards
+### Planned features
 
-- Notifications card (like setting personal alarm messages)
-- Todo list card
-- Device statistics (like battery status and more)
+- **NotificationsCard:** setting personal alarm messages.
+- **TodoCard:** don't need to explain that.
+- **DeviceCard:** statistics about your device _(like battery status and more)_.
+- **Offline message:** user is suddenly offline? be nice and tell him.
+- _More features to be defined._
 
 ### Technologies
 
-- All currently implemented/available ES6 features in Chrome
+- All currently available ES6 features in Chrome 
+  - ES6 Classes
+  - Template Strings
+  - `const`, `let`
 - localStorage API
 - Device API's
 - Web Components (HTML imports, Custom Elements)
 
 # How to use
 
-BrowDash is currently still in heavy development and not even alpha. As soon as a first beta is available to download, I'll will let you know.
+BrowDash is currently **still in heavy development** and not even alpha. As soon as a first beta is available to download, I'll will let you know. In the meantime you can visit [this][7] preview link and hope the current state is online.
 
 
 # Contribution
@@ -52,3 +58,4 @@ This projected is licensed under the terms of the [MIT license][1].
 [4]: http://www.google.com/design
 [5]: http://sass-lang.com/
 [6]: http://samherbert.net/svg-loaders/
+[7]: http://labs.morkro.de/browdash
