@@ -1,13 +1,21 @@
 card-base, text-card, weather-card {
 	position: relative;
 	z-index: z($content, cards);
-	margin-bottom: 25px;
 	transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
+
+	// Controls should be above all other cards.
+	&:hover { z-index: z($content, cardshover); }
 
 	&.editmode {
 		z-index: z($content, editmode);
 		transform: translateY(-5px);
 		box-shadow: $shadow-z4;
+	}
+
+	&.draggmode {
+		z-index: z($content, editmode);
+		box-shadow: $shadow-z4;
+		cursor: -webkit-grabbing;
 	}
 
 	&.deletemode {

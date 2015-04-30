@@ -54,13 +54,14 @@ module.exports = function(grunt) {
 				/* Application */
 				'<%= app.directory.build.scripts %>/controller/brow.core.js',
 				'<%= app.directory.build.scripts %>/model/brow.data.js',
-				'<%= app.directory.build.scripts %>/controller/brow.dialog.js',
-				'<%= app.directory.build.scripts %>/controller/brow.masonry.js',
 				'<%= app.directory.build.scripts %>/controller/brow.settings.js',
-				'<%= app.directory.build.scripts %>/controller/brow.timer.js',
-				'<%= app.directory.build.scripts %>/controller/brow.card.js',
-				'<%= app.directory.build.scripts %>/controller/brow.card.text.js',
-				'<%= app.directory.build.scripts %>/controller/brow.card.weather.js',
+				/* Components */
+				'<%= app.directory.build.scripts %>/components/brow.dialog.js',
+				'<%= app.directory.build.scripts %>/components/brow.masonry.js',
+				'<%= app.directory.build.scripts %>/components/brow.timer.js',
+				'<%= app.directory.build.scripts %>/components/brow.card.js',
+				'<%= app.directory.build.scripts %>/components/brow.card.text.js',
+				'<%= app.directory.build.scripts %>/components/brow.card.weather.js',
 				/* App initialisation */
 				'<%= app.directory.build.scripts %>/app.init.js'
 			]
@@ -90,10 +91,10 @@ module.exports = function(grunt) {
 			componentsscript: {
 				expand	: true,
 				src		: [
-					'<%= app.directory.build.scripts %>/components/brow-icon.js',
-					'<%= app.directory.build.scripts %>/components/card-base.js',
-					'<%= app.directory.build.scripts %>/components/text-card.js',
-					'<%= app.directory.build.scripts %>/components/weather-card.js'
+					'<%= app.directory.build.scripts %>/components/custom-elements/brow-icon.js',
+					'<%= app.directory.build.scripts %>/components/custom-elements/card-base.js',
+					'<%= app.directory.build.scripts %>/components/custom-elements/text-card.js',
+					'<%= app.directory.build.scripts %>/components/custom-elements/weather-card.js'
 				],
 				dest		: '<%= app.directory.dest.scripts %>',
 				flatten	: true,

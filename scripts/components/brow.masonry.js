@@ -29,7 +29,7 @@ BrowMasonry = (function (window, Brow) {
 		}
 
 		organiseDashboard () {
-			console.log(this);
+			//console.log(this);
 			for (let col = 0; col < this.grid.length; col++) {
 				for (let row = 0; row < this.grid[col].length; row++) {
 					let item = document.querySelector(`[data-module-guid="${this.grid[col][row]}"]`);

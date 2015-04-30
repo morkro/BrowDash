@@ -2,7 +2,7 @@
  * @name				BrowCard
  * @description	/
  */
-BrowCard = (function () {
+BrowCard = (function (Brow) {
 	'use strict';
 
 	class BrowCard {
@@ -51,6 +51,10 @@ BrowCard = (function () {
 			return this.wrapper.getContent;
 		}
 
+		/**
+		 * @description	Applies classes and data-attributes to DOM element.
+		 * @private
+		 */
 		applyCardData () {
 			this.wrapper.getContent.classList.add('brow__content__module');
 			this.wrapper.getContent.setAttribute('data-module-width', this.storage.style.width);
@@ -64,22 +68,21 @@ BrowCard = (function () {
 		 * @param			{Object} event
 		 */
 		addEvents (elem) {
-			let self = this;
+			elem.addEventListener('card-settings', this.setCardEvents.bind(this) );
+			elem.addEventListener('card-edit', this.activateEditMode.bind(this) );
+			elem.addEventListener('card-save', this.saveCardChanges.bind(this) );
+			elem.addEventListener('card-remove', this.removeCard.bind(this) );
+		}
 
-			elem.addEventListener('card-settings', function (event) {
-				if (self.config.elem === null) {
-					self.config.elem = event.target;
-				}
-			});
-			elem.addEventListener('card-edit', function (event) {
-				self.activateEditMode(event);
-			});
-			elem.addEventListener('card-save', function (event) {
-				self.saveCardChanges(event);
-			});
-			elem.addEventListener('card-remove', function (event) {
-				self.removeCard(event);
-			});
+		/**
+		 * @description	Stores event target into class.
+		 * @private
+		 * @param			{Object} event
+		 */
+		setCardEvents (event) {
+			if (this.config.elem === null) {
+				this.config.elem = event.target;
+			}
 		}
 
 		/**
@@ -141,4 +144,4 @@ BrowCard = (function () {
 	}
 
 	return BrowCard;
-})();
+})(Brow);

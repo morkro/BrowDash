@@ -89,171 +89,6 @@ Brow.Data = (function (Brow) {
 	};
 })(Brow);
 /**
- * @name				Brow.Dialog
- * @description	Shows/hides the dialog. Sets new theme.
- * @todo  			Needs to be more modular. Should be able to load dynamic content.
- * @param			{Object} Brow
- * @return			{Function} addEvents
- */
-Brow.Dialog = (function (Brow) {
-	'use strict';
-
-	/* Variables */
-	var settingsBtn		= null;
-	
-	var dialogOverlay		= null;
-	var dialogElem			= null;
-	var dialogContainer	= null;
-	var dialogTheme		= null;
-	var dialogThemeList	= null;
-	var dialogSidebar		= null;
-
-	/**
-	 *	@description	Opens the settings dialog
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _showSettings = function (event) {
-		event.preventDefault();
-		
-		let currentLocation = window.location.href.slice(0, -1);
-		let dialogContent = this.getAttribute('data-dialog');
-		let dialogContentPath = `${currentLocation}/markup/dialog-${dialogContent}.html`;
-
-		_loadDialogContent(dialogContentPath);
-		dialogElem.classList.add('show');
-		dialogOverlay.classList.add('show');
-	};
-
-	/**
-	 *	@description	Closes the settings dialog
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _closeSettings = function (event) {
-		let _curTarget			= event.target;
-		let _curKeyCode		= event.keyCode;
-		let _dialogIsShown	= dialogElem.classList.contains('show');
-		let _isCloseBtn		= _curTarget.classList.contains('dialog__close');
-		let _isOutsideDialog	= _curTarget === dialogElem && _dialogIsShown;
-		let _isESCKey			= _curKeyCode === 27;
-
-		if (_isCloseBtn || _isOutsideDialog || _isESCKey && _dialogIsShown) {
-			dialogContainer.innerHTML = null;
-			dialogElem.classList.remove('show');
-			dialogOverlay.classList.remove('show');
-		}
-	};
-
-	/**
-	 *	@description	Loads the dialog content and appends it.
-	 * @private
-	 * @param			{String} path
-	 */
-	const _loadDialogContent = function (path) {
-		fetch(path)
-			.then(function (response) {
-				return response.text();
-			})
-			.then(function (body) {
-				dialogContainer.innerHTML = body;
-			});
-	};
-
-	/**
-	 * @description	Gets the color attribute of the clicked element and updates the theme.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _chooseTheme = function (event) {
-		event.preventDefault();
-
-		if (event.target.hasAttribute('data-settings-theme')) {
-			let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-			localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
-			Brow.Settings.setTheme(_themeColor);
-		}
-	};
-
-	/**
-	 * @name				Brow.Dialog.start
-	 *	@description	Adds events
-	 * @public
-	 * @param			{HTMLElement} elem
-	 */
-	const addEvents = function () {
-		settingsBtn			= Brow.Settings.getElem()['onClickDialog'];
-		dialogElem			= Brow.Settings.getElem()['DIALOG'];
-		dialogOverlay		= Brow.Settings.getElem()['DIALOG_OVERLAY'];
-		dialogContainer	= dialogElem.querySelector('.dialog__inner');
-		dialogSidebar		= dialogElem.querySelector('.dialog__sidebar__list');
-		dialogTheme			= dialogElem.querySelector('.settings__theme');
-		
-		[].forEach.call(settingsBtn, function (btn) {
-			btn.addEventListener('click', _showSettings);
-		});
-		dialogElem.addEventListener('click', _closeSettings);
-		//dialogTheme.addEventListener('click', _chooseTheme);
-		window.addEventListener('keydown', _closeSettings);
-	};
-	
-	/* Public API */
-	return {
-		addEvents: addEvents
-	};
-})(Brow);
-BrowMasonry = (function (window, Brow) {
-	'use strict';
-
-	class BrowMasonry {
-		constructor (container) {
-			this.container	= container;
-			this.items		= null;
-			this.grid		= [];
-			this.rowCount	= 3;
-			
-			this.update();
-		}
-
-		update () {
-			this.items = this.container.querySelectorAll('.brow__content__module');
-			this.grid = [];
-
-			for (let i = 0; i < this.items.length; i += this.rowCount) {
-				let itemsRow = [];
-
-				if (!!this.items[i]) itemsRow.push(this.items[i].getAttribute('data-module-guid'));
-				if (!!this.items[i + 1]) itemsRow.push(this.items[i + 1].getAttribute('data-module-guid'));
-				if (!!this.items[i + 2]) itemsRow.push(this.items[i + 2].getAttribute('data-module-guid'));
-
-				this.grid.push( itemsRow );
-			}
-
-			this.organiseDashboard();
-		}
-
-		organiseDashboard () {
-			console.log(this);
-			for (let col = 0; col < this.grid.length; col++) {
-				for (let row = 0; row < this.grid[col].length; row++) {
-					let item = document.querySelector(`[data-module-guid="${this.grid[col][row]}"]`);
-					
-					if (col !== 0)  {
-						let itemAbove = document.querySelector(`[data-module-guid="${this.grid[col - 1][row]}"]`);
-						if (!!itemAbove) {
-							item.style.top = `${itemAbove.getBoundingClientRect().bottom - 35}px`;
-						}
-					}
-
-					item.setAttribute('data-module-column', `${row + 1}`);
-				}
-			}
-		}
-	}
-
-	return BrowMasonry;
-})(window, Brow);
-/**
  * @name				Brow.Settings
  * @description	Stores all necessary HTMLElements, sets the theme and 
  *              	runs all other modules.	
@@ -275,7 +110,7 @@ Brow.Settings = (function (Brow) {
 
 	/* Variables */
 	var isSelectionState	= false;
-	var masonry				= null;
+	var browMasonry		= null;
 	var browElements		= {
 		onClickDialog : null,
 		onClickNewCard : null,
@@ -289,7 +124,8 @@ Brow.Settings = (function (Brow) {
 	};
 
 	const _startMasonryLayout = function () {
-		masonry = new BrowMasonry( browElements.CONTENT );
+		browMasonry = new BrowMasonry( browElements.CONTENT );
+		console.log(browMasonry);
 	};
 
 	/**
@@ -297,6 +133,7 @@ Brow.Settings = (function (Brow) {
 	 * @private
 	 */
 	const _addEvents = function () {
+		window.addEventListener('mouseup', _removeDragging);
 		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
 		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
@@ -376,6 +213,7 @@ Brow.Settings = (function (Brow) {
 				content: storageItem['content']
 			});
 			browElements['CONTENT'].appendChild( browCard );
+			browCard.addEventListener('mousedown', _activateDragging);
 		}
 	};
 
@@ -420,8 +258,12 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addNewCard = function (event) {
 		event.preventDefault();
-		let selectedCard = this.getAttribute('data-create-card');
-		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
+		let selectedCard	= this.getAttribute('data-create-card');
+		let browCard		= new BrowCard({ type: `${selectedCard}` });
+
+		browElements['CONTENT'].appendChild( browCard );
+		browCard.addEventListener('mousedown', _activateDragging);
+
 		masonry.update();
 	};
 
@@ -455,6 +297,61 @@ Brow.Settings = (function (Brow) {
 		}
 
 		timer.run();
+	};
+
+	/**
+	 * @description	Calls this.dragCard when mouse is moving.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _activateDragging = function (event) {
+		let isModule = event.target.classList.contains('brow__content__module');
+		
+		if (isModule) {
+			event.preventDefault();
+			window.addEventListener('mousemove', _dragCard);
+		}
+	};
+
+	/**
+	 * @description	Removes already called eventListener.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _removeDragging = function (event) {
+		window.removeEventListener('mousemove', _dragCard);
+	};
+
+	/**
+	 * @description	Moves the card element.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _dragCard = function (event) {
+		console.log('jep');
+		//let calcTopMovement	= event.pageY - (this.position.bottom / 2);
+		//let calcLeftMovement	= event.pageX - (this.position.right / 2);
+		//let translate = `translate(${calcLeftMovement}px, ${calcTopMovement}px)`;
+			// visual
+		//this.wrapper.getContent.classList.add('draggmode');
+		//this.wrapper.getContent.style.transform = translate;
+	};
+
+	/**
+	 * @description	Adds all dialog.
+	 * @private
+	 */
+	const _initDialogs = function () {
+		//Brow.Dialog.addEvents();
+		let currentLocation = window.location.href.slice(0, -1);
+		
+		[].forEach.call(browElements['onClickDialog'], function (item) {
+			let dialogContent = item.getAttribute('data-dialog');
+			let browDialog = new BrowDialog({
+				elem: item,
+				content: `${currentLocation}/markup/dialog-${dialogContent}.html`
+			});
+		});
 	};
 
 	/**
@@ -515,11 +412,11 @@ Brow.Settings = (function (Brow) {
 	 * @public
 	 */
 	const initialiseAndStartApp = function () {
-		Brow.Dialog.addEvents();
+		_initDialogs();
 		_validateBrowTimer();
-		_addEvents();
 		_validateBrowCards();
 		_startMasonryLayout();
+		_addEvents();
 	};
 	
 	/* Public API */
@@ -532,6 +429,148 @@ Brow.Settings = (function (Brow) {
 		BROW_KEY : BROW_KEY,
 	};
 })(Brow);
+/**
+ * @name				BrowDialog
+ * @description	Shows/hides the dialog.
+ * @param			{Object} Brow
+ */
+BrowDialog = (function (Brow) {
+	'use strict';
+
+	class BrowDialog {
+		constructor (config) {
+			this.elem				= config.elem;
+			this.path				= config.content;
+			this.dialogOverlay	= Brow.Settings.getElem()['DIALOG_OVERLAY'];
+			this.dialogElem		= Brow.Settings.getElem()['DIALOG'];
+			this.dialogContainer	= this.dialogElem.querySelector('.dialog__inner');
+			this.dialogSidebar	= this.dialogElem.querySelector('.dialog__sidebar__list');
+			this.dialogTheme		= this.dialogElem.querySelector('.settings__theme');
+			
+			this.addEvents();
+		}
+
+		/**
+		 *	@description	Opens the settings dialog
+		 * @private
+		 * @param			{Object} event
+		 */
+		showSettings (event) {
+			event.preventDefault();
+			let _self = this;
+
+			fetch(this.path)
+				.then(function (response) {
+					return response.text();
+				})
+				.then(function (body) {
+					_self.dialogContainer.innerHTML = body;
+				});
+
+			this.dialogElem.classList.add('show');
+			this.dialogOverlay.classList.add('show');
+		}
+
+		/**
+		 *	@description	Closes the settings dialog
+		 * @private
+		 * @param			{Object} event
+		 */
+		closeSettings (event) {
+			let _curTarget			= event.target;
+			let _curKeyCode		= event.keyCode;
+			let _dialogIsShown	= this.dialogElem.classList.contains('show');
+			let _isCloseBtn		= _curTarget.classList.contains('dialog__close');
+			let _isOutsideDialog	= _curTarget === this.dialogElem && _dialogIsShown;
+			let _isESCKey			= _curKeyCode === 27;
+
+			if (_isCloseBtn || _isOutsideDialog || _isESCKey && _dialogIsShown) {
+				this.dialogContainer.innerHTML = null;
+				this.dialogElem.classList.remove('show');
+				this.dialogOverlay.classList.remove('show');
+			}
+		}
+
+		/**
+		 * @description	Gets the color attribute of the clicked element and updates the theme.
+		 * @private
+		 * @param			{Object} event
+		 */
+		chooseTheme (event) {
+			event.preventDefault();
+
+			if (event.target.hasAttribute('data-settings-theme')) {
+				let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
+				localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
+				Brow.Settings.setTheme(_themeColor);
+			}
+		}
+
+		/**
+		 * @name				Brow.Dialog.start
+		 *	@description	Adds events
+		 * @private
+		 */
+		addEvents () {
+			this.elem.addEventListener('click', this.showSettings.bind(this) );
+			this.dialogElem.addEventListener('click', this.closeSettings.bind(this) );
+			window.addEventListener('keydown', this.closeSettings.bind(this) );
+		}
+	}
+
+	return BrowDialog;
+})(Brow);
+BrowMasonry = (function (window, Brow) {
+	'use strict';
+
+	class BrowMasonry {
+		constructor (container) {
+			this.container	= container;
+			this.items		= null;
+			this.grid		= [];
+			this.rowCount	= 3;
+			
+			this.update();
+		}
+
+		update () {
+			this.items = this.container.querySelectorAll('.brow__content__module');
+			this.grid = [];
+
+			for (let i = 0; i < this.items.length; i += this.rowCount) {
+				let itemsRow = [];
+
+				if (!!this.items[i]) itemsRow.push(this.items[i].getAttribute('data-module-guid'));
+				if (!!this.items[i + 1]) itemsRow.push(this.items[i + 1].getAttribute('data-module-guid'));
+				if (!!this.items[i + 2]) itemsRow.push(this.items[i + 2].getAttribute('data-module-guid'));
+
+				this.grid.push( itemsRow );
+			}
+
+			this.organiseDashboard();
+		}
+
+		organiseDashboard () {
+			//console.log(this);
+			for (let col = 0; col < this.grid.length; col++) {
+				for (let row = 0; row < this.grid[col].length; row++) {
+					let item = document.querySelector(`[data-module-guid="${this.grid[col][row]}"]`);
+					
+					if (col !== 0)  {
+						let itemAbove = document.querySelector(`[data-module-guid="${this.grid[col - 1][row]}"]`);
+						if (!!itemAbove) {
+							item.style.top = `${itemAbove.getBoundingClientRect().bottom - 35}px`;
+						}
+					}
+
+					item.setAttribute('data-module-column', `${row + 1}`);
+				}
+			}
+		}
+	}
+
+	return BrowMasonry;
+})(window, Brow);
 /**
  * @name				BrowTimer
  * @description	Class which appends a time string to an element 
@@ -548,6 +587,8 @@ BrowTimer = (function() {
 
 			this.update	= 1000;
 			this.elem	= elem;
+			this.format = '24h';
+			this.abbreviations = false;
 		}
 
 		/**
@@ -569,7 +610,11 @@ BrowTimer = (function() {
 		 * @param			{String} format
 		 */
 		setDateFormat (format) {
-			console.log(format);
+			if (typeof format !== 'string') {
+				return;
+			}
+
+			this.format = format;
 		}
 
 		/**
@@ -596,7 +641,7 @@ BrowTimer = (function() {
  * @name				BrowCard
  * @description	/
  */
-BrowCard = (function () {
+BrowCard = (function (Brow) {
 	'use strict';
 
 	class BrowCard {
@@ -645,6 +690,10 @@ BrowCard = (function () {
 			return this.wrapper.getContent;
 		}
 
+		/**
+		 * @description	Applies classes and data-attributes to DOM element.
+		 * @private
+		 */
 		applyCardData () {
 			this.wrapper.getContent.classList.add('brow__content__module');
 			this.wrapper.getContent.setAttribute('data-module-width', this.storage.style.width);
@@ -658,22 +707,21 @@ BrowCard = (function () {
 		 * @param			{Object} event
 		 */
 		addEvents (elem) {
-			let self = this;
+			elem.addEventListener('card-settings', this.setCardEvents.bind(this) );
+			elem.addEventListener('card-edit', this.activateEditMode.bind(this) );
+			elem.addEventListener('card-save', this.saveCardChanges.bind(this) );
+			elem.addEventListener('card-remove', this.removeCard.bind(this) );
+		}
 
-			elem.addEventListener('card-settings', function (event) {
-				if (self.config.elem === null) {
-					self.config.elem = event.target;
-				}
-			});
-			elem.addEventListener('card-edit', function (event) {
-				self.activateEditMode(event);
-			});
-			elem.addEventListener('card-save', function (event) {
-				self.saveCardChanges(event);
-			});
-			elem.addEventListener('card-remove', function (event) {
-				self.removeCard(event);
-			});
+		/**
+		 * @description	Stores event target into class.
+		 * @private
+		 * @param			{Object} event
+		 */
+		setCardEvents (event) {
+			if (this.config.elem === null) {
+				this.config.elem = event.target;
+			}
 		}
 
 		/**
@@ -735,7 +783,7 @@ BrowCard = (function () {
 	}
 
 	return BrowCard;
-})();
+})(Brow);
 /**
  * @name				TextCard
  * @description	/

@@ -20,7 +20,7 @@ Brow.Settings = (function (Brow) {
 
 	/* Variables */
 	var isSelectionState	= false;
-	var masonry				= null;
+	var browMasonry		= null;
 	var browElements		= {
 		onClickDialog : null,
 		onClickNewCard : null,
@@ -34,7 +34,8 @@ Brow.Settings = (function (Brow) {
 	};
 
 	const _startMasonryLayout = function () {
-		masonry = new BrowMasonry( browElements.CONTENT );
+		browMasonry = new BrowMasonry( browElements.CONTENT );
+		console.log(browMasonry);
 	};
 
 	/**
@@ -42,6 +43,7 @@ Brow.Settings = (function (Brow) {
 	 * @private
 	 */
 	const _addEvents = function () {
+		window.addEventListener('mouseup', _removeDragging);
 		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
 		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
@@ -121,6 +123,7 @@ Brow.Settings = (function (Brow) {
 				content: storageItem['content']
 			});
 			browElements['CONTENT'].appendChild( browCard );
+			browCard.addEventListener('mousedown', _activateDragging);
 		}
 	};
 
@@ -165,8 +168,12 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addNewCard = function (event) {
 		event.preventDefault();
-		let selectedCard = this.getAttribute('data-create-card');
-		browElements['CONTENT'].appendChild( new BrowCard({ type: `${selectedCard}` }) );
+		let selectedCard	= this.getAttribute('data-create-card');
+		let browCard		= new BrowCard({ type: `${selectedCard}` });
+
+		browElements['CONTENT'].appendChild( browCard );
+		browCard.addEventListener('mousedown', _activateDragging);
+
 		masonry.update();
 	};
 
@@ -200,6 +207,61 @@ Brow.Settings = (function (Brow) {
 		}
 
 		timer.run();
+	};
+
+	/**
+	 * @description	Calls this.dragCard when mouse is moving.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _activateDragging = function (event) {
+		let isModule = event.target.classList.contains('brow__content__module');
+		
+		if (isModule) {
+			event.preventDefault();
+			window.addEventListener('mousemove', _dragCard);
+		}
+	};
+
+	/**
+	 * @description	Removes already called eventListener.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _removeDragging = function (event) {
+		window.removeEventListener('mousemove', _dragCard);
+	};
+
+	/**
+	 * @description	Moves the card element.
+	 * @private
+	 * @param			{Object} event
+	 */
+	const _dragCard = function (event) {
+		console.log('jep');
+		//let calcTopMovement	= event.pageY - (this.position.bottom / 2);
+		//let calcLeftMovement	= event.pageX - (this.position.right / 2);
+		//let translate = `translate(${calcLeftMovement}px, ${calcTopMovement}px)`;
+			// visual
+		//this.wrapper.getContent.classList.add('draggmode');
+		//this.wrapper.getContent.style.transform = translate;
+	};
+
+	/**
+	 * @description	Adds all dialog.
+	 * @private
+	 */
+	const _initDialogs = function () {
+		//Brow.Dialog.addEvents();
+		let currentLocation = window.location.href.slice(0, -1);
+		
+		[].forEach.call(browElements['onClickDialog'], function (item) {
+			let dialogContent = item.getAttribute('data-dialog');
+			let browDialog = new BrowDialog({
+				elem: item,
+				content: `${currentLocation}/markup/dialog-${dialogContent}.html`
+			});
+		});
 	};
 
 	/**
@@ -260,11 +322,11 @@ Brow.Settings = (function (Brow) {
 	 * @public
 	 */
 	const initialiseAndStartApp = function () {
-		Brow.Dialog.addEvents();
+		_initDialogs();
 		_validateBrowTimer();
-		_addEvents();
 		_validateBrowCards();
 		_startMasonryLayout();
+		_addEvents();
 	};
 	
 	/* Public API */

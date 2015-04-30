@@ -14,6 +14,8 @@ BrowTimer = (function() {
 
 			this.update	= 1000;
 			this.elem	= elem;
+			this.format = '24h';
+			this.abbreviations = false;
 		}
 
 		/**
@@ -35,7 +37,11 @@ BrowTimer = (function() {
 		 * @param			{String} format
 		 */
 		setDateFormat (format) {
-			console.log(format);
+			if (typeof format !== 'string') {
+				return;
+			}
+
+			this.format = format;
 		}
 
 		/**
