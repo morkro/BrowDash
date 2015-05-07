@@ -4,7 +4,7 @@ _This extension isn't downloadable before version 1.0.0. Until then, I prepared 
 
 ### Goals
 
-Having a full customisable dashboard with a set of different modules , called _cards_, using bleeding edge technologies _(such as the new ECMAScript 6 features)_ and Google's material design. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
+Having a full customisable dashboard with a set of different modules, called _cards_, using bleeding edge technologies _(such as the new ECMAScript 6 features)_ and Google's material design. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
 
 ### Available features:
 
@@ -51,6 +51,7 @@ This projected is licensed under the terms of the [MIT license][1].
 - [Google Material Design][4] - The complete projects layout is based on Google's design principles.
 - [Sass][5] - CSS preprocessor language.
 - [SVG Loaders][6] by Sam herbert
+- [Packery][8] - bin-packing layout library by Metafizzy
 
 [1]: https://github.com/morkro/BrowDash/LICENSE
 [2]: http://gruntjs.com
@@ -59,3 +60,4 @@ This projected is licensed under the terms of the [MIT license][1].
 [5]: http://sass-lang.com/
 [6]: http://samherbert.net/svg-loaders/
 [7]: http://labs.morkro.de/browdash
+[8]: http://packery.metafizzy.co/

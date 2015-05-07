@@ -34,8 +34,13 @@ Brow.Settings = (function (Brow) {
 	};
 
 	const _startMasonryLayout = function () {
-		browMasonry = new BrowMasonry( browElements.CONTENT );
-		console.log(browMasonry);
+		//browMasonry = new BrowMasonry( browElements.CONTENT );
+		browMasonry = new Packery(browElements['CONTENT'], {
+			itemSelector: '.brow__content__module',
+			percentPosition: true,
+			transitionDuration: 0,
+			gutter: 20
+		});
 	};
 
 	/**
@@ -252,7 +257,6 @@ Brow.Settings = (function (Brow) {
 	 * @private
 	 */
 	const _initDialogs = function () {
-		//Brow.Dialog.addEvents();
 		let currentLocation = window.location.href.slice(0, -1);
 		
 		[].forEach.call(browElements['onClickDialog'], function (item) {

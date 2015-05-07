@@ -51,13 +51,14 @@ module.exports = function(grunt) {
 			scripts: [
 				/* Libraries */
 				//'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
+				'<%= app.directory.build.scripts %>/libs/packery.pkgd.min.js',
 				/* Application */
 				'<%= app.directory.build.scripts %>/controller/brow.core.js',
 				'<%= app.directory.build.scripts %>/model/brow.data.js',
 				'<%= app.directory.build.scripts %>/controller/brow.settings.js',
 				/* Components */
 				'<%= app.directory.build.scripts %>/components/brow.dialog.js',
-				'<%= app.directory.build.scripts %>/components/brow.masonry.js',
+				//'<%= app.directory.build.scripts %>/components/brow.masonry.js',
 				'<%= app.directory.build.scripts %>/components/brow.timer.js',
 				'<%= app.directory.build.scripts %>/components/brow.card.js',
 				'<%= app.directory.build.scripts %>/components/brow.card.text.js',
@@ -153,7 +154,8 @@ module.exports = function(grunt) {
 				eqeqeq	: true,
 				noempty	: true,
 				sub		: true,
-				esnext	: true
+				esnext	: true,
+				ignores	: '<%= app.directory.build.scripts %>/libs/packery.pkgd.min.js'
 			},
 			beforeconcat: '<%= app.directory.build.scripts %>/**/*.js'
 		},
