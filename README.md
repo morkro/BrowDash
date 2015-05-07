@@ -4,7 +4,7 @@ _This extension isn't downloadable before version 1.0.0. Until then, I prepared 
 
 ### Goals
 
-Having a full customisable dashboard with a set of different modules , called _(cards)_, using bleeding edge technologies _(such as the new ECMAScript 6 features)_ and Google's material design. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
+Having a full customisable dashboard with a set of different modules , called _cards_, using bleeding edge technologies _(such as the new ECMAScript 6 features)_ and Google's material design. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
 
 ### Available features:
 
