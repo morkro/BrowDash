@@ -72,16 +72,6 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @description	Checks if custom key is set, if not: do it.
-	 * @private
-	 */
-	const _checkIfCustomBrowCards = function () {
-		if (!localStorage[BROW_CARDS]) {
-			localStorage[BROW_CARDS] = true;
-		}
-	};
-
-	/**
 	 * @description	Gets localStorage, parses available cards and creates them.
 	 * @private
 	 * @param			{Number|String} index
@@ -96,6 +86,16 @@ Brow.Settings = (function (Brow) {
 				content: storageItem['content']
 			});
 			browElements['CONTENT'].appendChild( browCard );
+		}
+	};
+
+	/**
+	 * @description	Checks if custom key is set, if not: do it.
+	 * @private
+	 */
+	const _checkIfCustomBrowCards = function () {
+		if (!localStorage[BROW_CARDS]) {
+			localStorage[BROW_CARDS] = true;
 		}
 	};
 

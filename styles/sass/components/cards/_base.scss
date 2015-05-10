@@ -2,6 +2,10 @@ card-base, text-card, weather-card {
 	position: relative;
 	z-index: z($content, cards);
 	transition: box-shadow 150ms ease-in-out;
+	animation-name: cardSlideIn;
+	animation-duration: 150ms;
+	animation-timing-function: ease-in-out;
+	animation-fill-mode: fowards;
 	
 	&.fx {
 		transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
@@ -32,4 +36,18 @@ card-base, text-card, weather-card {
 
 .module--longshadow {
 	box-shadow: $shadow-z4;
+}
+
+/**
+ * ANIMATION
+ */
+@keyframes cardSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
