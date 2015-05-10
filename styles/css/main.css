@@ -177,10 +177,10 @@ h3 { font-size: 18px; }
 h4 { font-weight: 400; font-size: 15px; }
 
 /** Links */
-a { font-size: 14px; text-decoration: none; }
+a { font-size: 15px; text-decoration: none; }
 
 /** Copy */
-p, span { font-weight: 300; line-height: 22px; font-size: 14px; }
+p, span { font-weight: 300; line-height: 24px; font-size: 15px; }
 
 b, strong { font-weight: 400; }
 
@@ -267,7 +267,7 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .dialog__sidebar__list a.active { color: #000000; cursor: default; }
 .dialog__sidebar__list a.active:hover { background: rgba(0, 0, 0, 0.025); }
 
-.dialog__content { padding: 20px; }
+.dialog__content { padding: 20px; overflow-y: auto; }
 .dialog__content h2 { margin-bottom: 20px; }
 .dialog__content span { font-style: italic; color: #9e9e9e; }
 .dialog__content section:not(:last-of-type) { margin-bottom: 40px; }

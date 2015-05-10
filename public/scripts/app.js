@@ -335,32 +335,32 @@ BrowDialog = (function (Brow) {
 		}
 
 		/**
-		 *	@description	Opens the settings dialog
+		 *	@description	Loads the content
 		 * @private
 		 * @param			{Object} event
 		 */
-		showSettings (event) {
+		showContent (event) {
 			event.preventDefault();
 			let _self = this;
 
 			fetch(this.path)
-				.then(function (response) {
-					return response.text();
-				})
-				.then(function (body) {
-					_self.dialogContainer.innerHTML = body;
-				});
+			.then(function (response) {
+				return response.text();
+			})
+			.then(function (body) {
+				_self.dialogContainer.innerHTML = body;
+			});
 
 			this.dialogElem.classList.add('show');
 			this.dialogOverlay.classList.add('show');
 		}
 
 		/**
-		 *	@description	Closes the settings dialog
+		 *	@description	Closes the dialog
 		 * @private
 		 * @param			{Object} event
 		 */
-		closeSettings (event) {
+		closeDialog (event) {
 			let _curTarget			= event.target;
 			let _curKeyCode		= event.keyCode;
 			let _dialogIsShown	= this.dialogElem.classList.contains('show');
@@ -396,9 +396,9 @@ BrowDialog = (function (Brow) {
 		 * @private
 		 */
 		addEvents () {
-			this.elem.addEventListener('click', this.showSettings.bind(this) );
-			this.dialogElem.addEventListener('click', this.closeSettings.bind(this) );
-			window.addEventListener('keydown', this.closeSettings.bind(this) );
+			this.elem.addEventListener('click', this.showContent.bind(this) );
+			this.dialogElem.addEventListener('click', this.closeDialog.bind(this) );
+			window.addEventListener('keydown', this.closeDialog.bind(this) );
 		}
 	}
 
