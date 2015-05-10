@@ -34,7 +34,6 @@ Having a full customisable dashboard with a set of different modules, called _ca
 
 BrowDash is currently **still in heavy development** and not even alpha. As soon as a first beta is available to download, I'll will let you know. In the meantime you can visit [this][7] preview link and hope the current state is online.
 
-
 # Contribution
 
 - You have an idea of a new card and whish to use it in your dashboard? No problem! Just write me and I will get back to you as soon as I can.
@@ -52,6 +51,7 @@ This projected is licensed under the terms of the [MIT license][1].
 - [Sass][5] - CSS preprocessor language.
 - [SVG Loaders][6] by Sam herbert
 - [Packery][8] - bin-packing layout library by Metafizzy
+- [Draggabilly][9] - "Make that shiz draggable"
 
 [1]: https://github.com/morkro/BrowDash/LICENSE
 [2]: http://gruntjs.com
@@ -61,3 +61,4 @@ This projected is licensed under the terms of the [MIT license][1].
 [6]: http://samherbert.net/svg-loaders/
 [7]: http://labs.morkro.de/browdash
 [8]: http://packery.metafizzy.co/
+[9]: https://github.com/desandro/draggabilly
