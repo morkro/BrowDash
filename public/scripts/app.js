@@ -957,11 +957,16 @@ WeatherCard = (function () {
 		 * @description	Saves current content to localStorage.
 		 * @public
 		 */	
-		updateStorage () {}
+		updateStorage () {
+			this.parent.storage['content'] = {};
+			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
+		}
 
 		edit () {}
 
-		save () {}
+		save () {
+			this.updateStorage();
+		}
 	}
 
 	return WeatherCard;
