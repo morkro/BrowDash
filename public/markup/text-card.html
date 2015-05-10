@@ -1,16 +1,23 @@
 <template id="text-card">
 	<style>
+		* { 
+			box-sizing: border-box; 
+		}	 
 		:host {
 			width: 100%;
 			display: block;
 		}
 		/* Editmode */
-		:host(.editmode) .module__editor { 
+		:host(.is-edit) .module__editor { 
 			height: 40px; 
 			margin-bottom: 20px; 
 		}
-		:host(.editmode) .module__editor ul { 
+		:host(.is-edit) .module__editor ul { 
 			display: block; 
+		}
+		.module {
+			position: relative;
+			z-index: 100;
 		}
 		/* Header */
 		.module__heading { 
@@ -131,65 +138,67 @@
 		.editor__unstyle[data-tooltip]:before { width: 293%; }
 	</style>
 	<card-base>
-		<header class="module__heading">
-			<content select="h1"></content>
-		</header>
+		<div class="module">
+			<header class="module__heading">
+				<content select="h1"></content>
+			</header>
 
-		<div class="module__editor">
-			<ul>
-				<li class="editor__bold" data-tooltip="Bold" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="bold">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4h-6.25v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zm-5.6-4.29h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9h-3.5v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>
-							<path d="M0 0h24v24h-24z" fill="none"/>
-						</svg>
-					</button>
-				</li>
-				<li class="editor__italic" data-tooltip="Italic" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="italic">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M0 0h24v24h-24z" fill="none"/>
-							<path d="M10 4v3h2.21l-3.42 8h-2.79v3h8v-3h-2.21l3.42-8h2.79v-3z"/>
-						</svg>
-					</button>
-				</li>
-				<li class="editor__underline" data-tooltip="Underline" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="underline">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M0 0h24v24h-24z" fill="none"/>
-							<path d="M12 17c3.31 0 6-2.69 6-6v-8h-2.5v8c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5v-8h-2.5v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2h-14z"/>
-						</svg>
-					</button>
-				</li>
-				<li class="editor__strikethrough" data-tooltip="Strikethrough" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="strikethrough">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M0 0h24v24h-24z" fill="none"/>
-							<path d="M10 19h4v-3h-4v3zm-5-15v3h5v3h4v-3h5v-3h-14zm-2 10h18v-2h-18v2z"/>
-						</svg>
-					</button>
-				</li>
-				<li class="editor__link" data-tooltip="Link" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="link">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M0 0h24v24h-24z" fill="none"/>
-							<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4v-1.9h-4c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9h-4c-1.71 0-3.1-1.39-3.1-3.1zm4.1 1h8v-2h-8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4v1.9h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
-						</svg>
-					</button>
-				</li>
-				<li class="editor__unstyle" data-tooltip="Unstyle" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="unstyle">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M0 0h24v24h-24z" fill="none"/>
-							<path d="M3.27 5l-1.27 1.27 6.97 6.97-2.47 5.76h3l1.57-3.66 5.66 5.66 1.27-1.27-14.45-14.46-.28-.27zm2.73 0v.18l2.82 2.82h2.4l-.72 1.68 2.1 2.1 1.61-3.78h5.79v-3h-14z"/>
-						</svg>
-					</button>
-				</li>
-			</ul>
-		</div>
+			<div class="module__editor">
+				<ul>
+					<li class="editor__bold" data-tooltip="Bold" data-tooltip-pos="bottom">
+						<button class="btn" data-editor-option="bold">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4h-6.25v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zm-5.6-4.29h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9h-3.5v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>
+								<path d="M0 0h24v24h-24z" fill="none"/>
+							</svg>
+						</button>
+					</li>
+					<li class="editor__italic" data-tooltip="Italic" data-tooltip-pos="bottom">
+						<button class="btn" data-editor-option="italic">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M0 0h24v24h-24z" fill="none"/>
+								<path d="M10 4v3h2.21l-3.42 8h-2.79v3h8v-3h-2.21l3.42-8h2.79v-3z"/>
+							</svg>
+						</button>
+					</li>
+					<li class="editor__underline" data-tooltip="Underline" data-tooltip-pos="bottom">
+						<button class="btn" data-editor-option="underline">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M0 0h24v24h-24z" fill="none"/>
+								<path d="M12 17c3.31 0 6-2.69 6-6v-8h-2.5v8c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5v-8h-2.5v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2h-14z"/>
+							</svg>
+						</button>
+					</li>
+					<li class="editor__strikethrough" data-tooltip="Strikethrough" data-tooltip-pos="bottom">
+						<button class="btn" data-editor-option="strikethrough">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M0 0h24v24h-24z" fill="none"/>
+								<path d="M10 19h4v-3h-4v3zm-5-15v3h5v3h4v-3h5v-3h-14zm-2 10h18v-2h-18v2z"/>
+							</svg>
+						</button>
+					</li>
+					<li class="editor__link" data-tooltip="Link" data-tooltip-pos="bottom">
+						<button class="btn" data-editor-option="link">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M0 0h24v24h-24z" fill="none"/>
+								<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4v-1.9h-4c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9h-4c-1.71 0-3.1-1.39-3.1-3.1zm4.1 1h8v-2h-8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4v1.9h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+							</svg>
+						</button>
+					</li>
+					<li class="editor__unstyle" data-tooltip="Unstyle" data-tooltip-pos="bottom">
+						<button class="btn" data-editor-option="unstyle">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M0 0h24v24h-24z" fill="none"/>
+								<path d="M3.27 5l-1.27 1.27 6.97 6.97-2.47 5.76h3l1.57-3.66 5.66 5.66 1.27-1.27-14.45-14.46-.28-.27zm2.73 0v.18l2.82 2.82h2.4l-.72 1.68 2.1 2.1 1.61-3.78h5.79v-3h-14z"/>
+							</svg>
+						</button>
+					</li>
+				</ul>
+			</div>
 
-		<div class="module__content">
-			<content select="p"></content>
+			<div class="module__content">
+				<content select="p"></content>
+			</div>
 		</div>
 	</card-base>
 </template>

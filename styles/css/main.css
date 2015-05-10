@@ -277,12 +277,13 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .dialog__block > section { flex-basis: 50%; }
 
 /* Cards */
-card-base, text-card, weather-card { position: relative; z-index: 1; transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out; }
+card-base, text-card, weather-card { position: relative; z-index: 1; transition: box-shadow 150ms ease-in-out; }
+card-base.fx, text-card.fx, weather-card.fx { transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out; }
 card-base:hover, text-card:hover, weather-card:hover { z-index: 2; }
-card-base.editmode, text-card.editmode, weather-card.editmode { z-index: 4; transform: translateY(-5px); box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
-card-base.draggmode, text-card.draggmode, weather-card.draggmode { z-index: 4; box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
-card-base.deletemode, text-card.deletemode, weather-card.deletemode { transition: opacity 150ms ease-in-out, transform 150ms ease-in-out 150ms; transform: scale(0); }
-card-base.deletemode > *, text-card.deletemode > *, weather-card.deletemode > * { opacity: 0; }
+card-base.is-edit, text-card.is-edit, weather-card.is-edit { z-index: 4; transform: translateY(-5px); box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
+card-base.is-dragging, text-card.is-dragging, weather-card.is-dragging { z-index: 4; box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
+card-base.is-delete, text-card.is-delete, weather-card.is-delete { transition: opacity 150ms ease-in-out, transform 150ms ease-in-out 150ms; transform: scale(0); }
+card-base.is-delete > *, text-card.is-delete > *, weather-card.is-delete > * { opacity: 0; }
 
 .module--longshadow { box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
 

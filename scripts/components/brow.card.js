@@ -9,10 +9,12 @@ BrowCard = (function (Brow) {
 		constructor (config) {
 			if (!config) config = {};
 			
-			this.isEditMode	= false;
+			// initialisation
 			this.type			= (config.type) ? config.type : 'text';
 			this.guid			= (config.guid) ? config.guid : Brow.GUID();
 			this.content		= (config.content) ? config.content : {};
+			// settings
+			this.isEditMode	= false;
 			this.config			= { elem: null };
 			this.saveState		= this.saveCardChanges;
 			this.wrapper		= null;
@@ -21,8 +23,13 @@ BrowCard = (function (Brow) {
 				type: this.type, 
 				guid: this.guid, 
 				content: this.content,
-				style: { width: 1, sticky: false }
+				style: { width: 1 }
 			};
+			// events
+			this.eventOption	= { 'detail': this.guid };
+			this.editEvent		= new CustomEvent('card-edit', this.eventOption);
+			this.saveEvent		= new CustomEvent('card-save', this.eventOption);
+			this.removeEvent	= new CustomEvent('card-remove', this.eventOption);
 
 			return this.createCard();
 		}
@@ -68,10 +75,10 @@ BrowCard = (function (Brow) {
 		 * @param			{Object} event
 		 */
 		addEvents (elem) {
-			elem.addEventListener('card-settings', this.setCardEvents.bind(this) );
-			elem.addEventListener('card-edit', this.activateEditMode.bind(this) );
-			elem.addEventListener('card-save', this.saveCardChanges.bind(this) );
-			elem.addEventListener('card-remove', this.removeCard.bind(this) );
+			elem.addEventListener('settings', this.setCardEvents.bind(this) );
+			elem.addEventListener('edit', this.activateEditMode.bind(this) );
+			elem.addEventListener('save', this.saveCardChanges.bind(this) );
+			elem.addEventListener('remove', this.removeCard.bind(this) );
 		}
 
 		/**
@@ -92,14 +99,13 @@ BrowCard = (function (Brow) {
 		 */
 		activateEditMode (event) {
 			// config
-			Brow.isEditMode = true;
 			Brow.activeCard = this;
 			this.isEditMode = true;
 			this.wrapper.edit();
-
 			// visual
-			this.config.elem.classList.add('editmode');
-			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
+			this.config.elem.classList.add('fx', 'is-edit');
+			// fire custom event
+			window.dispatchEvent( this.editEvent );
 		}
 
 		/**
@@ -109,15 +115,12 @@ BrowCard = (function (Brow) {
 		 */
 		saveCardChanges (event) {
 			// config
-			Brow.isEditMode = false;
-			Brow.activeCard = null;
 			this.isEditMode = false;
 			this.wrapper.save();
-			Brow.Settings.checkCustom();
-
 			// visual
-			this.config.elem.classList.remove('editmode');
-			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+			this.config.elem.classList.remove('fx', 'is-edit');
+			// fire custom event
+			window.dispatchEvent( this.saveEvent );
 		}
 
 		/**
@@ -126,20 +129,16 @@ BrowCard = (function (Brow) {
 		 * @param			{Object} event
 		 */
 		removeCard (event) {
-			let curCardGUI = this.config.elem.getAttribute('data-module-guid');
-			let self = this;
-
-			this.config.elem.classList.add('deletemode');
-			this.config.elem.addEventListener('transitionend', function (event) {
-				// Only listen to the last transition.
-				if (event.propertyName === 'transform') {
-					Brow.isEditMode = false;
-					this.isEditMode = false;
-					localStorage.removeItem(curCardGUI);
-					Brow.Settings.getElem()['CONTENT'].removeChild( self.config.elem );
-					Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
-				}
-			});
+			this.config.elem.classList.add('fx', 'is-delete');
+			this.config.elem.addEventListener('transitionend', 
+				function (event) {
+					// Only listen to the last transition.
+					if (event.propertyName === 'transform') {
+						this.isEditMode = false;
+						window.dispatchEvent( this.removeEvent );
+					}
+				}.bind(this)
+			);
 		}
 	}
 

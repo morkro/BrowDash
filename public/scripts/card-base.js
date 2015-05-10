@@ -21,19 +21,19 @@
 	};
 
 	CardProto.enableEvent = function () {
-		this.dispatchEvent(new Event('card-settings'));
+		this.dispatchEvent(new Event('settings'));
 	};
 
 	CardProto.enableEdit = function () {
-		this.dispatchEvent(new Event('card-edit'));
+		this.dispatchEvent(new Event('edit'));
 	};
 
 	CardProto.enableSave = function () {
-		this.dispatchEvent(new Event('card-save'));
+		this.dispatchEvent(new Event('save'));
 	};
 
 	CardProto.enableRemove = function () {
-		this.dispatchEvent(new Event('card-remove'));
+		this.dispatchEvent(new Event('remove'));
 	};
 	
 	document.registerElement('card-base', { prototype: CardProto });

@@ -51,14 +51,11 @@
 			.module__settings button:focus { 
 				outline: none; 
 			}
-		.card-content { 
-			height: 100%;
-		}
-		:host-context(.editmode) .hidden { 
+		:host-context(.is-edit) .hidden { 
 			display: block; 
 		}
 		.hidden,
-		:host-context(.editmode) [data-settings="edit"] { 
+		:host-context(.is-edit) [data-settings="edit"] { 
 			display: none; 
 		}
 	</style>

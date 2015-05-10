@@ -13,14 +13,13 @@ Brow.Settings = (function (Brow) {
 	'use strict';
 
 	/* Constants */
-	const BROW_KEY			= 'BROW_THEME';
-	const BROW_CARDS		= 'BROW_CARDS';
-	const BROW_SETTINGS	= 'BROW_SETTINGS';
-	const DEFAULT_THEME	= 'blue-a400';
+	const BROW_KEY				= 'BROW_THEME';
+	const BROW_CARDS			= 'BROW_CARDS';
+	const BROW_SETTINGS		= 'BROW_SETTINGS';
 
 	/* Variables */
 	var isSelectionState	= false;
-	var browMasonry		= null;
+	var browGrid			= null;
 	var browElements		= {
 		onClickDialog : null,
 		onClickNewCard : null,
@@ -33,22 +32,12 @@ Brow.Settings = (function (Brow) {
 		TIMER : null
 	};
 
-	const _startMasonryLayout = function () {
-		//browMasonry = new BrowMasonry( browElements.CONTENT );
-		browMasonry = new Packery(browElements['CONTENT'], {
-			itemSelector: '.brow__content__module',
-			percentPosition: true,
-			transitionDuration: 0,
-			gutter: 20
-		});
-	};
-
 	/**
 	 * @description	Adds event listener.
 	 * @private
 	 */
 	const _addEvents = function () {
-		window.addEventListener('mouseup', _removeDragging);
+		// Elements
 		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
 		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
@@ -57,34 +46,9 @@ Brow.Settings = (function (Brow) {
 		});
 	};
 
-	/**
-	 * @description	Checks if custom theme settings are available.
-	 * @private
-	 * @return			{Object}
-	 */
-	const _isCustomTheme = function () {
-		let CUSTOM = localStorage[BROW_KEY];
-		return CUSTOM;
-	};
-
-	/**
-	 * @description	Parses the custom settings from localStorage and sets classes.
-	 * @private
-	 * @param			{String} storage
-	 */
-	const _updateThemeFromStorage = function (storage) {
-		storage = JSON.parse(localStorage[BROW_KEY]);
-		document.body.className = '';
-		document.body.classList.add('theme-'+ storage.theme);
-	};
-
-	/**
-	 * @description	Adds the theme class to <body> from initial settings.
-	 * @private
-	 * @param			{String} theme
-	 */
-	const _updateThemeFromConfig = function (theme) {
-		document.body.classList.add('theme-'+ theme);
+	const _initLayoutManager = function () {
+		browGrid = new BrowLayoutManager( browElements['CONTENT'] );
+		browGrid.layout();
 	};
 
 	/**
@@ -128,7 +92,6 @@ Brow.Settings = (function (Brow) {
 				content: storageItem['content']
 			});
 			browElements['CONTENT'].appendChild( browCard );
-			browCard.addEventListener('mousedown', _activateDragging);
 		}
 	};
 
@@ -173,13 +136,12 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addNewCard = function (event) {
 		event.preventDefault();
+
 		let selectedCard	= this.getAttribute('data-create-card');
 		let browCard		= new BrowCard({ type: `${selectedCard}` });
 
 		browElements['CONTENT'].appendChild( browCard );
-		browCard.addEventListener('mousedown', _activateDragging);
-
-		masonry.update();
+		browGrid.add( browCard );
 	};
 
 	/**
@@ -198,7 +160,7 @@ Brow.Settings = (function (Brow) {
 	 * @private
 	 */
 	const _validateBrowTimer = function ()  {
-		let timer = new BrowTimer(browElements['TIMER']);
+		let timer = new BrowTimer( browElements['TIMER'] );
 		let dateSettings = { dateFormat : null, abbreviations : false };
 
 		if (!localStorage[BROW_SETTINGS]) {
@@ -215,44 +177,6 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
-	 * @description	Calls this.dragCard when mouse is moving.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _activateDragging = function (event) {
-		let isModule = event.target.classList.contains('brow__content__module');
-		
-		if (isModule) {
-			event.preventDefault();
-			window.addEventListener('mousemove', _dragCard);
-		}
-	};
-
-	/**
-	 * @description	Removes already called eventListener.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _removeDragging = function (event) {
-		window.removeEventListener('mousemove', _dragCard);
-	};
-
-	/**
-	 * @description	Moves the card element.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _dragCard = function (event) {
-		console.log('jep');
-		//let calcTopMovement	= event.pageY - (this.position.bottom / 2);
-		//let calcLeftMovement	= event.pageX - (this.position.right / 2);
-		//let translate = `translate(${calcLeftMovement}px, ${calcTopMovement}px)`;
-			// visual
-		//this.wrapper.getContent.classList.add('draggmode');
-		//this.wrapper.getContent.style.transform = translate;
-	};
-
-	/**
 	 * @description	Adds all dialog.
 	 * @private
 	 */
@@ -266,24 +190,6 @@ Brow.Settings = (function (Brow) {
 				content: `${currentLocation}/markup/dialog-${dialogContent}.html`
 			});
 		});
-	};
-
-	/**
-	 * @name				Brow.Settings.setTheme
-	 *	@description	Updates the current theme.
-	 * @public
-	 * @param			{Object} theme
-	 */
-	const setTheme = function (theme) {
-		if (!theme || typeof theme !== 'string') {
-			theme = DEFAULT_THEME;
-		}
-
-		if (_isCustomTheme()) {
-			_updateThemeFromStorage( _isCustomTheme() );
-		} else {
-			_updateThemeFromConfig( theme );
-		}
 	};
 
 	/**
@@ -329,13 +235,13 @@ Brow.Settings = (function (Brow) {
 		_initDialogs();
 		_validateBrowTimer();
 		_validateBrowCards();
-		_startMasonryLayout();
+		_initLayoutManager();
 		_addEvents();
 	};
 	
 	/* Public API */
 	return {
-		setTheme : setTheme,
+		//setTheme : setTheme,
 		useElements : useElements,
 		getElem : getElem,
 		start : initialiseAndStartApp,
