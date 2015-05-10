@@ -3,17 +3,15 @@ BrowLayoutManager = (function (window, Brow) {
 
 	class BrowLayoutManager {
 		constructor (container) {
-			this.gutter			= 20;
+			this.dragSelector = '.brow__content__module /deep/ .dragg-area';
 			this.transition	= 0;
 			this.pkrOptions	= {
 				itemSelector: '.brow__content__module',
-				columnWidth: 30,
-				percentPosition: true,
 				transitionDuration: this.transition,
-				gutter: this.gutter,
+				gutter: '.brow__content--gutter',
 				isInitLayout: false
 			};
-			this.dragOptions	= {}; // { handle: '.dragg-area' };
+			this.dragOptions	= { handle: this.dragSelector };
 			this.packery		= new Packery(container, this.pkrOptions);
 			this.addDraggabilly();
 			this.addEvents();

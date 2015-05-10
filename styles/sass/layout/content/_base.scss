@@ -9,17 +9,17 @@
 	z-index: z($modals, content);
 }
 
+.brow__content--gutter {
+	width: 2%;
+}
+
 .brow__content__module {
 	position: absolute;
-	width: 32%;
+	width: 18.4%; // I actually have no clue why this is the magic number here.
 
 	&[data-module-width="1"] { width: 32%; }
 	&[data-module-width="2"] { width: 64%; }
 	&[data-module-width="3"] { width: 96%; }
-
-	&[data-module-column="1"] { left: 0; }
-	&[data-module-column="2"] { left: 34%; }
-	&[data-module-column="3"] { right: 0; }
 }
 
 @media #{$max-desktop} {

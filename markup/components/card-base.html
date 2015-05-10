@@ -1,5 +1,6 @@
 <template id="card-base">
 	<style>
+		* { box-sizing: border-box; }
 		:host { display: block; }
 		.module  {
 			position: relative;
@@ -25,7 +26,7 @@
 				opacity: 1;
 			}
 		.module__settings li {
-			width: 100%; 
+			width: 48px; 
 			height: 48px; 
 			margin-bottom: 10px; 
 			background: white; 
@@ -58,35 +59,63 @@
 		:host-context(.is-edit) [data-settings="edit"] { 
 			display: none; 
 		}
+		.dragg-area {
+			position: absolute;
+			z-index: 99;
+			cursor: -webkit-grab;
+		}
+			:host-context(.is-edit) .dragg-area,
+			:host-context(.is-pointer-down.is-edit) .dragg-area  {
+				cursor: default;
+			}
+			:host-context(.is-pointer-down) .dragg-area,
+			:host-context(.is-dragging) .dragg-area {
+				cursor: -webkit-grabbing;		
+			}
+			.dragg-area[data-position="top"],
+			.dragg-area[data-position="bottom"] {
+				width: 100%;
+				height: 20px;
+			}
+			.dragg-area[data-position="left"],
+			.dragg-area[data-position="right"] {
+				width: 20px;
+				height: 100%;
+			}
+			.dragg-area[data-position="top"],
+			.dragg-area[data-position="left"] {
+				top: 0;
+				left: 0;
+			}
+			.dragg-area[data-position="right"],
+			.dragg-area[data-position="bottom"] {
+				bottom: 0;
+				right: 0;
+			}
 	</style>
 	<section class="module">
 		<ul class="module__settings">
 			<li data-settings="edit">
 				<button class="settings__edit">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
-						<path d="M3 17.25v3.75h3.75l11.06-11.06-3.75-3.75-11.06 11.06zm17.71-10.21c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-						<path d="M0 0h24v24h-24z" fill="none"/>
-					</svg>
+					<brow-icon icon="edit"></brow-icon>
 				</button>
 			</li>
 			<li class="hidden" data-settings="save">
 				<button class="settings__save">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
-						<path d="M0 0h24v24h-24z" fill="none"/>
-						<path d="M9 16.17l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41z"/>
-					</svg>	
+					<brow-icon icon="save"></brow-icon>
 				</button>
 			</li>
 			<li data-settings="remove">
 				<button class="settings__remove">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
-						<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-12h-12v12zm13-15h-3.5l-1-1h-5l-1 1h-3.5v2h14v-2z"/>
-						<path d="M0 0h24v24h-24z" fill="none"/>
-					</svg>
+					<brow-icon icon="remove"></brow-icon>
 				</button>
 			</li>
 		</ul>
 		<content></content>
+		<div class="dragg-area" data-position="top"></div>
+		<div class="dragg-area" data-position="right"></div>
+		<div class="dragg-area" data-position="bottom"></div>
+		<div class="dragg-area" data-position="left"></div>
 	</section>
 </template>
 <script type="text/javascript" src="../scripts/card-base.js"></script>
