@@ -46,6 +46,10 @@ Brow.Settings = (function (Brow) {
 		});
 	};
 
+	/**
+	 * @description	Calls the LayoutManager class.
+	 * @private
+	 */
 	const _initLayoutManager = function () {
 		browGrid = new BrowLayoutManager( browElements['CONTENT'] );
 		browGrid.layout();

@@ -13,15 +13,15 @@
 	width: 2%;
 }
 
+.brow__content__module,
+.brow__content--sizer {
+	width: 32%;
+}
+
 .brow__content__module {
 	position: absolute;
-	width: 18.4%; // I actually have no clue why this is the magic number here.
-
-	&[data-module-width="1"] { width: 32%; }
-	&[data-module-width="2"] { width: 64%; }
-	&[data-module-width="3"] { width: 96%; }
 }
 
 @media #{$max-desktop} {
-	#brow__content { width: 95%; }
+	#brow__content { width: 90%; }
 }

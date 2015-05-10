@@ -23,7 +23,7 @@ BrowCard = (function (Brow) {
 				type: this.type, 
 				guid: this.guid, 
 				content: this.content,
-				style: { width: 1 }
+				style: { width: 1, stamp: false }
 			};
 			// events
 			this.eventOption	= { 'detail': this.guid };

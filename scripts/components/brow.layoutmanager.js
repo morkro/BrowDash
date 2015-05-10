@@ -8,7 +8,9 @@ BrowLayoutManager = (function (window, Brow) {
 			this.pkrOptions	= {
 				itemSelector: '.brow__content__module',
 				transitionDuration: this.transition,
+				columnWidth: '.brow__content--sizer',
 				gutter: '.brow__content--gutter',
+				stamp: '.is-stamp',
 				isInitLayout: false
 			};
 			this.dragOptions	= { handle: this.dragSelector };
@@ -26,7 +28,7 @@ BrowLayoutManager = (function (window, Brow) {
 
 		/**
 		 * Adds a new item to the Packery layout.
-		 * @param {HTMLElement} elem
+		 * @param {NodeList|HTMLElement} elem
 		 */
 		add (elem) {
 			this.packery.appended( elem );
@@ -35,11 +37,19 @@ BrowLayoutManager = (function (window, Brow) {
 
 		/**
 		 * Removes passed element from the Packery layout.
-		 * @param {Object|HTMLElement} config
+		 * @param {NodeList|HTMLElement} config
 		 */
 		remove (elem) {
 			this.packery.remove( elem );
 			this.layout();
+		}
+
+		/**
+		 * Makes an element sticky
+		 * @param {NodeList|HTMLElement} config
+		 */
+		stamp (elem) {
+			this.packery.stamp( elem );
 		}
 
 		/**
@@ -69,6 +79,8 @@ BrowLayoutManager = (function (window, Brow) {
 		 * @param  {Object} event
 		 */
 		validateLayoutState (event) {
+			let elem = document.querySelector(`[data-module-guid="${event.detail}"]`);
+
 			// activated editing mode
 			if (event.type === 'card-edit') {
 				Brow.isEditMode = true;
@@ -77,6 +89,7 @@ BrowLayoutManager = (function (window, Brow) {
 
 			// saved card
 			if (event.type === 'card-save') {
+				this.layout();
 				Brow.isEditMode = false;
 				Brow.activeCard = null;
 				Brow.Settings.checkCustom();
@@ -85,10 +98,9 @@ BrowLayoutManager = (function (window, Brow) {
 			
 			// card is removed
 			if (event.type === 'card-remove') {
-				let elem = document.querySelector(`[data-module-guid="${event.detail}"]`);
+				this.remove(elem);
 				Brow.isEditMode = false;
 				localStorage.removeItem( event.detail );
-				this.remove(elem);
 				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
 			}
 		}
