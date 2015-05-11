@@ -1,11 +1,11 @@
-card-base, text-card, weather-card {
+.brow__content__module {
 	position: relative;
 	z-index: z($content, cards);
 	transition: box-shadow 150ms ease-in-out;
 	animation-name: cardSlideIn;
 	animation-duration: 150ms;
 	animation-timing-function: ease-in-out;
-	animation-fill-mode: fowards;
+	animation-fill-mode: forwards;
 	
 	&.fx {
 		transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;

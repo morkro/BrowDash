@@ -14,8 +14,10 @@
 		display: flex;
 
 		.dialog__inner {
-			opacity: 1; 
-			display: block;
+			animation-name: animateDialogInView;
+			animation-duration: 150ms;
+			animation-timing-function: ease-in-out;
+			animation-fill-mode: forwards;
 		}
 	}
 }
@@ -28,8 +30,6 @@
 	width: 65vw;
 	height: 80vh;
 	min-height: 300px;
-	opacity: 0;
-	display: none;
 	overflow: hidden;
 
 	&.module { padding: 0; }
@@ -37,5 +37,26 @@
 	.dialog__sidebar,
 	.dialog__content {
 		height: calc(100% - 60px);
+	}
+}
+
+/**
+ * ANIMATION
+ */
+@keyframes animateDialogInView {
+	0% {
+		display: none;
+		opacity: 0;
+		transform: translateY(25px);
+	}
+	1% {
+		display: block;
+		opacity: 0;
+		transform: translateY(25px);
+	}
+	100% {
+		display: block;
+		opacity: 1;
+		transform: translateY(0);
 	}
 }
