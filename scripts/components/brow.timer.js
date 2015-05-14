@@ -30,13 +30,11 @@ BrowTimer = (function() {
 			let dateAbbr		= '';
 
 			// If time format is set to 12h, use 12h-system.
-			if (this.format === '12h' && dateHours >= 12) {
-				if (dateHours > 12) {
-					dateHours -= 12;
-				}
+			if (this.format === '12h') {
 				if (this.abbreviations) {
 					dateAbbr = this.getAbbreviation(dateHours);
 				}
+				dateHours = (dateHours % 12) ? dateHours : 12;
 			}
 
 			// Add '0' if below 10
@@ -57,7 +55,7 @@ BrowTimer = (function() {
 				time = parseFloat(time);
 			}
 
-			return (time >= 12) ? 'AM' : 'PM';
+			return (time >= 12) ? 'PM' : 'AM';
 		}
 
 		/**
@@ -65,12 +63,10 @@ BrowTimer = (function() {
 		 * @param			{Object} config
 		 */
 		setDateFormat (config) {
-			if (!config) {
-				config = { 'format': '24h' };
+			if (!!config) {
+				this.format = (config.format) ? config.format : this.format;
+				this.abbreviations = config.abbreviations;
 			}
-
-			this.format = config.format;
-			this.abbreviations = config.abbreviations;
 			this.run();
 		}
 

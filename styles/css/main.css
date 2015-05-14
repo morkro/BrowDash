@@ -192,7 +192,7 @@ label { cursor: pointer; position: relative; transition: all 150ms ease-in-out; 
 
 input[type="checkbox"] { margin-right: 20px; visibility: hidden; }
 input[type="checkbox"] + label:before { content: ""; position: absolute; width: 14px; height: 14px; left: -40px; top: 1px; color: #ffffff; border: 2px solid #616161; border-radius: 2px; background: white; font-size: 14px; line-height: 14px; transition: all 150ms ease-in-out; }
-input[type="checkbox"][disabled] + label { color: #bdbdbd; }
+input[type="checkbox"][disabled] + label { color: #bdbdbd; cursor: not-allowed; }
 input[type="checkbox"][disabled] + label:before { border-color: #bdbdbd; }
 input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1px; width: 13px; border-color: #009688; background: #009688; }
 
