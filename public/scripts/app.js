@@ -921,10 +921,11 @@ WeatherCard = (function () {
 			this.city		= null;
 			this.degrees	= null;
 			this.weather	= 'cloudy';
+			this.daytime	= 'day';
 
 			this.elem.setAttribute('loading', '');
 			this.elem.setAttribute('weather', `${this.weather}`);
-			this.elem.setAttribute('time', 'day');
+			this.elem.setAttribute('time', `${this.daytime}`);
 			this.getGeolocation();
 		}
 
@@ -950,10 +951,14 @@ WeatherCard = (function () {
 			return degreeElem;
 		}
 
+		/**
+		 * @description	Creates all content elements and appends them to <weather-card>.
+		 */
 		createContent () {
 			let city = document.createElement('h1');
 			let location = document.createElement('h2');
 			let temperatur = this.createTemperatur(this.degrees);
+
 			// City
 			city.classList.add('weather__city');
 			city.innerText = this.city;
@@ -961,6 +966,7 @@ WeatherCard = (function () {
 			location.classList.add('weather__place');
 			location.innerText = 'Current location';
 
+			// Append elements
 			this.elem.appendChild( temperatur );
 			this.elem.appendChild( city );
 			this.elem.appendChild( location );
@@ -1001,14 +1007,40 @@ WeatherCard = (function () {
 			.then(function (response) { return response.text(); })
 			.then(function (response) {
 				let weatherResponse = JSON.parse(response);
-				console.log(weatherResponse);
+				
 				// Set values
 				self.city = weatherResponse.name;
 				self.kelvinCalculator( weatherResponse.main.temp );
 				self.validateWeather( weatherResponse.weather[0].main );
+				self.validateDaytime( weatherResponse.sys );
 				// Create content
 				self.createContent();
+
+				console.log(weatherResponse);
+				console.log(self);
+			})
+			.catch(function (error) {
+				console.log(error);
 			});
+		}
+
+		validateDaytime (config) {
+			const MS		= 1000; // milliseconds
+			let now		= new Date();
+			let sunrise	= new Date(config.sunrise * MS);
+			let sunset	= new Date(config.sunset * MS);
+			let isNight	= now >= sunset;
+			let isDay	= now <= sunrise;
+
+			if (isNight) {
+				this.daytime = 'night';
+				this.elem.removeAttribute('weather');
+			}
+			else if (isDay) { 
+				this.daytime = 'day';
+			}
+
+			this.elem.setAttribute('time', `${this.daytime}`);
 		}
 
 		kelvinCalculator (temp) {
@@ -1018,15 +1050,13 @@ WeatherCard = (function () {
 			this.degrees = calcCelcius;
 		}
 
+		/**
+		 * @description	Saves the weather string and sets attribute.
+		 * @param  {String} weather
+		 */
 		validateWeather (weather) {
-			weather = weather.toString().toLowerCase();
-			this.weather = weather;
-
-			switch (weather) {
-				case 'clear':
-					this.elem.setAttribute('weather', `${this.weather}`);
-					break;
-			}
+			this.weather = weather.toString().toLowerCase();
+			this.elem.setAttribute('weather', `${this.weather}`);
 		}
 
 		/**
