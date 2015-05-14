@@ -4,7 +4,7 @@
 	padding: 0;
 	width: 90%;
 	height: auto; //calc(100vh - 120px);
-	margin: 60px auto;
+	margin: 64px auto;
 	transition: width 150ms ease-in-out;
 	z-index: z($modals, content);
 }
