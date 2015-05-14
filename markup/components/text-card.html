@@ -7,10 +7,10 @@
 		/* Editmode */
 		:host(.is-edit) .module__editor { 
 			height: 40px; 
-			margin-bottom: 20px; 
+			margin-bottom: 20px;
 		}
-		:host(.is-edit) .module__editor ul { 
-			display: block; 
+		:host(.is-edit) .module__editor ul li {
+			opacity: 1;
 		}
 		.module {
 			position: relative;
@@ -57,13 +57,13 @@
 			position: relative; 
 			margin-bottom: 0px; 
 			background: rgba(0, 0, 0, .05); 
-			transition: all 150ms ease-in-out; 
+			transition: all 100ms ease-in-out; 
 			box-shadow: inset 0px 0px 6px -3px rgba(0, 0, 0, 1); 
 			display: block; 
 		}
 		.module__editor ul { 
 			height: 100%; 
-			display: none; 
+			display: block; 
 			margin: 0; 
 			padding: 0; 
 		}
@@ -75,7 +75,9 @@
 			margin-left: 20px; 
 			position: relative; 
 			top: 50%; 
-			transform: translateY(-50%); 
+			transform: translateY(-50%);
+			transition: opacity 100ms ease-in-out;
+			opacity: 0;
 		}
 			.module__editor ul li:hover button { 
 				opacity: 1; 
@@ -85,7 +87,7 @@
 			height: 100%; 
 			cursor: pointer; 
 			opacity: .6; 
-			transition: opacity 150ms ease-in-out; 
+			transition: opacity 100ms ease-in-out; 
 		}
 			.module__editor ul li button:active, 
 			.module__editor ul li button:focus { 
