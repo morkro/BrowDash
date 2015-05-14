@@ -611,9 +611,6 @@ BrowTimer = (function() {
 				if (this.abbreviations) {
 					dateAbbr = this.getAbbreviation(dateHours);
 				}
-				else {
-					dateAbbr = '';
-				}
 			}
 
 			// Add '0' if below 10
@@ -646,10 +643,7 @@ BrowTimer = (function() {
 				config = { 'format': '24h' };
 			}
 
-			if (config.format) {
-				this.format = config.format;
-			}
-
+			this.format = config.format;
 			this.abbreviations = config.abbreviations;
 			this.run();
 		}
