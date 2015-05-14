@@ -35,7 +35,13 @@
 	top: 50%;
 	transform: translateY(-50%);
 
-	[data-tooltip]:before { width: 450%; }
+	[data-tooltip-identifier="textcard"]:before {
+		width: 500%;
+	}
+
+	[data-tooltip-identifier="weathercard"]:before {
+		width: 450%;
+	}
 
 	li {
 		position: relative;

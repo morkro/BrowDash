@@ -19,29 +19,65 @@ BrowTimer = (function() {
 		}
 
 		/**
-		 * @name 			BrowTimer.getTime
 		 * @description	Creates a string with current time in HH:MM:SS
 		 * @return			{String}
 		 */
 		getTime () {
-			let _date			= new Date();
-			let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
-			let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
-			let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
+			let date				= new Date();
+			let dateHours		= date.getHours();
+			let dateMinutes	= date.getMinutes();
+			let dateSeconds	= date.getSeconds();
+			let dateAbbr		= '';
 
-			return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
+			// If time format is set to 12h, use 12h-system.
+			if (this.format === '12h' && dateHours >= 12) {
+				if (dateHours > 12) {
+					dateHours -= 12;
+				}
+				if (this.abbreviations) {
+					dateAbbr = this.getAbbreviation(dateHours);
+				}
+				else {
+					dateAbbr = '';
+				}
+			}
+
+			// Add '0' if below 10
+			if (dateHours < 10) dateHours = `0${dateHours}`;
+			if (dateMinutes < 10) dateMinutes = `0${dateMinutes}`;
+			if (dateSeconds < 10) dateSeconds = `0${dateSeconds}`;
+
+			return `${dateHours}:${dateMinutes}:${dateSeconds} ${dateAbbr}`;
+		}
+
+		/**
+		 * @description	Validates number and returns either AM or PM.
+		 * @param 			{Number} time
+		 * @return			{String}
+		 */
+		getAbbreviation (time) {
+			if (typeof time !== 'number') {
+				time = parseFloat(time);
+			}
+
+			return (time >= 12) ? 'AM' : 'PM';
 		}
 
 		/**
 		 *	@description	Needs to be written.
-		 * @param			{String} format
+		 * @param			{Object} config
 		 */
-		setDateFormat (format) {
-			if (typeof format !== 'string') {
-				return;
+		setDateFormat (config) {
+			if (!config) {
+				config = { 'format': '24h' };
 			}
 
-			this.format = format;
+			if (config.format) {
+				this.format = config.format;
+			}
+
+			this.abbreviations = config.abbreviations;
+			this.run();
 		}
 
 		/**

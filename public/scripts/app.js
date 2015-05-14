@@ -80,6 +80,7 @@ Brow.Settings = (function (Brow) {
 	/* Variables */
 	var isSelectionState	= false;
 	var browGrid			= null;
+	var browTimer			= null;
 	var browElements		= {
 		onClickDialog : null,
 		onClickNewCard : null,
@@ -224,20 +225,71 @@ Brow.Settings = (function (Brow) {
 	 * @private
 	 */
 	const _validateBrowTimer = function ()  {
-		let timer = new BrowTimer( browElements['TIMER'] );
+		browTimer = new BrowTimer( browElements['TIMER'] );
 		let dateSettings = { dateFormat : null, abbreviations : false };
 
 		if (!localStorage[BROW_SETTINGS]) {
 			dateSettings['dateFormat'] = '24h';
-			timer.setDateFormat(dateSettings.dateFormat);
+			browTimer.setDateFormat({
+				'format': dateSettings.dateFormat
+			});
 			localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
 		}
 		else {
 			dateSettings = JSON.parse(localStorage[BROW_SETTINGS]);
-			timer.setDateFormat(dateSettings.dateFormat, dateSettings.abbreviations);
+			browTimer.setDateFormat({
+				'format': dateSettings.dateFormat, 
+				'abbreviations': dateSettings.abbreviations
+			});
 		}
 
-		timer.run();
+		browTimer.run();
+	};
+
+	const _dialogSettingsCallback = function () {		
+		let formatCheckbox	= this.dialogContent.querySelector('#settings--dateformat');
+		let abbrCheckbox		= this.dialogContent.querySelector('#settings--ampm');
+		let dateSettings		= JSON.parse(localStorage[BROW_SETTINGS]);
+
+		// Validate date settings and update DOM
+		if (dateSettings['dateFormat'] === '12h') {
+			formatCheckbox.checked = false;
+		}
+		abbrCheckbox.checked = dateSettings['abbreviations'];
+		abbrCheckbox.disabled = !dateSettings['abbreviations'];
+
+		this.dialogContent.addEventListener('click', _updateDateFormat.bind(this));
+	};
+
+	const _updateDateFormat = function (event) {
+		let formatCheckbox	= this.dialogContent.querySelector('#settings--dateformat');
+		let abbrCheckbox		= this.dialogContent.querySelector('#settings--ampm');
+		let timeFormat			= '24h';
+		let dateSettings		= JSON.parse(localStorage[BROW_SETTINGS]);
+
+		// If date format checkbox is clicked
+		if (event.target.id === 'settings--dateformat') {
+			if (!formatCheckbox.checked) {
+				timeFormat = '12h';
+				abbrCheckbox.disabled = false;	
+			}
+			else if (formatCheckbox.checked && !abbrCheckbox.disabled) {
+				abbrCheckbox.disabled = true;
+				abbrCheckbox.checked = false;
+			}
+
+			browTimer.setDateFormat({ 'format': timeFormat });
+			dateSettings['dateFormat'] = timeFormat;
+			dateSettings['abbreviations'] = abbrCheckbox.checked;
+		}
+
+		// If abbreviation checkbox is clicked
+		if (!event.target.disabled && event.target.id === 'settings--ampm') {
+			browTimer.setDateFormat({ 'abbreviations': abbrCheckbox.checked });
+			dateSettings['abbreviations'] = abbrCheckbox.checked;
+		}
+
+		localStorage.setItem(BROW_SETTINGS, JSON.stringify(dateSettings));
 	};
 
 	/**
@@ -248,10 +300,17 @@ Brow.Settings = (function (Brow) {
 		let currentLocation = window.location.href.slice(0, -1);
 		
 		[].forEach.call(browElements['onClickDialog'], function (item) {
-			let dialogContent = item.getAttribute('data-dialog');
+			let dialogContent		= item.getAttribute('data-dialog');
+			let dialogCallback	= false;
+
+			if (dialogContent === 'settings') {
+				dialogCallback = _dialogSettingsCallback;
+			}
+
 			let browDialog = new BrowDialog({
 				elem: item,
-				content: `${currentLocation}/markup/dialog-${dialogContent}.html`
+				content: `${currentLocation}/markup/dialog-${dialogContent}.html`,
+				callback: dialogCallback
 			});
 		});
 	};
@@ -325,12 +384,12 @@ BrowDialog = (function (Brow) {
 		constructor (config) {
 			this.elem				= config.elem;
 			this.path				= config.content;
+			this.callback			= config.callback;
 			this.dialogOverlay	= Brow.Settings.getElem()['DIALOG_OVERLAY'];
 			this.dialogElem		= Brow.Settings.getElem()['DIALOG'];
 			this.dialogContainer	= this.dialogElem.querySelector('.dialog__inner');
-			this.dialogSidebar	= this.dialogElem.querySelector('.dialog__sidebar__list');
-			this.dialogTheme		= this.dialogElem.querySelector('.settings__theme');
-			
+			this.dialogContent	= null;
+
 			this.addEvents();
 		}
 
@@ -340,15 +399,17 @@ BrowDialog = (function (Brow) {
 		 * @param			{Object} event
 		 */
 		showContent (event) {
-			event.preventDefault();
 			let _self = this;
-
+			event.preventDefault();
+			
 			fetch(this.path)
 			.then(function (response) {
 				return response.text();
 			})
 			.then(function (body) {
 				_self.dialogContainer.innerHTML = body;
+				_self.dialogContent = _self.dialogContainer.querySelector('.dialog__content');
+				if (_self.callback) _self.callback(this);
 			});
 
 			this.dialogElem.classList.add('show');
@@ -372,21 +433,6 @@ BrowDialog = (function (Brow) {
 				this.dialogContainer.innerHTML = null;
 				this.dialogElem.classList.remove('show');
 				this.dialogOverlay.classList.remove('show');
-			}
-		}
-
-		/**
-		 * @description	Gets the color attribute of the clicked element and updates the theme.
-		 * @private
-		 * @param			{Object} event
-		 */
-		chooseTheme (event) {
-			event.preventDefault();
-
-			if (event.target.hasAttribute('data-settings-theme')) {
-				let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-				localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
-				Brow.Settings.setTheme(_themeColor);
 			}
 		}
 
@@ -547,29 +593,65 @@ BrowTimer = (function() {
 		}
 
 		/**
-		 * @name 			BrowTimer.getTime
 		 * @description	Creates a string with current time in HH:MM:SS
 		 * @return			{String}
 		 */
 		getTime () {
-			let _date			= new Date();
-			let _dateHours		= (_date.getHours() < 10) ? '0' + _date.getHours() : _date.getHours();
-			let _dateMinutes	= (_date.getMinutes() < 10) ? '0' + _date.getMinutes() : _date.getMinutes();
-			let _dateSeconds	= (_date.getSeconds() < 10) ? '0' + _date.getSeconds() : _date.getSeconds();
+			let date				= new Date();
+			let dateHours		= date.getHours();
+			let dateMinutes	= date.getMinutes();
+			let dateSeconds	= date.getSeconds();
+			let dateAbbr		= '';
 
-			return _dateHours +':'+ _dateMinutes +':'+ _dateSeconds;
+			// If time format is set to 12h, use 12h-system.
+			if (this.format === '12h' && dateHours >= 12) {
+				if (dateHours > 12) {
+					dateHours -= 12;
+				}
+				if (this.abbreviations) {
+					dateAbbr = this.getAbbreviation(dateHours);
+				}
+				else {
+					dateAbbr = '';
+				}
+			}
+
+			// Add '0' if below 10
+			if (dateHours < 10) dateHours = `0${dateHours}`;
+			if (dateMinutes < 10) dateMinutes = `0${dateMinutes}`;
+			if (dateSeconds < 10) dateSeconds = `0${dateSeconds}`;
+
+			return `${dateHours}:${dateMinutes}:${dateSeconds} ${dateAbbr}`;
+		}
+
+		/**
+		 * @description	Validates number and returns either AM or PM.
+		 * @param 			{Number} time
+		 * @return			{String}
+		 */
+		getAbbreviation (time) {
+			if (typeof time !== 'number') {
+				time = parseFloat(time);
+			}
+
+			return (time >= 12) ? 'AM' : 'PM';
 		}
 
 		/**
 		 *	@description	Needs to be written.
-		 * @param			{String} format
+		 * @param			{Object} config
 		 */
-		setDateFormat (format) {
-			if (typeof format !== 'string') {
-				return;
+		setDateFormat (config) {
+			if (!config) {
+				config = { 'format': '24h' };
 			}
 
-			this.format = format;
+			if (config.format) {
+				this.format = config.format;
+			}
+
+			this.abbreviations = config.abbreviations;
+			this.run();
 		}
 
 		/**

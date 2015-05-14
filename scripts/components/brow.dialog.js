@@ -10,12 +10,12 @@ BrowDialog = (function (Brow) {
 		constructor (config) {
 			this.elem				= config.elem;
 			this.path				= config.content;
+			this.callback			= config.callback;
 			this.dialogOverlay	= Brow.Settings.getElem()['DIALOG_OVERLAY'];
 			this.dialogElem		= Brow.Settings.getElem()['DIALOG'];
 			this.dialogContainer	= this.dialogElem.querySelector('.dialog__inner');
-			this.dialogSidebar	= this.dialogElem.querySelector('.dialog__sidebar__list');
-			this.dialogTheme		= this.dialogElem.querySelector('.settings__theme');
-			
+			this.dialogContent	= null;
+
 			this.addEvents();
 		}
 
@@ -25,15 +25,17 @@ BrowDialog = (function (Brow) {
 		 * @param			{Object} event
 		 */
 		showContent (event) {
-			event.preventDefault();
 			let _self = this;
-
+			event.preventDefault();
+			
 			fetch(this.path)
 			.then(function (response) {
 				return response.text();
 			})
 			.then(function (body) {
 				_self.dialogContainer.innerHTML = body;
+				_self.dialogContent = _self.dialogContainer.querySelector('.dialog__content');
+				if (_self.callback) _self.callback(this);
 			});
 
 			this.dialogElem.classList.add('show');
@@ -57,21 +59,6 @@ BrowDialog = (function (Brow) {
 				this.dialogContainer.innerHTML = null;
 				this.dialogElem.classList.remove('show');
 				this.dialogOverlay.classList.remove('show');
-			}
-		}
-
-		/**
-		 * @description	Gets the color attribute of the clicked element and updates the theme.
-		 * @private
-		 * @param			{Object} event
-		 */
-		chooseTheme (event) {
-			event.preventDefault();
-
-			if (event.target.hasAttribute('data-settings-theme')) {
-				let _themeColor = { theme: event.target.getAttribute('data-settings-theme') };
-				localStorage[Brow.Settings.BROW_KEY] = JSON.stringify(_themeColor);
-				Brow.Settings.setTheme(_themeColor);
 			}
 		}
 

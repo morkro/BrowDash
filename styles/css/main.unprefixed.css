@@ -277,7 +277,7 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .dialog__block > section { flex-basis: 50%; }
 
 /* Cards */
-.brow__content__module { position: relative; z-index: 1; transition: box-shadow 150ms ease-in-out; animation-name: cardSlideIn; animation-duration: 150ms; animation-timing-function: ease-in-out; animation-fill-mode: forwards; }
+.brow__content__module { position: relative; z-index: 1; transition: box-shadow 150ms ease-in-out; }
 .brow__content__module.fx { transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out; }
 .brow__content__module:hover { z-index: 2; }
 .brow__content__module.is-edit { z-index: 4; transform: translateY(-5px); box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
@@ -367,7 +367,8 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .footer__select ul { opacity: 0; transition: opacity 150ms ease-in-out 150ms; }
 
 .footer__select__list { list-style: none; width: 90px; height: 32px; margin: 0 auto; position: relative; top: 50%; transform: translateY(-50%); }
-.footer__select__list [data-tooltip]:before { width: 450%; }
+.footer__select__list [data-tooltip-identifier="textcard"]:before { width: 500%; }
+.footer__select__list [data-tooltip-identifier="weathercard"]:before { width: 450%; }
 .footer__select__list li { position: relative; display: inline-block; margin-right: 20px; width: 32px; height: 32px; }
 .footer__select__list li:last-child { margin-right: 0; }
 .footer__select__list svg { fill: white; }
