@@ -77,7 +77,7 @@ img[src$=".jpg"], img[src$=".png"] {
 label {
 	cursor: pointer;
 	position: relative;
-	transition: all 150ms ease-in-out;
+	transition: all 150ms $easeInOut;
 }
 
 input[type="checkbox"] {
@@ -97,7 +97,7 @@ input[type="checkbox"] {
 		background: white;
 		font-size: 14px;
 		line-height: 14px;
-		transition: all 150ms ease-in-out;
+		transition: all 150ms $easeInOut;
 	}
 
 	&[disabled] + label {

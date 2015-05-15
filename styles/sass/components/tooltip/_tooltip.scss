@@ -17,12 +17,12 @@
 		line-height: 22px;
 		text-transform: initial;
 		font-size: 14px;
-		transition: opacity 150ms ease-in-out 0s;
+		transition: opacity 150ms $easeInOut 0s;
 	}
 
 	&:hover:before {
 		opacity: 1;
-		transition: opacity 150ms ease-in-out 500ms;
+		transition: opacity 150ms $easeInOut 500ms;
 	}
 }
 

@@ -11,7 +11,7 @@
 		cursor: pointer;
 		border-radius: 2px;
 		box-shadow: $shadow-base;
-		transition: all 150ms ease-in-out;
+		transition: all 150ms $easeInOut;
 		position: relative;
 
 		&:hover {
@@ -32,7 +32,7 @@
 			transform: translateX(-50%);
 			background: $black;
 			box-shadow: $shadow-base;
-			transition: all 150ms ease-in-out;
+			transition: all 150ms $easeInOut;
 		}
 
 		&[data-settings-theme="blue-a400"] {

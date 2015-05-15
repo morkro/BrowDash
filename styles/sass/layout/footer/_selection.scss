@@ -5,10 +5,10 @@
 	margin: 0 auto;
 	z-index: z($footer, selection);
 	transform: translateY(100%);
-	transition: width 150ms ease-in-out;
+	transition: width 150ms $easeInOut;
 
 	&.show {
-		transition: width 150ms ease-in-out 150ms;
+		transition: width 150ms $easeInOut 150ms;
 		transform: translateY(0%);
 		width: 100%;
 
@@ -22,7 +22,7 @@
 
 	ul {
 		opacity: 0;
-		transition: opacity 150ms ease-in-out 150ms;
+		transition: opacity 150ms $easeInOut 150ms;
 	}
 }
 

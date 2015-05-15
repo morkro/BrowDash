@@ -9,7 +9,7 @@
 		display: block;
 		width: 100%;
 		padding: 15px 20px;
-		transition: all 150ms ease-in-out;
+		transition: all 150ms $easeInOut;
 
 		&:hover {
 			background: $grey-200;

@@ -1,14 +1,14 @@
 .brow__content__module {
 	position: relative;
 	z-index: z($content, cards);
-	transition: box-shadow 150ms ease-in-out;
+	transition: box-shadow 150ms $easeInOut;
 	// animation-name: cardSlideIn;
 	// animation-duration: 150ms;
-	// animation-timing-function: ease-in-out;
+	// animation-timing-function: $easeInOut;
 	// animation-fill-mode: forwards;
 	
 	&.fx {
-		transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
+		transition: box-shadow 150ms $easeInOut, transform 150ms $easeInOut;
 	}
 
 	// Controls should be above all other cards.
@@ -27,7 +27,7 @@
 	}
 
 	&.is-delete {
-		transition: opacity 150ms ease-in-out, transform 150ms ease-in-out 150ms;
+		transition: opacity 150ms $easeInOut, transform 150ms $easeInOut 150ms;
 		transform: scale(0);
 
 		> * { opacity: 0; }

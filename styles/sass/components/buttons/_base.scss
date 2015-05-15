@@ -4,7 +4,7 @@
 	padding: 0;
 	display: inline-block;
 	text-transform: uppercase;
-	transition: all 150ms ease-in-out;
+	transition: all 150ms $easeInOut;
 	font-size: 14px;
 	font-weight: 400;
 	position: relative;
@@ -26,11 +26,11 @@
 		width: 44px;
 		height: 44px;
 		transform: translate(-50%, -50%);
-		transition: opacity 100ms ease-in-out;
+		transition: opacity 100ms $easeInOut;
 	}
 
 	&:active:before {
-		transition: opacity 150ms ease-in-out;
+		transition: opacity 150ms $easeInOut;
 		opacity: 1;
 	}
 }

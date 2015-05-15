@@ -16,7 +16,7 @@
 		.dialog__inner {
 			animation-name: animateDialogInView;
 			animation-duration: 150ms;
-			animation-timing-function: ease-in-out;
+			animation-timing-function: $easeInOut;
 			animation-fill-mode: forwards;
 		}
 	}
