@@ -5,6 +5,7 @@
 		:host-context([color="white"]) {
 			fill: #ffffff;
 		}
+		:host-context([icon="close"]) .icon-close,
 		:host-context([icon="loader"]) .icon-loader,
 		:host-context([icon="column"]) .icon-column,
 		:host-context([icon="schedule"]) .icon-schedule,
@@ -31,6 +32,10 @@
 	</style>
 	
 	<svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+		<!-- Close -->
+		<symbol id="close" viewBox="0 0 24 24">
+			<path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+		</symbol>
 		<!-- Loader -->
 		<symbol id="loader" viewBox="0 0 44 44" stroke="#fff">
 			<g fill="none" fill-rule="evenodd" stroke-width="2">
@@ -143,6 +148,7 @@
 		</symbol>
 	</svg>
 	
+	<svg class="icon-close" height="24" width="24"><use xlink:href="#close"></use></svg>
 	<svg class="icon-loader" height="44" width="44"><use xlink:href="#loader"></use></svg>
 	<svg class="icon-column" height="24" width="24"><use xlink:href="#column"></use></svg>
 	<svg class="icon-schedule" height="24" width="24"><use xlink:href="#schedule"></use></svg>

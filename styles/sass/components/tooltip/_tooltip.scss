@@ -22,7 +22,7 @@
 
 	&:hover:before {
 		opacity: 1;
-		transition: opacity 150ms $easeInOut 500ms;
+		transition: opacity 150ms $easeInOut;
 	}
 }
 

@@ -29,7 +29,6 @@ Brow.Settings = (function (Brow) {
 		CONTENT : null,
 		CONTENT_OVERLAY : null,
 		DIALOG : null,
-		DIALOG_OVERLAY : null,
 		TIMER : null
 	};
 
@@ -274,7 +273,6 @@ Brow.Settings = (function (Brow) {
 			CONTENT : config.CONTENT,
 			CONTENT_OVERLAY : config.CONTENT_OVERLAY,
 			DIALOG : config.DIALOG,
-			DIALOG_OVERLAY : config.DIALOG_OVERLAY,
 			TIMER : config.TIMER
 		};
 	};

@@ -7,8 +7,13 @@
 		margin-left: 24px;
 	}
 
-	brow-icon { 
+	brow-icon:not([color="white"]) { 
 		opacity: .6;
 		transition: all 150ms $easeInOut;
+
+		.dialog-is-visible & { 
+			opacity: .2;
+			cursor: not-allowed; 
+		}
 	}
 }

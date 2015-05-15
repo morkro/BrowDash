@@ -7,4 +7,10 @@
 	//box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
 	z-index: z($modals, header);
 	color: $grey-700;	
+	transition: color 50ms $easeInOut;
+
+	.dialog-is-visible & {
+		color: white;
+		transition-delay: 100ms;
+	}
 }

@@ -10,7 +10,6 @@
 		CONTENT : document.querySelector('.trigger-content'),
 		CONTENT_OVERLAY : document.querySelector('.content__overlay'),
 		DIALOG : document.querySelector('.trigger-dialog'),
-		DIALOG_OVERLAY: document.querySelector('#brow__overlay'),
 		TIMER: document.querySelector('.trigger-timer')
 	});
 

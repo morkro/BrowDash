@@ -10,7 +10,7 @@
 	&.show {
 		transition: width 150ms $easeInOut 150ms;
 		transform: translateY(0%);
-		width: 100%;
+		width: 100vw;
 
 		ul { opacity: 1; }
 	}

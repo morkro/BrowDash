@@ -19,9 +19,7 @@ body {
 	font-family: $Roboto;
 	font-weight: 300;
 	color: $black;
-	// Enable best font rendering
 	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
 }
 
 /**
@@ -33,7 +31,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 { font-size: 24px; }
-h2 { font-size: 20px; }
+h2 { 
+	font-size: 22px; 
+	font-weight: 200;
+}
 h3 { font-size: 18px;}
 h4 { 
 	font-weight: 400; 
@@ -46,6 +47,21 @@ h4 {
 a {
 	font-size: 15px;
 	text-decoration: none;
+
+	&[target="_blank"]:after {
+		content: "";
+		display: inline-block;
+		width: 14px;
+		height: 14px;
+		margin-left: 2px;
+		transform: translateY(2px);
+		background-image: url(../assets/icons/newwindow.svg);
+		opacity: 0.6;
+	}
+
+	&[data-href="twitter"]:after {
+		background-image: url(../assets/icons/twitter.svg);
+	}
 }
 
 /**

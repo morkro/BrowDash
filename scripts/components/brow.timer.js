@@ -34,7 +34,7 @@ BrowTimer = (function() {
 				if (this.abbreviations) {
 					dateAbbr = this.getAbbreviation(dateHours);
 				}
-				dateHours = (dateHours % 12) ? dateHours : 12;
+				dateHours = (dateHours % 12) ? dateHours % 12 : 12;
 			}
 
 			// Add '0' if below 10

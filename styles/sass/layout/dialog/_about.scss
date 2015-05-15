@@ -1,0 +1,9 @@
+.content--about {
+	.content__wrap {
+		display: flex;
+		justify-content: space-between;
+		section { flex-basis: 45%; }
+	}
+
+	.content__author { text-align: center; }
+}
