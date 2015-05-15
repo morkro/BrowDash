@@ -84,24 +84,27 @@ BrowLayoutManager = (function (window, Brow) {
 			// activated editing mode
 			if (event.type === 'card-edit') {
 				Brow.isEditMode = true;
-				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('show');
+				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('is-visible');
 			} 
 
-			// saved card
-			if (event.type === 'card-save') {
-				this.layout();
+			// saved card or remove card
+			if (event.type === 'card-save' || event.type === 'card-remove') {
 				Brow.isEditMode = false;
-				Brow.activeCard = null;
-				Brow.Settings.checkCustom();
-				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
-			}
-			
-			// card is removed
-			if (event.type === 'card-remove') {
-				this.remove(elem);
-				Brow.isEditMode = false;
-				localStorage.removeItem( event.detail );
-				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('show');
+				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('is-fading');
+				setTimeout(function () {
+					Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('is-visible', 'is-fading');
+				}, 100);
+				
+				if (event.type === 'card-save') {
+					this.layout();
+					Brow.Settings.checkCustom();
+				}
+
+				if (event.type === 'card-remove') {
+					this.remove(elem);
+					Brow.activeCard = null;
+					localStorage.removeItem( event.detail );
+				}
 			}
 		}
 

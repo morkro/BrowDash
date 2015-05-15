@@ -244,8 +244,9 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .btn--text:hover { background: rgba(0, 0, 0, 0.1); }
 
 /* DIALOG */
-#brow__overlay { width: 100%; height: 100%; position: fixed; z-index: 4; top: 0; bottom: 0; left: 0; right: 0; background: rgba(10, 10, 10, 0.6); display: none; opacity: 0; -webkit-animation-name: fadeInOverlay; animation-name: fadeInOverlay; -webkit-animation-duration: 150ms; animation-duration: 150ms; -webkit-animation-fill-mode: forwards; animation-fill-mode: forwards; -webkit-animation-timing-function: ease-in-out; animation-timing-function: ease-in-out; }
-#brow__overlay.show { opacity: 1; display: block; }
+#brow__overlay { width: 100%; height: 100%; position: fixed; z-index: 4; top: 0; bottom: 0; left: 0; right: 0; background: rgba(10, 10, 10, 0.6); display: none; opacity: 0; -webkit-animation-name: fadeInOverlay; animation-name: fadeInOverlay; -webkit-animation-duration: 100ms; animation-duration: 100ms; -webkit-animation-timing-function: ease-in-out; animation-timing-function: ease-in-out; transition: opacity 100ms ease-in-out; }
+#brow__overlay.is-visible { opacity: 1; display: block; }
+#brow__overlay.is-fading { opacity: 0; }
 
 #brow__dialog { position: absolute; z-index: 5; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; overflow: hidden; align-items: center; justify-content: center; display: none; }
 #brow__dialog.show { display: flex; }
@@ -331,8 +332,9 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 @media all and (max-width: 1280px) { #brow__content { width: 90%; } }
 .content__heading brow-icon { margin-right: 10px; transform: translateY(-1px); }
 
-.content__overlay { position: fixed; top: 0; left: 0; opacity: 0; display: none; z-index: 3; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); -webkit-animation-name: fadeInOverlay; animation-name: fadeInOverlay; -webkit-animation-duration: 150ms; animation-duration: 150ms; -webkit-animation-fill-mode: forwards; animation-fill-mode: forwards; -webkit-animation-timing-function: ease-in-out; animation-timing-function: ease-in-out; }
-.content__overlay.show { opacity: 1; display: block; }
+.content__overlay { position: fixed; top: 0; left: 0; opacity: 0; display: none; z-index: 3; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); -webkit-animation-name: fadeInOverlay; animation-name: fadeInOverlay; -webkit-animation-duration: 100ms; animation-duration: 100ms; -webkit-animation-timing-function: ease-in-out; animation-timing-function: ease-in-out; transition: opacity 100ms ease-in-out; }
+.content__overlay.is-visible { opacity: 1; display: block; }
+.content__overlay.is-fading { opacity: 0; }
 
 /* DIALOG */
 .settings__theme { list-style: none; margin-bottom: 10px; }

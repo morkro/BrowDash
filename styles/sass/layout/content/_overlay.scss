@@ -9,12 +9,16 @@
 	height: 100%;
 	background: rgba(0, 0, 0, .2);
 	animation-name: fadeInOverlay;
-	animation-duration: 150ms;
-	animation-fill-mode: forwards;
-	animation-timing-function: ease-in-out;
+	animation-duration: 100ms;
+	animation-timing-function: $easeInOut;
+	transition: opacity 100ms $easeInOut;
 
-	&.show {
+	&.is-visible {
 		opacity: 1;
 		display: block;
+	}
+
+	&.is-fading {
+		opacity: 0;
 	}
 }

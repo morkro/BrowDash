@@ -39,7 +39,7 @@ BrowDialog = (function (Brow) {
 			});
 
 			this.dialogElem.classList.add('show');
-			this.dialogOverlay.classList.add('show');
+			this.dialogOverlay.classList.add('is-visible');
 		}
 
 		/**
@@ -48,6 +48,7 @@ BrowDialog = (function (Brow) {
 		 * @param			{Object} event
 		 */
 		closeDialog (event) {
+			let _self				= this;
 			let _curTarget			= event.target;
 			let _curKeyCode		= event.keyCode;
 			let _dialogIsShown	= this.dialogElem.classList.contains('show');
@@ -58,7 +59,10 @@ BrowDialog = (function (Brow) {
 			if (_isCloseBtn || _isOutsideDialog || _isESCKey && _dialogIsShown) {
 				this.dialogContainer.innerHTML = null;
 				this.dialogElem.classList.remove('show');
-				this.dialogOverlay.classList.remove('show');
+				this.dialogOverlay.classList.add('is-fading');
+				setTimeout(function () {
+					_self.dialogOverlay.classList.remove('is-visible', 'is-fading');
+				}, 100);
 			}
 		}
 
