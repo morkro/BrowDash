@@ -1,17 +1,13 @@
 <template id="text-card">
 	<style>
+		* { box-sizing: border-box; }
 		:host {
 			width: 100%;
 			display: block;
 		}
 		/* Editmode */
 		:host(.is-edit) .module__editor { 
-			height: 40px; 
-			margin-bottom: 20px;
-			overflow: visible;
-		}
-		:host(.is-edit) .module__editor ul li {
-			opacity: 1;
+			display: block; 
 		}
 		.module {
 			position: relative;
@@ -53,34 +49,32 @@
 		}
 		/* Editor */
 		.module__editor { 
-			height: 0px; 
-			width: 100%; 
-			position: relative; 
-			margin-bottom: 0px; 
-			background: rgba(0, 0, 0, .05); 
-			transition: all 100ms ease-in-out; 
-			box-shadow: inset 0px 0px 6px -3px rgba(0, 0, 0, 1); 
-			display: block; 
-			overflow: hidden;
+			height: 50px; 
+			width: 100%;
+			position: absolute; 
+			top: -55px; 
+			display: none; 
 		}
 		.module__editor ul { 
 			height: 100%; 
+			width: calc(6 * 50px); 
 			display: block; 
-			margin: 0; 
-			padding: 0; 
+			margin: 0 auto; 
+			padding: 0;
+			background: white;
+			border-radius: 2px;
 		}
 		.module__editor ul li { 
 			list-style: none; 
 			display: inline-block; 
-			height: 24px; 
-			width: 24px; 
-			margin-left: 20px; 
+			height: 100%; 
+			width: 50px; 
 			position: relative; 
-			top: 50%; 
-			transform: translateY(-50%);
-			transition: opacity 100ms ease-in-out;
-			opacity: 0;
+			border-right: 1px solid lightgrey;
 		}
+			.module__editor ul li:last-child {
+				border-right: none;
+			}
 			.module__editor ul li:hover button { 
 				opacity: 1; 
 			}

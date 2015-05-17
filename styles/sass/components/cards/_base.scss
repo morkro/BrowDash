@@ -2,11 +2,7 @@
 	position: relative;
 	z-index: z($content, cards);
 	transition: box-shadow 150ms $easeInOut;
-	// animation-name: cardSlideIn;
-	// animation-duration: 150ms;
-	// animation-timing-function: $easeInOut;
-	// animation-fill-mode: forwards;
-	
+
 	&.fx {
 		transition: box-shadow 150ms $easeInOut, transform 150ms $easeInOut;
 	}
@@ -15,7 +11,8 @@
 	&:hover { z-index: z($content, cardshover); }
 
 	&.is-edit {
-		z-index: z($content, editmode);
+		//z-index: z($content, editmode);
+		z-index: 10;
 		transform: translateY(-5px);
 		box-shadow: $shadow-z4;
 	}

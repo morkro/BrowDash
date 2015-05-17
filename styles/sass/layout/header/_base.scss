@@ -6,7 +6,7 @@
 	padding: 20px;
 	z-index: z($modals, header);
 	color: $grey-700;	
-	background-color: $grey-200;
+	background-color: transparent;
 	transition: color 50ms $easeInOut 100ms, 			// When dialog fades out, background
 					background 0ms $easeInOut 250ms, 	// & box-shadow should delay until all 
 					box-shadow 50ms $easeInOut 250ms;	// other effects are finished. Makes everything feel smoother.

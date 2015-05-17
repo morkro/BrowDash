@@ -7,7 +7,8 @@
 	z-index: z($content, overlay);
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, .2);
+	background: rgba(0, 0, 0, .3);
+	cursor: url(../assets/img/cursor-close.png) 0 0, auto;
 	animation-name: fadeInOverlay;
 	animation-duration: 100ms;
 	animation-timing-function: $easeInOut;

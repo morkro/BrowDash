@@ -269,7 +269,7 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .brow__content__module { position: relative; z-index: 1; transition: box-shadow 150ms ease-in-out; }
 .brow__content__module.fx { transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out; }
 .brow__content__module:hover { z-index: 2; }
-.brow__content__module.is-edit { z-index: 4; transform: translateY(-5px); box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
+.brow__content__module.is-edit { z-index: 10; transform: translateY(-5px); box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); }
 .brow__content__module.is-dragging { z-index: 4; box-shadow: 0 0 14px rgba(0, 0, 0, 0.24), 0 14px 28px rgba(0, 0, 0, 0.48); cursor: -webkit-grabbing; }
 .brow__content__module.is-delete { transition: opacity 150ms ease-in-out, transform 150ms ease-in-out 150ms; transform: scale(0); }
 .brow__content__module.is-delete > * { opacity: 0; }
@@ -290,7 +290,7 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 
 /* LAYOUT */
 /* HEADER */
-#brow__header { width: 100%; height: 64px; position: fixed; top: 0; padding: 20px; z-index: 5; color: #616161; background-color: #eeeeee; transition: color 50ms ease-in-out 100ms, background 0ms ease-in-out 250ms, box-shadow 50ms ease-in-out 250ms; }
+#brow__header { width: 100%; height: 64px; position: fixed; top: 0; padding: 20px; z-index: 5; color: #616161; background-color: transparent; transition: color 50ms ease-in-out 100ms, background 0ms ease-in-out 250ms, box-shadow 50ms ease-in-out 250ms; }
 .theme-headerbar #brow__header { box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26); color: #ffffff; transition: color 50ms ease-in-out 0ms, background 0ms ease-in-out 0ms, box-shadow 50ms ease-in-out 0ms; }
 .theme-headerbar.theme-blue-a400 #brow__header { background-color: #2979ff; }
 .theme-headerbar.theme-pink-400 #brow__header { background-color: #ec407a; }
@@ -299,16 +299,19 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 .theme-headerbar.theme-red #brow__header { background-color: #f44336; }
 .dialog-is-visible #brow__header { color: white; box-shadow: none; background: transparent; transition: color 50ms ease-in-out, background 0ms ease-in-out 0ms, box-shadow 50ms ease-in-out 0ms; }
 
-.header__timer { float: right; }
-.header__timer h1 { line-height: 26px; text-align: center; }
+.header__timer { float: right; background: #eeeeee; border-top-left-radius: 2px; border-bottom-left-radius: 2px; transition: background 0ms ease-in-out 200ms; }
+.dialog-is-visible .header__timer { background: transparent; transition: background 0ms ease-in-out 0ms; }
+.header__timer h1 { line-height: 26px; text-align: center; padding: 0px 4px; }
 
-.header__nav { float: right; }
-.header__nav li { float: left; list-style: none; margin-left: 24px; }
+.header__nav { float: right; background: #eeeeee; padding-bottom: 1px; padding-right: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; transition: background 0ms ease-in-out 200ms; }
+.dialog-is-visible .header__nav { background: transparent; transition: background 0ms ease-in-out 0ms; }
+.header__nav ul { height: 24px; }
+.header__nav li { float: left; list-style: none; margin-left: 24px; line-height: 24px; }
 .header__nav brow-icon:not([color="white"]) { opacity: .6; transition: all 150ms ease-in-out; }
 .dialog-is-visible .header__nav brow-icon:not([color="white"]) { opacity: .2; cursor: not-allowed; }
 
 /* CONTENT */
-#brow__content { position: relative; max-width: 1280px; padding: 0; width: 90%; height: auto; margin: 64px auto; transition: width 150ms ease-in-out; z-index: 1; }
+#brow__content { position: relative; max-width: 1280px; padding: 0; width: 90%; height: auto; margin: 64px auto; transition: width 150ms ease-in-out; }
 .theme-headerbar #brow__content { margin: 100px auto; }
 
 .brow__content--gutter { width: 1.25%; }
@@ -320,7 +323,7 @@ input[type="checkbox"]:checked + label:before { content: "✔"; padding-left: 1p
 @media all and (max-width: 1280px) { #brow__content { width: 90%; } }
 .content__heading brow-icon { margin-right: 5px; transform: translateY(-1px); opacity: .3; }
 
-.content__overlay { position: fixed; top: 0; left: 0; opacity: 0; display: none; z-index: 3; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.2); animation-name: fadeInOverlay; animation-duration: 100ms; animation-timing-function: ease-in-out; transition: opacity 100ms ease-in-out; }
+.content__overlay { position: fixed; top: 0; left: 0; opacity: 0; display: none; z-index: 3; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.3); cursor: url(../assets/img/cursor-close.png) 0 0, auto; animation-name: fadeInOverlay; animation-duration: 100ms; animation-timing-function: ease-in-out; transition: opacity 100ms ease-in-out; }
 .content__overlay.is-visible { opacity: 1; display: block; }
 .content__overlay.is-fading { opacity: 0; }
 

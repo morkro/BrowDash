@@ -1,8 +1,18 @@
 .header__timer {
 	float: right;
+	background: $grey-200;
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+	transition: background 0ms $easeInOut 200ms;
+
+	.dialog-is-visible & { 
+		background: transparent; 
+		transition: background 0ms $easeInOut 0ms;
+	}
 
 	h1 {
 		line-height: 26px;
 		text-align: center;
+		padding: 0px 4px;
 	}
 }

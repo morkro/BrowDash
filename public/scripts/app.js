@@ -1095,10 +1095,13 @@ WeatherCard = (function () {
 		 * @description	Creates all content elements and appends them to <weather-card>.
 		 */
 		createContent () {
-			let city = document.createElement('h1');
-			let location = document.createElement('h2');
-			let temperatur = this.createTemperatur(this.degrees);
+			let icon			= document.createElement('brow-icon');
+			let city			= document.createElement('h1');
+			let location	= document.createElement('h2');
+			let temperatur	= this.createTemperatur(this.degrees);
 
+			// Icon
+			icon.setAttribute('icon', this.weather);
 			// City
 			city.classList.add('weather__city');
 			city.innerText = this.city;
@@ -1108,6 +1111,7 @@ WeatherCard = (function () {
 
 			// Append elements
 			this.elem.appendChild( temperatur );
+			this.elem.appendChild( icon );
 			this.elem.appendChild( city );
 			this.elem.appendChild( location );
 			this.elem.removeAttribute('loading');

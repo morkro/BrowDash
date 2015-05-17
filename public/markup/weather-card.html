@@ -6,12 +6,15 @@
 		:host /deep/ .module { 
 			background: #448aff;
 			color: white;
-			min-height: 141px;
+			min-height: 156px;
 			transition: background 150ms ease-in-out;
 		}
 		/* Loader */
 		:host-context([loading]) .weather__loading {
 			display: flex;
+		}
+		:host-context(.is-edit) .weather__settings {
+			display: block;
 		}
 		.weather__loading {
 			background: #448aff;
@@ -26,23 +29,29 @@
 			align-items: center;
 			justify-content: center;
 		}
+		/* Settings */
+		.weather__settings {
+			display: none;
+			background: inherit;
+			position: absolute;
+			z-index: 1;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
 		/* Night */
-		:host-context([time="night"]) .night { display: block; }
 		:host-context([time="night"]) /deep/ .module,
 		:host-context([time="night"]) .weather__loading { background: #616161; }
 		/* Cloudy */
-		:host-context([weather="clouds"]) .clouds { display: block; }
 		:host-context([weather="clouds"]) /deep/ .module,
 		:host-context([weather="clouds"]) .weather__loading { background: #448aff; }
 		/* Sunny */
-		:host-context([weather="sunny"]) .sunny,
-		:host-context([weather="clear"]) .sunny { display: block; }
 		:host-context([weather="sunny"]) /deep/ .module,
 		:host-context([weather="clear"]) /deep/ .module,
 		:host-context([weather="sunny"]) .weather__loading,
 		:host-context([weather="clear"]) .weather__loading { background: #ff9800; }
 		/* Snowy */
-		:host-context([weather="snowy"]) .snowy { display: block; }
 		:host-context([weather="snowy"]) /deep/ .module,
 		:host-context([weather="snowy"]) .weather__loading { background: silver; }
 		.weather__temperature {
@@ -51,30 +60,48 @@
 			right: 20px;
 		}
 		::content .weather__degrees {
-			font-size: 26px;
+			font-size: 32px;
 			font-weight: 400;
 		}
 		.weather__location {
-			height: 100%;
-			width: 100%;
 			padding: 20px;
 		}
-		.weather__icon brow-icon {
-			width: 32px;
-			height: 32px;
+		::content brow-icon {
+			width: 42px;
+			height: 42px;
 			margin-bottom: 15px;
-			display: none;
 		}
+			::content brow-icon /deep/ svg {
+				width: 42px;
+				height: 42px;
+			}
 		::content .weather__city {
 			margin-bottom: 5px;
 			font-weight: 400;
+			font-size: 28px;
+			width: calc(100% - 40px);
+			display: inline-block;
 		}
 		::content .weather__place {
 			font-size: 18px;
 			color: rgba(255, 255, 255, .75);
+			width: calc(100% - 40px);
+			display: inline-block;
 		}
 	</style>
 	<card-base>
+		<div class="weather__settings">
+			<ul>
+				<li>
+					<input type="checkbox" id="degrees--celsius" checked>
+					<label for="degrees--celsius">Celsius °C</label>
+				</li>
+				<li>
+					<input type="checkbox" id="degrees--fahrenheit">
+					<label for="degrees--fahrenheit">Fahrenheit °F</label>
+				</li>
+			</ul>
+		</div>
 		<div class="weather__loading">
 			<brow-icon icon="loader"></brow-icon>
 		</div>
@@ -84,17 +111,7 @@
 		</div>
 
 		<div class="weather__location">
-			<div class="weather__icon">
-				<!-- Night -->
-				<brow-icon icon="night" class="night"></brow-icon>
-				<!-- Cloudy -->
-				<brow-icon icon="clouds" class="clouds" color="white"></brow-icon>
-				<!-- Sunny -->
-				<brow-icon icon="sunny" class="sunny" color="white"></brow-icon>
-				<!-- Snowy -->
-				<brow-icon icon="snowy" class="snowy" color="white"></brow-icon>
-			</div>
-
+			<content select="brow-icon"></content>
 			<content select=".weather__city"></content>
 			<content select=".weather__place"></content>
 		</div>

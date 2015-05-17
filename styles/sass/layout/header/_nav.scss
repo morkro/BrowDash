@@ -1,10 +1,24 @@
 .header__nav {
 	float: right;
+	background: $grey-200;
+	padding-bottom: 1px;
+	padding-right: 2px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+	transition: background 0ms $easeInOut 200ms;
+
+	.dialog-is-visible & {
+		background: transparent;
+		transition: background 0ms $easeInOut 0ms;
+	}
+
+	ul { height: 24px; }
 
 	li {
 		float: left;
 		list-style: none;
 		margin-left: 24px;
+		line-height: 24px;
 	}
 
 	brow-icon:not([color="white"]) { 
