@@ -61,13 +61,13 @@ Brow.GUID = (function () {
 /**
  * @name				Brow.Settings
  * @description	Stores all necessary HTMLElements, sets the theme and 
- *              	runs all other modules.	
+ *              	runs all other modules.	Also contains the DOM handling for the
+ *              	dialog modules. Which isn't nice. Need to find a better pattern here.
  * @param			{Object} Brow
  * @return			{Function} setTheme
  * @return			{Function} useElements
  * @return			{Function} getElem
  * @return			{Function} start
- * @return			{String} BROW_KEY
  */
 Brow.Settings = (function (Brow) {
 	'use strict';
@@ -76,6 +76,7 @@ Brow.Settings = (function (Brow) {
 	const BROW_KEY				= 'BROW_THEME';
 	const BROW_CARDS			= 'BROW_CARDS';
 	const BROW_SETTINGS		= 'BROW_SETTINGS';
+	const DEFAULT_THEME		= 'blue-a400';
 
 	/* Variables */
 	var isSelectionState	= false;
@@ -104,6 +105,56 @@ Brow.Settings = (function (Brow) {
 		[].forEach.call(browElements.onClickNewCard, function (item) {
 			item.addEventListener('click', _addNewCard);
 		});
+	};
+
+	/**
+	 * @description	Checks if custom theme settings are available.
+	 * @private
+	 * @return			{Boolean}
+	 */
+	const _isCustomTheme = function () {
+		let isCustom = false;
+
+		if (localStorage[BROW_SETTINGS]) {
+			let settings = JSON.parse(localStorage[BROW_SETTINGS]);
+			isCustom = !!settings['theme'];
+		}
+
+		return isCustom;
+	};
+
+	/**
+	 * @description	Parses the custom settings from localStorage and sets classes.
+	 * @private
+	 */
+	const _updateThemeFromStorage = function () {
+		let settings = JSON.parse(localStorage[BROW_SETTINGS]);
+		let dialogIsOpen = document.body.classList.contains('dialog-is-visible');
+
+		_checkForThemeClass();
+		document.body.classList.add(`theme-${settings.theme.color}`);
+
+		if (_isCustomTheme() && settings.theme.headerbar) {
+			document.body.classList.add('theme-headerbar');
+		}
+	};
+
+	/**
+	 * @description	Adds the theme class to <body> from initial settings.
+	 * @private
+	 * @param			{String} theme
+	 */
+	const _updateThemeFromConfig = function (theme) {
+		document.body.classList.add(`theme-${theme}`);
+	};
+
+	const _checkForThemeClass = function () {
+		let themeRegEx = /theme-.*/;
+		for (let i = document.body.classList.length; i--;) {
+			if (themeRegEx.test(document.body.classList[i])) {
+				document.body.classList.remove( document.body.classList[i] );
+			}
+		}
 	};
 
 	/**
@@ -245,21 +296,70 @@ Brow.Settings = (function (Brow) {
 		browTimer.run();
 	};
 
-	const _dialogSettingsCallback = function () {		
+	/**
+	 * @description	Adds callback to content in dialog and validates <input> fields.
+	 * @private
+	 */
+	const _dialogSettingsCallback = function () {
+		let timeContent		= this.dialogContent.querySelector('.content__time');
+		let themeContent		= this.dialogContent.querySelector('.content__theme');
 		let formatCheckbox	= this.dialogContent.querySelector('#settings--dateformat');
 		let abbrCheckbox		= this.dialogContent.querySelector('#settings--ampm');
-		let dateSettings		= JSON.parse(localStorage[BROW_SETTINGS]);
+		let themeCheckbox		= this.dialogContent.querySelector('#settings--coloredhead');
+		let browSettings		= JSON.parse(localStorage[BROW_SETTINGS]);
 
 		// Validate date settings and update DOM
-		if (dateSettings['dateFormat'] === '12h') {
+		if (browSettings['dateFormat'] === '12h') {
 			formatCheckbox.checked = false;
 		}
-		abbrCheckbox.checked = dateSettings['abbreviations'];
-		abbrCheckbox.disabled = !dateSettings['abbreviations'];
+		abbrCheckbox.checked = browSettings['abbreviations'];
+		abbrCheckbox.disabled = !browSettings['abbreviations'];
 
-		this.dialogContent.addEventListener('click', _updateDateFormat.bind(this));
+		// Validate header bar settings and update DOM
+		if (_isCustomTheme()) {
+			themeCheckbox.checked = browSettings.theme.headerbar;
+		}
+
+		// Add eventListener
+		timeContent.addEventListener('click', _updateDateFormat.bind(this));
+		themeContent.addEventListener('click', _updateTheme.bind(this));
 	};
 
+	/**
+	 * @description	Validates input fields, updates browTheme and saves to localStorage.
+	 * @private
+	 * @param  			{Object} event
+	 */
+	const _updateTheme = function (event) {
+		let colorHeadCheckbox	= this.dialogContent.querySelector('#settings--coloredhead');
+		let isThemeButton			= event.target.hasAttribute('data-settings-theme');
+		let isThemeCheckbox		= event.target.id === 'settings--coloredhead';
+		let settings				= JSON.parse(localStorage[BROW_SETTINGS]);
+
+		// If no theme settings are stored yet.
+		if (!settings.theme) {
+			settings['theme'] = { color: DEFAULT_THEME, headerbar: false };
+		}
+
+		// Is theme option
+		if (event.target.hasAttribute('data-settings-theme')) {
+			settings.theme.color = event.target.getAttribute('data-settings-theme');
+		}
+
+		// If colored header bar is clicked
+		if (event.target.id === 'settings--coloredhead') {
+			settings.theme.headerbar = colorHeadCheckbox.checked;
+		}
+
+		localStorage.setItem(BROW_SETTINGS, JSON.stringify(settings));
+		setTheme();
+	};
+
+	/**
+	 * @description	Validates input fields, updates browTimer and saves to localStorage.
+	 * @private
+	 * @param  			{Object} event
+	 */
 	const _updateDateFormat = function (event) {
 		let formatCheckbox	= this.dialogContent.querySelector('#settings--dateformat');
 		let abbrCheckbox		= this.dialogContent.querySelector('#settings--ampm');
@@ -294,6 +394,7 @@ Brow.Settings = (function (Brow) {
 	/**
 	 * @description	Adds all dialog.
 	 * @private
+	 * @todo 			Make more modular.
 	 */
 	const _initDialogs = function () {
 		let currentLocation = window.location.href.slice(0, -1);
@@ -348,6 +449,23 @@ Brow.Settings = (function (Brow) {
 	};
 
 	/**
+	 *	@description	Updates the current theme.
+	 * @public
+	 * @param			{Object} theme
+	 */
+	const setTheme = function (theme) {
+		if (!theme || typeof theme !== 'string') {
+			theme = DEFAULT_THEME;
+		}
+
+		if (_isCustomTheme()) {
+			_updateThemeFromStorage();
+		} else {
+			_updateThemeFromConfig( theme );
+		}
+	};
+
+	/**
 	 * @name				Brow.Settings.start
 	 *	@description	Calls all necessary modules which are required to run the app.
 	 * @public
@@ -358,16 +476,16 @@ Brow.Settings = (function (Brow) {
 		_validateBrowCards();
 		_initLayoutManager();
 		_addEvents();
+		setTheme();
 	};
 	
 	/* Public API */
 	return {
-		//setTheme : setTheme,
+		setTheme : setTheme,
 		useElements : useElements,
 		getElem : getElem,
 		start : initialiseAndStartApp,
-		checkCustom : _checkIfCustomBrowCards,
-		BROW_KEY : BROW_KEY,
+		checkCustom : _checkIfCustomBrowCards
 	};
 })(Brow);
 /**
@@ -468,6 +586,11 @@ BrowDialog = (function (Brow) {
 
 	return BrowDialog;
 })(Brow);
+/**
+ * @name				BrowLayoutManager
+ * @description	/
+ * @param			{Object} Brow
+ */
 BrowLayoutManager = (function (window, Brow) {
 	'use strict';
 
@@ -1160,7 +1283,7 @@ Brow.Data = (function (Brow) {
 		TIMER: document.querySelector('.trigger-timer')
 	});
 
-	//BROW.setTheme('blue-a400');
+	BROW.setTheme('blue-a400');
 	BROW.start();
 
 })(window);

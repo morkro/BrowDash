@@ -3,7 +3,7 @@
 	z-index: z($modals, dialog);
 	top: 0;
 	right: 0; 
-	width: 0;
+	width: 100vw;
 	height: 0;
 	overflow: hidden;
 	align-items: center;
@@ -12,7 +12,6 @@
 	transition: all 150ms $easeInOut;
 
 	.dialog-is-visible & {
-		width: 100vw;
 		height: 100vh;
 	}
 }
@@ -21,9 +20,9 @@
 	position: relative;
 	width: 70vw;
 	height: 0;
-	overflow: hidden;
 	transition: height 0ms;
-	transition-delay: 300ms;
+	transition-delay: 250ms;
+	overflow-y: hidden;
 
 	.dialog-is-visible & {
 		height: 50vh;

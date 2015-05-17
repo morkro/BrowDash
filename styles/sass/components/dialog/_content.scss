@@ -1,5 +1,4 @@
 .dialog__content {
-	overflow-y: auto;
 	color: white;
 
 	h2 {
@@ -22,8 +21,9 @@
 
 .dialog__block {
 	display: flex;
+	justify-content: space-between;
 
 	> section {
-		flex-basis: 50%;
+		flex-basis: 45%;
 	}
 }

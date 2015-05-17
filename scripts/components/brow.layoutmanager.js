@@ -1,3 +1,8 @@
+/**
+ * @name				BrowLayoutManager
+ * @description	/
+ * @param			{Object} Brow
+ */
 BrowLayoutManager = (function (window, Brow) {
 	'use strict';
 

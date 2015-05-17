@@ -7,6 +7,10 @@
 	margin: 64px auto;
 	transition: width 150ms $easeInOut;
 	z-index: z($modals, content);
+
+	.theme-headerbar & {
+		margin: 100px auto;
+	}
 }
 
 .brow__content--gutter {

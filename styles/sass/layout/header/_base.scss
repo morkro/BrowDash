@@ -4,13 +4,33 @@
 	position: fixed;
 	top: 0;
 	padding: 20px;
-	//box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
 	z-index: z($modals, header);
 	color: $grey-700;	
-	transition: color 50ms $easeInOut;
+	background-color: $grey-200;
+	transition: color 50ms $easeInOut 100ms, 			// When dialog fades out, background
+					background 0ms $easeInOut 250ms, 	// & box-shadow should delay until all 
+					box-shadow 50ms $easeInOut 250ms;	// other effects are finished. Makes everything feel smoother.
+
+	.theme-headerbar & {
+		box-shadow: 0 2px 5px rgba(0, 0, 0, .26);
+		color: $white;
+		transition: color 50ms $easeInOut 0ms, 		// When header bar is themed,
+						background 0ms $easeInOut 0ms, 	// we don't want any delayed effects
+						box-shadow 50ms $easeInOut 0ms;	// for better initialisation.
+	}
+
+	.theme-headerbar.theme-blue-a400 & 	{ background-color: $blue-a400; 	}
+	.theme-headerbar.theme-pink-400 & 	{ background-color: $pink-400; 	}
+	.theme-headerbar.theme-teal-400 & 	{ background-color: $teal-400; 	}
+	.theme-headerbar.theme-indigo-400 & { background-color: $indigo-400; }
+	.theme-headerbar.theme-red & 			{ background-color: $red; 			}
 
 	.dialog-is-visible & {
 		color: white;
-		transition-delay: 100ms;
+		box-shadow: none;
+		background: transparent;
+		transition: color 50ms $easeInOut,				// When dialog moves in, all values
+						background 0ms $easeInOut 0ms, 	// should change immediately without
+						box-shadow 50ms $easeInOut 0ms;	// any delay.
 	}
 }

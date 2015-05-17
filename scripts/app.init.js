@@ -13,7 +13,7 @@
 		TIMER: document.querySelector('.trigger-timer')
 	});
 
-	//BROW.setTheme('blue-a400');
+	BROW.setTheme('blue-a400');
 	BROW.start();
 
 })(window);

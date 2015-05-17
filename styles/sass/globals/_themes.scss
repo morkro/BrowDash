@@ -1,69 +1,54 @@
 // Blue
 .theme-blue-a400 {
-	//#brow__header { background-color: $blue-a400; }
-	.btn--round { 
-		background-color: $red; 
-		&:hover { background-color: $red-600; }
-	}
 	a { color: $blue-a400; }
-	.colored-bg {
-		background: $red; 
-		a { color: white; }
-	}
+
+	.colored-bg-opposite a,
+	.colored-bg a { color: white; }
+
+	.colored-bg-opposite { background-color: $red; }
+	.colored-bg { background-color: $blue-a400; }
 }
 
 // Indigo
 .theme-indigo-400 {
-	//#brow__header { background-color: $indigo-400; }
-	.btn--round { 
-		background-color: $pink; 
-		&:hover { background-color: $pink-600; }
-	}
 	a { color: $indigo-400; }
-	.colored-bg {
-		background: $pink; 
-		a { color: white; }
-	}
+
+	.colored-bg-opposite a,
+	.colored-bg a { color: white; }
+
+	.colored-bg-opposite { background-color: $pink; }
+	.colored-bg { background-color: $indigo-400; }
 }
 
 // Teal
 .theme-teal-400 {
-	//#brow__header { background-color: $teal-400; }
-	.btn--round { 
-		background-color: $pink; 
-		&:hover { background-color: $pink-600; }
-	}
 	a { color: $teal-400; }
-	.colored-bg {
-		background: $pink; 
-		a { color: white; }
-	}
+
+	.colored-bg-opposite a,
+	.colored-bg a { color: white; }
+
+	.colored-bg-opposite { background-color: $pink; }
+	.colored-bg { background-color: $teal-400; }
 }
 
 // Pink
 .theme-pink-400 {
-	//#brow__header { background-color: $pink-400; }
-	.btn--round { 
-		background-color: $cyan; 
-		&:hover { background-color: $cyan-600; }
-	}
 	a { color: $pink-400; }
-	.colored-bg {
-		background: $cyan; 
-		a { color: white; }
-	}
+
+	.colored-bg-opposite a,
+	.colored-bg a { color: white; }
+
+	.colored-bg-opposite { background-color: $cyan; }
+	.colored-bg { background-color: $pink-400; }
 }
 
 // Red
 .theme-red {
-	//#brow__header { background-color: $red; }
-	.btn--round { 
-		background-color: $blue-a400; 
-		&:hover { background-color: $blue-a400; }
-	}
 	a { color: $red; }
-	.colored-bg {
-		background: $blue-a400; 
-		a { color: white; }
-	}
+
+	.colored-bg-opposite a,
+	.colored-bg a { color: white; }
+
+	.colored-bg-opposite { background-color: $blue-a400; }
+	.colored-bg { background-color: $red; }
 }
