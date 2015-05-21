@@ -18,6 +18,7 @@ Having a full customisable dashboard with a set of different modules, called _ca
 - **TodoCard:** don't need to explain that.
 - **DeviceCard:** statistics about your device _(like battery status and more)_.
 - **Offline message:** user is suddenly offline? be nice and tell him.
+- **LockScreen:** user should be able to set a password and timeout, so that his content is protected/hidden
 - _More features to be defined._
 
 ### Technologies
@@ -28,6 +29,7 @@ Having a full customisable dashboard with a set of different modules, called _ca
   - `const`, `let`
 - localStorage API
 - Device API's
+- Web Crypto API
 - Web Components (HTML imports, Custom Elements)
 
 # How to use
