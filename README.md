@@ -8,7 +8,7 @@ Having a full customisable dashboard with a set of different modules, called _ca
 
 ### Available features:
 
-- **TextCard:** the basic one; saves simple text. Options like *bold', _italic_, etc are available.
+- **TextCard:** the basic one; saves simple text. Options: *bold', _italic_, underline, strikethrough, link, erase style.
 - **WeatherCard:** displays the current weather based on your location.
 - **Timer:** changing the time to 12h _(including AM/PM)_ or 24h is possible. _Default: 24h._
 

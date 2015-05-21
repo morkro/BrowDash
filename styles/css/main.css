@@ -13,6 +13,12 @@
 
 /** FUNCTIONS ==============================  This function is usefull in combination with z-index and lists. It checks that we are requesting something that exists in the list. If the value exists,  then it returns the result of the index call, just like before. If the value does not exist,  then two things happen: 	1. A warning is printed telling you that the item you’re requesting is not in the list,  	and the values of the list are printed so that you can see what to choose from. 	2. The value returned is null, which tells Sass not to print out the rule at all. */
 /** MIXINS ==============================  Cross-browser support for @font-face.  Supports IE, Gecko, Webkit, Opera. Usage: @include font-face($family, $files, [$weight], [$style]); */
+/** PAGE SETTINGS */
+/** SHADOWS */
+/** MEDIA QUERIES */
+/** TRANSITIONS */
+/** Z-INDEX */
+/** COLORS */
 /* GLOBALS */
 /* GLOBALS */
 /*!
@@ -138,8 +144,6 @@ table { border-collapse: collapse; border-spacing: 0; }
 
 td, th { padding: 0; }
 
-/** Z-INDEX */
-/** COLORS */
 /** FONT-FACE */
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Thin.ttf") format('truetype'); font-weight: 100; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-ThinItalic.ttf") format('truetype'); font-weight: 100; font-style: italic; }
@@ -153,11 +157,6 @@ td, th { padding: 0; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Black.ttf") format('truetype'); font-weight: 600; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-BlackItalic.ttf") format('truetype'); font-weight: 600; font-style: italic; }
 /** FONT-FAMILY VARIABLES  Usage: Overall font-family. */
-/** MEDIA QUERIES */
-/** PAGE SETTINGS */
-/** General margins/paddings */
-/** Shadows */
-/** TRANSITIONS ============================== */
 /** SYSTEM ==============================  General */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -182,7 +181,7 @@ a[target="_blank"]:after { content: ""; display: inline-block; width: 14px; heig
 a[data-href="twitter"]:after { background-image: url(../assets/icons/twitter.svg); }
 
 /** Copy */
-p, span { font-weight: 300; line-height: 24px; font-size: 15px; }
+p, span { font-weight: 300; line-height: 24px; font-size: 16px; }
 
 b, strong { font-weight: 400; }
 

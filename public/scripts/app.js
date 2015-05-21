@@ -727,7 +727,7 @@ BrowTimer = (function() {
 	class BrowTimer {
 		constructor (elem) {
 			if (!(elem && elem.nodeName)) {
-				throw new Error('You haven\'t passed a valid HTMLElement!');
+				throw new Error(`You haven't passed a valid HTMLElement!`);
 			}
 
 			this.update	= 1000;
