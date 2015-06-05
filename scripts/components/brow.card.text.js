@@ -14,6 +14,7 @@ TextCard = (function () {
 
 			this.elem.appendChild( this.headline );
 			this.elem.appendChild( this.content );
+			this.elem.setAttribute('theme', this.parent.theme);
 		}
 
 		/**
@@ -22,7 +23,7 @@ TextCard = (function () {
 		 * @return 			{HTMLElement}
 		 */
 		previewContent () {
-			let textElem			= document.createElement('p');
+			let textElem			= document.createElement('div');
 			let defaultContent	= Brow.Data.Content('text')['default'];
 			let storedContent		= this.parent.content.text;
 			
@@ -56,35 +57,14 @@ TextCard = (function () {
 		}
 
 		/**
-		 * @description	Saves current content to localStorage.
-		 * @public
-		 */	
-		updateStorage () {
-			this.parent.storage['content'] = {
-				text: this.content.innerHTML,
-				headline: this.headline.innerHTML
-			};
-			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-		}
-
-		/**
-		 * @description	Sets 'contenteditable="true"' to all elements.
-		 * @public
-		 */	
-		edit () {
-			this.content.setAttribute('contenteditable', true);
-			this.headline.setAttribute('contenteditable', true);
-		}
-
-		/**
 		 * @description	Removes attributes, updates Object and saves it to localStorage.
 		 * @public
 		 */	
 		save () {
-			this.content.removeAttribute('contenteditable');
-			this.headline.removeAttribute('contenteditable');
+			this.elem.save();
+			this.parent.storage['content'] = this.elem.storage;
 			this.parent.content.headline = this.headline.innerHTML;
-			this.updateStorage();
+			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
 		}
 	}
 

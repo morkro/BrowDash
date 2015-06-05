@@ -8,16 +8,17 @@ BrowCard = (function (Brow) {
 	class BrowCard {
 		constructor (config) {
 			if (!config) config = {};
-			
-			// initialisation
-			this.type			= (config.type) ? config.type : 'text';
-			this.guid			= (config.guid) ? config.guid : Brow.GUID();
-			this.content		= (config.content) ? config.content : {};
+		
 			// settings
 			this.isEditMode	= false;
 			this.config			= { elem: null };
 			this.saveState		= this.saveCardChanges;
 			this.wrapper		= null;
+
+			// initialisation
+			this.type			= (config.type) ? config.type : 'text';
+			this.guid			= (config.guid) ? config.guid : Brow.GUID();
+			this.content		= (config.content) ? config.content : {};
 			this.storage		= { 
 				module: true, 
 				type: this.type, 
@@ -25,6 +26,7 @@ BrowCard = (function (Brow) {
 				content: this.content,
 				style: { width: 1, stamp: false }
 			};
+
 			// events
 			this.eventOption	= { 'detail': this.guid };
 			this.editEvent		= new CustomEvent('card-edit', this.eventOption);
@@ -101,9 +103,7 @@ BrowCard = (function (Brow) {
 			// config
 			Brow.activeCard = this;
 			this.isEditMode = true;
-			this.wrapper.edit();
-			// visual
-			this.config.elem.classList.add('fx', 'is-edit');
+			this.wrapper.getContent.edit();
 			// fire custom event
 			window.dispatchEvent( this.editEvent );
 		}
@@ -117,8 +117,6 @@ BrowCard = (function (Brow) {
 			// config
 			this.isEditMode = false;
 			this.wrapper.save();
-			// visual
-			this.config.elem.classList.remove('fx', 'is-edit');
 			// fire custom event
 			window.dispatchEvent( this.saveEvent );
 		}
@@ -129,7 +127,6 @@ BrowCard = (function (Brow) {
 		 * @param			{Object} event
 		 */
 		removeCard (event) {
-			this.config.elem.classList.add('fx', 'is-delete');
 			this.config.elem.addEventListener('transitionend', 
 				function (event) {
 					// Only listen to the last transition.

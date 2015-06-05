@@ -1,34 +1,22 @@
-<template id="brow-icon">
+<template id="svg-icon">
 	<style>
-		:host { display: inline-block; vertical-align: middle; }
-		svg { display: none; }
+		:host { 
+			display: inline-block; 
+			vertical-align: middle; 
+			fill: #000000;
+		}
 		:host-context([color="white"]) {
 			fill: #ffffff;
 		}
-		:host-context([icon="close"]) .icon-close,
-		:host-context([icon="loader"]) .icon-loader,
-		:host-context([icon="column"]) .icon-column,
-		:host-context([icon="schedule"]) .icon-schedule,
-		:host-context([icon="color-lens"]) .icon-color-lens,
-		:host-context([icon="gift"]) .icon-gift,
-		:host-context([icon="memory"]) .icon-memory,
-		:host-context([icon="file"]) .icon-file,
-		:host-context([icon="heart-outline"]) .icon-heart-outline,
-		:host-context([icon="info"]) .icon-info,
-		:host-context([icon="settings"]) .icon-settings,
-		:host-context([icon="balance-sunny"]) .icon-balance-sunny,
-		:host-context([icon="calendar-text"]) .icon-calendar-text,
-		:host-context([icon="plus"]) .icon-plus,
-		:host-context([icon="edit"]) .icon-edit,
-		:host-context([icon="save"]) .icon-save,
-		:host-context([icon="remove"]) .icon-remove,
-		:host-context([icon="move"]) .icon-move,
-		:host-context([icon="night"]) .icon-night,
-		:host-context([icon="clouds"]) .icon-clouds,
-		:host-context([icon="sunny"]) .icon-sunny,
-		:host-context([icon="snowy"]) .icon-snowy,
-		:host-context([icon="rain"]) .icon-rain {
-			display: block;
+		:host-context([color="green"]) {
+			fill: #388E3C;
+		}
+		:host-context([color="red"]) {
+			fill: #FF5252;
+		}
+		:host-context([icon="loader"]) #icon {
+			height: 44px;
+			width: 44px;
 		}
 	</style>
 	
@@ -113,17 +101,17 @@
 			<path d="M0 0h24v24h-24z" fill="none"/>
 		</symbol>
 		<!-- Edit -->
-		<symbol id="edit" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
+		<symbol id="edit" viewBox="0 0 24 24">
 			<path d="M3 17.25v3.75h3.75l11.06-11.06-3.75-3.75-11.06 11.06zm17.71-10.21c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
 			<path d="M0 0h24v24h-24z" fill="none"/>
 		</symbol>
 		<!-- Save -->
-		<symbol id="save" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
+		<symbol id="save" viewBox="0 0 24 24">
 			<path d="M0 0h24v24h-24z" fill="none"/>
 			<path d="M9 16.17l-4.17-4.17-1.42 1.41 5.59 5.59 12-12-1.41-1.41z"/>
 		</symbol>	
 		<!-- Remove -->
-		<symbol id="remove" viewBox="0 0 24 24" fill="#000000" fill-opacity=".5">
+		<symbol id="remove" viewBox="0 0 24 24">
 			<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-12h-12v12zm13-15h-3.5l-1-1h-5l-1 1h-3.5v2h14v-2z"/>
 			<path d="M0 0h24v24h-24z" fill="none"/>
 		</symbol>
@@ -151,31 +139,12 @@
 		<symbol id="rain" viewBox="0 0 24 24">
 			<path fill="#ffffff" d="M6,14A1,1 0 0,1 7,15A1,1 0 0,1 6,16A5,5 0 0,1 1,11A5,5 0 0,1 6,6C7,3.65 9.3,2 12,2C15.43,2 18.24,4.66 18.5,8.03L19,8A4,4 0 0,1 23,12A4,4 0 0,1 19,16H18A1,1 0 0,1 17,15A1,1 0 0,1 18,14H19A2,2 0 0,0 21,12A2,2 0 0,0 19,10H17V9A5,5 0 0,0 12,4C9.5,4 7.45,5.82 7.06,8.19C6.73,8.07 6.37,8 6,8A3,3 0 0,0 3,11A3,3 0 0,0 6,14M14.83,15.67C16.39,17.23 16.39,19.5 14.83,21.08C14.05,21.86 13,22 12,22C11,22 9.95,21.86 9.17,21.08C7.61,19.5 7.61,17.23 9.17,15.67L12,11L14.83,15.67M13.41,16.69L12,14.25L10.59,16.69C9.8,17.5 9.8,18.7 10.59,19.5C11,19.93 11.5,20 12,20C12.5,20 13,19.93 13.41,19.5C14.2,18.7 14.2,17.5 13.41,16.69Z" />
 		</symbol>
+		<!-- Palette -->
+		<symbol id="palette" viewBox="0 0 24 24">
+			<path d="M17.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,9A1.5,1.5 0 0,1 19,10.5A1.5,1.5 0 0,1 17.5,12M14.5,8A1.5,1.5 0 0,1 13,6.5A1.5,1.5 0 0,1 14.5,5A1.5,1.5 0 0,1 16,6.5A1.5,1.5 0 0,1 14.5,8M9.5,8A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 9.5,5A1.5,1.5 0 0,1 11,6.5A1.5,1.5 0 0,1 9.5,8M6.5,12A1.5,1.5 0 0,1 5,10.5A1.5,1.5 0 0,1 6.5,9A1.5,1.5 0 0,1 8,10.5A1.5,1.5 0 0,1 6.5,12M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A1.5,1.5 0 0,0 13.5,19.5C13.5,19.11 13.35,18.76 13.11,18.5C12.88,18.23 12.73,17.88 12.73,17.5A1.5,1.5 0 0,1 14.23,16H16A5,5 0 0,0 21,11C21,6.58 16.97,3 12,3Z" />
+		</symbol>
 	</svg>
 	
-	<svg class="icon-close" height="24" width="24"><use xlink:href="#close"></use></svg>
-	<svg class="icon-loader" height="44" width="44"><use xlink:href="#loader"></use></svg>
-	<svg class="icon-column" height="24" width="24"><use xlink:href="#column"></use></svg>
-	<svg class="icon-schedule" height="24" width="24"><use xlink:href="#schedule"></use></svg>
-	<svg class="icon-color-lens" height="24" width="24"><use xlink:href="#color-lens"></use></svg>
-	<svg class="icon-gift" height="24" width="24"><use xlink:href="#gift"></use></svg>
-	<svg class="icon-memory" height="24" width="24"><use xlink:href="#memory"></use></svg>
-	<svg class="icon-file" height="24" width="24"><use xlink:href="#file"></use></svg>
-	<svg class="icon-heart-outline" height="24" width="24"><use xlink:href="#heart-outline"></use></svg>
-	<svg class="icon-checkbox" height="24" width="24"><use xlink:href="#checkbox"></use></svg>
-	<svg class="icon-info" height="24" width="24"><use xlink:href="#info"></use></svg>
-	<svg class="icon-settings" height="24" width="24"><use xlink:href="#settings"></use></svg>
-	<svg class="icon-balance-sunny" height="32" width="32"><use xlink:href="#balance-sunny"></use></svg>
-	<svg class="icon-calendar-text" height="32" width="32"><use xlink:href="#calendar-text"></use></svg>
-	<svg class="icon-plus" height="24" width="24"><use xlink:href="#plus"></use></svg>
-	<svg class="icon-edit" height="24" width="24"><use xlink:href="#edit"></use></svg>
-	<svg class="icon-save" height="24" width="24"><use xlink:href="#save"></use></svg>
-	<svg class="icon-remove" height="24" width="24"><use xlink:href="#remove"></use></svg>
-	<svg class="icon-move" height="24" width="24"><use xlink:href="#move"></use></svg>
-	<svg class="icon-night" height="32" width="32"><use xlink:href="#night"></use></svg>
-	<svg class="icon-clouds" height="32" width="32"><use xlink:href="#clouds"></use></svg>
-	<svg class="icon-sunny" height="32" width="32"><use xlink:href="#sunny"></use></svg>
-	<svg class="icon-snowy" height="32" width="32"><use xlink:href="#snowy"></use></svg>
-	<svg class="icon-rain" height="32" width="32"><use xlink:href="#rain"></use></svg>
+	<svg id="icon" height="24" width="24"><use xlink:href=""></use></svg>
 </template>
-<script type="text/javascript" src="../scripts/brow-icon.js"></script>
+<script type="text/javascript" src="../scripts/svg-icon.js"></script>

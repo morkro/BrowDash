@@ -7,8 +7,8 @@
 	z-index: z($content, overlay);
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, .3);
-	cursor: url(../assets/img/cursor-close.png) 0 0, auto;
+	background: rgba(0, 0, 0, .5);
+	cursor: url(../assets/img/cursor-close.png) 15 10, auto; // Magic numbers. Moves the image in a good direction.
 	animation-name: fadeInOverlay;
 	animation-duration: 100ms;
 	animation-timing-function: $easeInOut;

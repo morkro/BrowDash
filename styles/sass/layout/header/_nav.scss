@@ -1,5 +1,6 @@
 .header__nav {
 	float: right;
+	height: 26px;
 	background: $grey-200;
 	padding-bottom: 1px;
 	padding-right: 2px;
@@ -21,7 +22,7 @@
 		line-height: 24px;
 	}
 
-	brow-icon:not([color="white"]) { 
+	svg-icon:not([color="white"]) { 
 		opacity: .6;
 		transition: all 150ms $easeInOut;
 

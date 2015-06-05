@@ -28,4 +28,16 @@
 
 @media #{$max-desktop} {
 	#brow__content { width: 90%; }
+
+	.brow__content__module,
+	.brow__content--sizer {
+		width: 48%;
+	}
+}
+
+@media #{$max-mobile} {
+	.brow__content__module,
+	.brow__content--sizer {
+		width: 100%;
+	}
 }

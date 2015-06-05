@@ -77,6 +77,8 @@ BrowLayoutManager = (function (window, Brow) {
 			window.addEventListener('card-edit', this.validateLayoutState.bind(this));
 			window.addEventListener('card-save', this.validateLayoutState.bind(this));
 			window.addEventListener('card-remove', this.validateLayoutState.bind(this));
+			Brow.Settings.getElem()['CONTENT_OVERLAY']
+				.addEventListener('click', this.validateLayoutState.bind(this));
 		}
 
 		/**
@@ -110,6 +112,11 @@ BrowLayoutManager = (function (window, Brow) {
 					Brow.activeCard = null;
 					localStorage.removeItem( event.detail );
 				}
+			}
+
+			else if (event.type === 'click' && Brow.isEditMode && Brow.activeCard.isEditMode) {
+				Brow.activeCard.saveState();
+				Brow.activeCard.wrapper.elem.classList.remove('fx', 'is-edit');
 			}
 		}
 

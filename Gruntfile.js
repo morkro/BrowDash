@@ -82,7 +82,7 @@ module.exports = function(grunt) {
 			componentsmarkup: {
 				expand	: true,
 				src		: [
-					'<%= app.directory.build.markup %>/components/brow-icon.html',
+					'<%= app.directory.build.markup %>/components/svg-icon.html',
 					'<%= app.directory.build.markup %>/components/card-base.html',
 					'<%= app.directory.build.markup %>/components/text-card.html',
 					'<%= app.directory.build.markup %>/components/weather-card.html'
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
 			componentsscript: {
 				expand	: true,
 				src		: [
-					'<%= app.directory.build.scripts %>/components/custom-elements/brow-icon.js',
+					'<%= app.directory.build.scripts %>/components/custom-elements/svg-icon.js',
 					'<%= app.directory.build.scripts %>/components/custom-elements/card-base.js',
 					'<%= app.directory.build.scripts %>/components/custom-elements/text-card.js',
 					'<%= app.directory.build.scripts %>/components/custom-elements/weather-card.js'
@@ -230,15 +230,15 @@ module.exports = function(grunt) {
 					'!<%= app.directory.build.scripts %>/libs/*.js',
 					'<%= app.directory.build.scripts %>/**/*.js'
 				],
-				tasks: ['newer:jshint', 'newer:concat']
+				tasks: ['jshint', 'concat']
 			},
 			components: {
-				files: '<%= app.directory.build.scripts %>/components/*.js',
+				files: '<%= app.directory.build.scripts %>/components/**/*.js',
 				tasks: ['copy:componentsscript']
 			},
 			assets: {
 				files: '<%= app.directory.build.assets %>/**/*.*',
-				tasks: ['newer:copy:assets']
+				tasks: ['copy:assets']
 			}
 		},
 

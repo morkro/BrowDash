@@ -6,8 +6,13 @@
 			display: block;
 		}
 		/* Editmode */
+		:host(.is-edit) /deep/ .module {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			border-bottom-left-radius: 2px;
+			border-bottom-right-radius: 2px;
+		}
 		:host(.is-edit) .module__editor { 
-			opacity: 1;
 			transform: translateY(0);
 		}
 		.module {
@@ -16,6 +21,9 @@
 			background: white;
 			border-radius: 2px;
 		}
+			:host([theme]) .module {
+				background: inherit;
+			}
 		/* Header */
 		.module__heading { 
 			padding: 20px; 
@@ -29,51 +37,64 @@
 		.module__heading ::content h1:read-write:hover { 
 			outline: none; 
 			border-radius: 2px;
-			background: #eeeeee;
-			color: rgba(0, 0, 0, .7);
+			background: rgba(0, 0, 0, .05);
 		}
 		/* Content */
 		.module__content {
 			padding: 0 20px 20px; 
 			display: block;
 		}
-		.module__content ::content p:focus,
-		.module__content ::content p:read-write:hover {
+		.module__content ::content div:focus,
+		.module__content ::content div:read-write:hover {
 			outline: none;
 			border-radius: 2px;
-			background: #eeeeee;
-			color: rgba(0, 0, 0, .7);
+			background: rgba(0, 0, 0, .05);
 		}
-		.module__content ::content p:empty:not(:focus):after {
+		.module__content ::content div:empty:not(:focus):after {
 			cursor: text;
 			content: attr(data-text-preview);
 			font-style: italic;
 			color: #9e9e9e;
 		}
+		.module__content ::content div ol {
+			padding-left: 20px;
+		}
+		.module__content ::content div ul li {
+			list-style: none;
+			padding-left: 20px;
+			text-indent: -6px;
+		}
+			.module__content ::content div ul li:before {
+				content: "•";
+				font-weight: 500;
+				position: relative;
+				left: -14px;
+			}
 		/* Editor */
 		.module__editor { 
 			height: 50px; 
 			width: 100%;
 			position: absolute; 
-			top: -55px; 
+			top: -50px; 
 			z-index: 0;
 			display: block;
-			opacity: 0;
-			transform: translateY(55px);
-			transition: all 150ms ease-in-out;
+			background: white;
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+			border-bottom: 1px solid lightgrey;
+			transform: translateY(50px);
+			transition: transform 150ms cubic-bezier(0.86, 0, 0.07, 1);
 		}
 			.module__editor:hover {
 				z-index: 2;
 			}
 		.module__editor ul { 
 			height: 100%; 
-			width: calc(6 * 50px); 
+			width: 100%; 
 			display: flex; 
 			margin: 0 auto; 
 			padding: 0;
-			background: white;
-			border-radius: 2px;
-			box-shadow: 0 1px 3px rgba(0, 0, 0, .24);
+			background: rgba(0, 0, 0, .05);
 		}
 		.module__editor ul li { 
 			list-style: none; 
@@ -136,11 +157,12 @@
 				opacity 150ms ease-in-out; 
 			}
 		.editor__bold[data-tooltip]:before { width: 115%; }
-		.editor__italic[data-tooltip]:before { width: 125%; }
+		.editor__italic[data-tooltip]:before { width: 120%; }
 		.editor__underline[data-tooltip]:before { width: 165%; }
 		.editor__strikethrough[data-tooltip]:before { width: 225%; }
-		.editor__link[data-tooltip]:before { width: 110%; }
-		.editor__unstyle[data-tooltip]:before { width: 255%; }
+		.editor__unorderedlist[data-tooltip]:before { width: 245%; }
+		.editor__orderedlist[data-tooltip]:before { width: 215%; }
+		.editor__removeformat[data-tooltip]:before { width: 285%; }
 	</style>
 	<card-base>
 		<div class="module__editor">
@@ -177,16 +199,22 @@
 						</svg>
 					</button>
 				</li>
-				<li class="editor__link" data-tooltip="Link" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="link">
+				<li class="editor__unorderedlist" data-tooltip="Unordered List" data-tooltip-pos="bottom">
+					<button class="btn" data-editor-option="insertunorderedlist">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-							<path d="M0 0h24v24h-24z" fill="none"/>
-							<path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4v-1.9h-4c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9h-4c-1.71 0-3.1-1.39-3.1-3.1zm4.1 1h8v-2h-8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4v1.9h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+							<path fill="#000000" d="M7,5V7H21V5M7,13H21V11H7M7,19H21V17H7M4,16.67C3.26,16.67 2.67,17.27 2.67,18C2.67,18.73 3.27,19.33 4,19.33C4.73,19.33 5.33,18.73 5.33,18C5.33,17.27 4.74,16.67 4,16.67M4,4.5A1.5,1.5 0 0,0 2.5,6A1.5,1.5 0 0,0 4,7.5A1.5,1.5 0 0,0 5.5,6A1.5,1.5 0 0,0 4,4.5M4,10.5A1.5,1.5 0 0,0 2.5,12A1.5,1.5 0 0,0 4,13.5A1.5,1.5 0 0,0 5.5,12A1.5,1.5 0 0,0 4,10.5Z" />
 						</svg>
 					</button>
 				</li>
-				<li class="editor__unstyle" data-tooltip="Clear formatting" data-tooltip-pos="bottom">
-					<button class="btn" data-editor-option="unstyle">
+				<li class="editor__orderedlist" data-tooltip="Ordered List" data-tooltip-pos="bottom">
+					<button class="btn" data-editor-option="insertorderedlist">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path fill="#000000" d="M7,13H21V11H7M7,19H21V17H7M7,7H21V5H7M2,11H3.8L2,13.1V14H5V13H3.2L5,10.9V10H2M3,8H4V4H2V5H3M2,17H4V17.5H3V18.5H4V19H2V20H5V16H2V17Z" />
+						</svg>
+					</button>
+				</li>
+				<li class="editor__removeformat" data-tooltip="Remove formatting" data-tooltip-pos="bottom">
+					<button class="btn" data-editor-option="removeformat">
 						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 							<path d="M0 0h24v24h-24z" fill="none"/>
 							<path d="M3.27 5l-1.27 1.27 6.97 6.97-2.47 5.76h3l1.57-3.66 5.66 5.66 1.27-1.27-14.45-14.46-.28-.27zm2.73 0v.18l2.82 2.82h2.4l-.72 1.68 2.1 2.1 1.61-3.78h5.79v-3h-14z"/>
@@ -200,7 +228,7 @@
 				<content select="h1"></content>
 			</header>
 			<div class="module__content">
-				<content select="p"></content>
+				<content select="div"></content>
 			</div>
 		</div>
 	</card-base>

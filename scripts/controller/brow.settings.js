@@ -40,7 +40,6 @@ Brow.Settings = (function (Brow) {
 	const _addEvents = function () {
 		// Elements
 		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
-		browElements.CONTENT_OVERLAY.addEventListener('click', _checkCardMode);
 		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
 		[].forEach.call(browElements.onClickNewCard, function (item) {
 			item.addEventListener('click', _addNewCard);
@@ -197,17 +196,6 @@ Brow.Settings = (function (Brow) {
 
 		browElements['CONTENT'].appendChild( browCard );
 		browGrid.add( browCard );
-	};
-
-	/**
-	 * @description	Saves state of active card.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _checkCardMode = function (event) {
-		if (Brow.isEditMode && Brow.activeCard.isEditMode) {
-			Brow.activeCard.saveState();
-		}
 	};
 
 	/**

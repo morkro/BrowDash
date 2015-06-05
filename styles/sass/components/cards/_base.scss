@@ -11,7 +11,6 @@
 	&:hover { z-index: z($content, cardshover); }
 
 	&.is-edit {
-		//z-index: z($content, editmode);
 		z-index: 10;
 		transform: translateY(-5px);
 		box-shadow: $shadow-z4;
