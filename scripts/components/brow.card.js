@@ -54,6 +54,9 @@ BrowCard = (function (Brow) {
 				case 'weather':
 					this.wrapper = new WeatherCard( this );
 					break;
+				case 'todo':
+					this.wrapper = new TodoCard( this );
+					break;
 				default:
 					this.wrapper = new TextCard( this );
 					break;

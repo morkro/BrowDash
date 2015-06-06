@@ -53,6 +53,8 @@ module.exports = function(grunt) {
 				//'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
 				'<%= app.directory.build.scripts %>/libs/draggabilly.pkgd.min.js',
 				'<%= app.directory.build.scripts %>/libs/packery.pkgd.min.js',
+				/* Helpers */
+				'<%= app.directory.build.scripts %>/app.helper.js',
 				/* Application */
 				'<%= app.directory.build.scripts %>/controller/brow.core.js',
 				'<%= app.directory.build.scripts %>/controller/brow.settings.js',
@@ -63,6 +65,7 @@ module.exports = function(grunt) {
 				'<%= app.directory.build.scripts %>/components/brow.card.js',
 				'<%= app.directory.build.scripts %>/components/brow.card.text.js',
 				'<%= app.directory.build.scripts %>/components/brow.card.weather.js',
+				'<%= app.directory.build.scripts %>/components/brow.card.todo.js',
 				/* Data */
 				'<%= app.directory.build.scripts %>/model/brow.data.js',
 				/* App initialisation */
@@ -77,7 +80,7 @@ module.exports = function(grunt) {
 		copy: {
 			index: {
 				src		: '<%= app.directory.build.markup %>/views/index.html',
-				dest		: '<%= app.directory.dest.public %>/index.html',
+				dest		: '<%= app.directory.dest.public %>/index.html'
 			},
 			componentsmarkup: {
 				expand	: true,
@@ -85,7 +88,8 @@ module.exports = function(grunt) {
 					'<%= app.directory.build.markup %>/components/svg-icon.html',
 					'<%= app.directory.build.markup %>/components/card-base.html',
 					'<%= app.directory.build.markup %>/components/text-card.html',
-					'<%= app.directory.build.markup %>/components/weather-card.html'
+					'<%= app.directory.build.markup %>/components/weather-card.html',
+					'<%= app.directory.build.markup %>/components/todo-card.html'
 				],
 				dest		: '<%= app.directory.dest.markup %>/',
 				flatten	: true,
@@ -97,7 +101,8 @@ module.exports = function(grunt) {
 					'<%= app.directory.build.scripts %>/components/custom-elements/svg-icon.js',
 					'<%= app.directory.build.scripts %>/components/custom-elements/card-base.js',
 					'<%= app.directory.build.scripts %>/components/custom-elements/text-card.js',
-					'<%= app.directory.build.scripts %>/components/custom-elements/weather-card.js'
+					'<%= app.directory.build.scripts %>/components/custom-elements/weather-card.js',
+					'<%= app.directory.build.scripts %>/components/custom-elements/todo-card.js'
 				],
 				dest		: '<%= app.directory.dest.scripts %>',
 				flatten	: true,

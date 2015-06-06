@@ -12,7 +12,6 @@ WeatherCard = (function () {
 			this.confTemp	= this.parent.content.temperature;
 
 			if (!!this.confTemp) {
-				console.log(this.confTemp);
 				this.elem.setTemperature(this.confTemp);
 			}
 		}

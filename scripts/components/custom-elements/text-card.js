@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
-	
+	console.log('kek');
 	/* Constants */
 	var doc			= document.currentScript.ownerDocument;
 	var template	= doc.querySelector('#text-card');

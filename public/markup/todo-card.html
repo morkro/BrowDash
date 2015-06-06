@@ -1,0 +1,185 @@
+<template id="todo-card">
+	<style>
+		* { box-sizing: border-box; }
+		:host {
+			width: 100%;
+			display: block;
+		}
+		button:active, button:focus {
+			outline: none;
+		}
+		/* Header */
+		header {
+			padding: 20px;
+			background-color: #3f51b5;
+			color: white;
+			position: relative;
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+		}
+		::content h1:active, ::content h1:focus {
+			outline: none;
+		}
+		/* Input */
+		.todo-input {
+			margin-top: 10px;
+			padding: 15px 0 5px;
+			width: 100%;
+			border: none;
+			color: white;
+			background: transparent;
+			font-size: 16px;
+			border-bottom: 1px solid rgba(255,255,255,.1);
+			transition: border-color 150ms ease-in-out;
+		}
+			.todo-input:focus {
+				border-color: rgba(255,255,255,1);
+			}
+			.todo-input::-webkit-input-placeholder {
+				color: rgba(255,255,255,0.6);
+			}
+			.todo-input:active, .todo-input:focus {
+				outline: none;
+			}
+		/* Main */
+		.todo-main ul {
+			list-style: none;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		.todo-main li {
+			padding: 0 20px;
+			font-size: 16px;
+			border-bottom: 1px solid rgba(0, 0, 0, .1);
+			position: relative;
+			cursor: pointer;
+			display: flex;
+			transition: background 150ms ease-in-out;
+		}
+			.todo-main li:hover {
+				background: rgba(0, 0, 0, .05);
+			}
+		.todo-main button {
+			position: absolute;
+			border: none;
+			background: none;
+			right: 20px;
+			top: 50%;
+			cursor: pointer;
+			opacity: 0;
+			padding: 0;
+			transform: translate(3px, -50%);
+			transition: opacity 150ms ease-in-out;
+		}
+		.todo-main li:hover button {
+			opacity: 1;
+		}
+		.todo-main label { 
+			position: relative;
+			padding: 15px 35px 15px 0;
+			width: 100%;
+			cursor: pointer;
+			transition: all 150ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+		.todo-main input[type="checkbox"] {
+			margin-right: 20px;
+			visibility: hidden;
+		}
+		.todo-main input[type="checkbox"] + label:before {
+			content: "";
+			position: absolute;
+			width: 14px;
+			height: 14px;
+			left: -35px;
+			top: 50%;
+			color: white;
+			border: 2px solid #616161;
+			border-radius: 2px;
+			background: white;
+			font-size: 14px;
+			line-height: 14px;
+			transform: translateY(-50%);
+			transition: all 150ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+		.todo-main input[type="checkbox"]:checked + label {
+			text-decoration: line-through;
+			color: rgba(0,0,0,.6);
+		}
+		.todo-main input[type="checkbox"]:checked + label:before {
+			content: "✔";
+			padding-left: 1px;
+			width: 13px;
+			background: #8BC34A;
+			border-color: #8BC34A;
+		}
+		/* Footer */
+		.todo-digest {
+			display: flex;
+			justify-content: space-between;
+			padding: 12px 20px;
+		}
+		.digest__count {
+			font-size: 12px;
+			align-self: center;
+		}
+		.digest__clear {
+			background: none;
+			border: none;
+			text-transform: uppercase;
+			font-weight: 600;
+			font-size: 12px;
+			background-color: white;
+			padding: 6px 12px;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+			cursor: pointer;
+			transition: all 150ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+			.digest__clear:hover {
+				background: rgba(0, 0, 0, .1);
+			}
+			.digest__clear:active {
+				transform: translateY(-2px);
+				box-shadow: 0 3px 10px rgba(0,0,0,.48);
+			}
+	</style>
+	<card-base>
+		<header>
+			<content select="h1"></content>
+			<input type="text" class="todo-input" placeholder="What needs to be done?">
+		</header>
+
+		<section class="todo-main">
+			<ul>
+				<li>
+					<input type="checkbox" id="item1" checked>
+					<label for="item1">Fancy todo lorem ipsum dolor very long text brop</label>
+					<button type="button">
+						<svg-icon icon="close" color="red"></svg-icon>
+					</button>
+				</li>
+				<li>
+					<input type="checkbox" id="item2">
+					<label for="item2">Fancy todo</label>
+					<button type="button">
+						<svg-icon icon="close" color="red"></svg-icon>
+					</button>
+				</li>
+				<li>
+					<input type="checkbox" id="item3">
+					<label for="item3">Fancy todo</label>
+					<button type="button">
+						<svg-icon icon="close" color="red"></svg-icon>
+					</button>
+				</li>
+			</ul>
+		</section>
+
+		<footer class="todo-digest">
+			<span class="digest__count">5 tasks left</span>
+			<button type="button" class="btn digest__clear">Clear completed</button>
+		</footer>
+	</card-base>
+</template>
+<script type="text/javascript" src="../scripts/todo-card.js"></script>

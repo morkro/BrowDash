@@ -39,7 +39,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addEvents = function () {
 		// Elements
-		[].forEach.call(browElements.onClickNewCard, function (item) {
+		browElements.onClickNewCard.forEach(function (item) {
 			item.addEventListener('click', _addNewCard);
 		});
 	};
@@ -292,7 +292,7 @@ Brow.Settings = (function (Brow) {
 	const _initDialogs = function () {
 		let currentLocation = window.location.href.slice(0, -1);
 		
-		[].forEach.call(browElements['onClickDialog'], function (item) {
+		browElements.onClickDialog.forEach(function (item) {
 			let dialogContent		= item.getAttribute('data-dialog');
 			let dialogCallback	= false;
 

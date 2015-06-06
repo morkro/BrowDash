@@ -17,9 +17,11 @@
 	},
 	"web_accessible_resources": [
 		"scripts/app.js",
-		"scripts/card.js",
-		"css/main.min.css",
-		"card-base.html"
+		"scripts/svg-icon.js",
+		"scripts/card-base.js",
+		"scripts/text-base.js",
+		"scripts/weather-base.js",
+		"scripts/todo-base.js"
 	],
 	"offline_enabled": true,
 	"content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none';"
