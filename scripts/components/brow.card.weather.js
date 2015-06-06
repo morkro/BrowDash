@@ -9,6 +9,12 @@ WeatherCard = (function () {
 		constructor (card) {
 			this.parent		= card;
 			this.elem		= document.createElement('weather-card');
+			this.confTemp	= this.parent.content.temperature;
+
+			if (!!this.confTemp) {
+				console.log(this.confTemp);
+				this.elem.setTemperature(this.confTemp);
+			}
 		}
 
 		/**
@@ -20,17 +26,10 @@ WeatherCard = (function () {
 			return this.elem;
 		}
 
-		/**
-		 * @description	Saves current content to localStorage.
-		 * @public
-		 */	
-		updateStorage () {
-			this.parent.storage['content'] = {};
-			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-		}
-
 		save () {
-			this.updateStorage();
+			this.elem.save();
+			this.parent.storage['content'] = this.elem.storage;
+			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
 		}
 	}
 

@@ -10,7 +10,7 @@ TextCard = (function () {
 			this.parent		= card;
 			this.elem		= document.createElement('text-card');
 			this.headline	= this.createHeadline();
-			this.content	= this.previewContent();
+			this.content	= this.createContent();
 			this.theme		= this.parent.theme;
 
 			this.elem.appendChild( this.headline );
@@ -28,7 +28,7 @@ TextCard = (function () {
 		 * @public
 		 * @return 			{HTMLElement}
 		 */
-		previewContent () {
+		createContent () {
 			let textElem			= document.createElement('div');
 			let defaultContent	= Brow.Data.Content('text')['default'];
 			let storedContent		= this.parent.content.text;
@@ -47,8 +47,8 @@ TextCard = (function () {
 		 * @return 			{HTMLElement}
 		 */	
 		createHeadline () {
-			let headElem = document.createElement('h1');
-			let cardHasTitle = this.parent.content.headline;
+			let headElem		= document.createElement('h1');
+			let cardHasTitle	= this.parent.content.headline;
 			headElem.innerHTML = (cardHasTitle) ? cardHasTitle : Brow.Data.Header('text');
 			return headElem;
 		}

@@ -27,11 +27,8 @@
 		this.validateHost();
 	};
 
-
-	
 	/**
 	 * @description	Sets eventListener on current card element.
-	 * @private
 	 */
 	CardProto.addEvents = function () {
 		this.settings.addEventListener('mouseover', this.enableEvent.bind(this));
@@ -44,7 +41,6 @@
 
 	/**
 	 * @description	Checks if <card-base> is inside another host.
-	 * @private
 	 */
 	CardProto.validateHost = function () {
 		if (!!this.parentNode.host) {

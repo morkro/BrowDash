@@ -8,23 +8,49 @@
 	
 	WeatherCard.coord			= { 'latitude': 0, 'longitude': 0, 'accuracy': 0 };
 	WeatherCard.curCity		= null;
-	WeatherCard.curDegrees	= null;
+	WeatherCard.celsius		= 0;
+	WeatherCard.fahrenheit	= 0;
 	WeatherCard.curWeather	= 'cloudy';
 	WeatherCard.daytime		= 'day';
+	WeatherCard.tempElem		= null;
+	WeatherCard.storage		= { temperature: 'celsius' };
 
+	/**
+	 * @description	An instance of the element is created.
+	 */
 	WeatherCard.createdCallback = function () {
-		let root = this.createShadowRoot();
-		root.appendChild( document.importNode(template.content, true) );
+		this.root		= this.createShadowRoot();
+		this.root.appendChild( document.importNode(template.content, true) );
+		this.settings	= this.root.querySelector('.weather__settings ul');
+		this.inputC		= this.root.querySelector('#celsius');
+		this.inputF		= this.root.querySelector('#fahrenheit');
+		this.icon		= document.createElement('svg-icon');
+		this.city		= document.createElement('h1');
+		this.location	= document.createElement('h2');
+		this.tempElem	= document.createElement('span');
 
 		this.setAttribute('loading', '');
 		this.setAttribute('weather', `${this.curWeather}`);
 		this.setAttribute('time', `${this.daytime}`);
+		this.setTemperature('celsius');
+		this.appendContent();
+
+		this.settings.addEventListener('click', this.validateSettings.bind(this));
+
 		this.getGeolocation();
 	};
 
 	/**
+	 * @description	Saves the users input.
+	 */
+	WeatherCard.validateSettings = function (event) {
+		if (event.target.type === 'radio') {
+			this.setTemperature(event.target.id);
+		}
+	};
+
+	/**
 	 * @description	Gets current geolocation and saves the values.
-	 * @public
 	 * @todo 			Add error callback.
 	 */	
 	WeatherCard.getGeolocation = function () {
@@ -45,7 +71,6 @@
 
 	/**
 	 * @description	Uses OpenWeatherMap.org to fetch the weather data.
-	 * @private
 	 */	
 	WeatherCard.getWeatherFromAPI = function () {
 		let weatherURL = `http://api.openweathermap.org/data/2.5/weather
@@ -62,10 +87,10 @@
 			this.kelvinCalculator( weatherResponse.main.temp );
 			this.validateWeather( weatherResponse.weather[0].main );
 			this.validateDaytime( weatherResponse.sys );
-			// // Create content
-			this.createContent();
-
-			//console.log(weatherResponse);
+			// Create content
+			this.updateContent();
+			this.removeAttribute('loading');
+			this.setTemperature(this.storage.temperature);
 		}.bind(this))
 		.catch(function (error) {
 			console.log(error);
@@ -73,7 +98,7 @@
 	};
 
 	/**
-	 * @description	Saves the weather string and sets attribute.
+	 * @description	Saves the weather string and sets 'weather=""' attribute.
 	 * @param  {String} weather
 	 */
 	WeatherCard.validateWeather = function (weather) {
@@ -81,6 +106,10 @@
 		this.setAttribute('weather', `${this.curWeather}`);
 	};
 
+	/**
+	 * @description	Validates current time and sets 'time=""' attribute.
+	 * @param  {Object} config
+	 */
 	WeatherCard.validateDaytime = function (config) {
 		const MS		= 1000; // milliseconds
 		let now		= new Date();
@@ -101,33 +130,39 @@
 	};
 
 	/**
-	 * @description	Returns an element containing current degrees.
-	 * @public
+	 * @description	Sets temperature as string in element.
 	 * @return 			{HTMLElement}
 	 */	
-	WeatherCard.createTemperatur = function (degrees) {
-		let degreeElem = document.createElement('span');
-		degreeElem.classList.add('weather__degrees');
-		degreeElem.innerText = `${degrees}°C`;
+	WeatherCard.setTemperature = function (degrees) {
+		let tempOutput = `${this.celsius}°C`;
 
-		return degreeElem;
-	};
+		if (degrees === 'fahrenheit') {
+			tempOutput = `${this.fahrenheit}°F`;
+			this.inputF.checked = true;
+		}
+		else {
+			this.inputC.checked = true;	
+		}
 
-	WeatherCard.kelvinCalculator = function (temp) {
-		let absZeroTempInC	= 273.15; // -273.15 °C
-		let calcCelcius		= Math.floor(temp - absZeroTempInC);
-		let calcFahrenheit	= Math.floor(calcCelcius * 1.8 + 32);
-		this.curDegrees		= calcCelcius;
+		this.tempElem.innerText = tempOutput;
+		this.storage.temperature = degrees;
 	};
 
 	/**
-	 * @description	Creates all content elements and appends them to <weather-card>.
+	 * @description	Takes a number and calculates celsius/fahrenheit. 
+	 * @param {Number} temp
 	 */
-	WeatherCard.createContent = function () {
-		let icon			= document.createElement('svg-icon');
-		let city			= document.createElement('h1');
-		let location	= document.createElement('h2');
-		let temperatur	= this.createTemperatur(this.curDegrees);
+	WeatherCard.kelvinCalculator = function (temp) {
+		let absZeroTempInC	= 273.15; // -273.15 °C
+		this.celsius			= Math.floor(temp - absZeroTempInC);
+		this.fahrenheit		= Math.floor(this.celsius * 1.8 + 32);
+	};
+
+	/**
+	 * @description	Validates this.daytime & this.curWeather and returns string.
+	 * @return {String}
+	 */
+	WeatherCard.validateCurrentWeather = function () {
 		let curWeather = this.curWeather;
 
 		if (curWeather === 'clear' && this.daytime === 'night') {
@@ -136,27 +171,53 @@
 		else if (curWeather === 'clear' && this.daytime === 'day') {
 			curWeather = 'sunny';
 		}
+		else {
+			curWeather = 'sunny';
+		}
 
-		// Icon
-		icon.setAttribute('icon', curWeather);
+		return curWeather;
+	};
+
+	/**
+	 * @description	Creates all content elements and appends them to <weather-card>.
+	 */
+	WeatherCard.appendContent = function () {
 		// City
-		city.classList.add('weather__city');
-		city.innerText = this.curCity;
+		this.city.classList.add('weather__city');
 		// Location
-		location.classList.add('weather__place');
-		location.innerText = 'Current location';
+		this.location.classList.add('weather__place');
+		// Temperature
+		this.tempElem.classList.add('weather__degrees');
+
+		this.updateContent();
 
 		// Append elements
-		this.appendChild( temperatur );
-		this.appendChild( icon );
-		this.appendChild( city );
-		this.appendChild( location );
-		this.removeAttribute('loading');
+		this.appendChild( this.tempElem );
+		this.appendChild( this.icon );
+		this.appendChild( this.city );
+		this.appendChild( this.location );
 	};
 
-	WeatherCard.edit = function () {
-		console.log('edit');
+	/**
+	 * @description	Updates all elements.
+	 */
+	WeatherCard.updateContent = function () {
+		let _curWeather	= this.validateCurrentWeather();
+		let _curCity		= (!!this.curCity) ? this.curCity : 'Where are you again?';
+
+		this.icon.setAttribute('icon', _curWeather);
+		this.city.innerText = _curCity;
+		this.location.innerText = 'Current location';
 	};
+
+	WeatherCard.edit = function () {};
+
+	/**
+	 * @description	Saves the current state of temperature settings.
+	 */
+	WeatherCard.save = function () {
+		this.setTemperature(this.storage.temperature);
+	};	
 	
 	/* Register element in document */
 	document.registerElement('weather-card', { prototype: WeatherCard });

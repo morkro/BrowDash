@@ -74,11 +74,11 @@
 				position: relative;
 				transition: all 150ms ease-in-out;
 			}
-			.weather__settings input[type="checkbox"] {
+			.weather__settings input[type="radio"] {
 				margin-right: 15px;
 				visibility: hidden;
 			}
-			.weather__settings input[type="checkbox"] + label:before {
+			.weather__settings input[type="radio"] + label:before {
 				content: "";
 				position: absolute;
 				width: 14px;
@@ -87,20 +87,30 @@
 				top: 1px;
 				color: #616161;
 				border: 2px solid white;
-				border-radius: 2px;
+				border-radius: 50%;
 				background: transparent;
 				font-size: 14px;
 				line-height: 14px;
 				transition: all 150ms ease-in-out;
 			}
-			.weather__settings input[type="checkbox"]:checked + label:before {
-				content: "✔";
-				padding-left: 1px;
-				width: 13px;
-				background: white;
-				border-color: white;
+			.weather__settings input[type="radio"]:checked + label:before {
+				border-color: white;	
 			}
-	}
+			.weather__settings input[type="radio"] + label:after {
+				content: "";
+				position: absolute;
+				background: white;
+				height: 10px;
+				width: 10px;
+				border-radius: 50%;
+				left: -31px;
+				top: 5px;
+				transform: scale(0);
+				transition: transform 100ms ease-in-out;
+			}
+			.weather__settings input[type="radio"]:checked + label:after {
+				transform: scale(1);
+			}
 		/* Night */
 		:host-context([time="night"]) /deep/ .module,
 		:host-context([time="night"]) .weather__loading { background: #616161; }
@@ -160,12 +170,12 @@
 				<h1>Settings</h1>
 				<ul>
 					<li>
-						<input type="checkbox" id="degrees--celsius" checked>
-						<label for="degrees--celsius">Celsius °C</label>
+						<input type="radio" id="celsius" name="weather-degrees">
+						<label for="celsius">Celsius °C</label>
 					</li>
 					<li>
-						<input type="checkbox" id="degrees--fahrenheit">
-						<label for="degrees--fahrenheit">Fahrenheit °F</label>
+						<input type="radio" id="fahrenheit" name="weather-degrees">
+						<label for="fahrenheit">Fahrenheit °F</label>
 					</li>
 				</ul>
 			</div>

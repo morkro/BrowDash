@@ -31,7 +31,6 @@
 
 	/**
 	 * @description	Sets 'contenteditable="true"' to all elements.
-	 * @public
 	 */	
 	TextCard.edit = function () {
 		this.headlineElement.setAttribute('contenteditable', true);
@@ -40,7 +39,6 @@
 
 	/**
 	 * @description	Removes attributes and stores data internally.
-	 * @public
 	 */	
 	TextCard.save = function () {
 		this.storeInternalData();
@@ -50,7 +48,6 @@
 
 	/**
 	 * @description	Stores content of <h1> and <p>.
-	 * @public
 	 */	
 	TextCard.storeInternalData = function () {
 		this.storage['headline'] = this.headlineElement.innerHTML;
