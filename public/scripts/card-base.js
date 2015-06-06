@@ -26,6 +26,8 @@
 		this.addEvents();
 		this.validateHost();
 	};
+
+
 	
 	/**
 	 * @description	Sets eventListener on current card element.
@@ -50,10 +52,16 @@
 		} else { this.host = this; }
 	};
 
+	/**
+	 * @description Dispatches 'settings' event.
+	 */
 	CardProto.enableEvent = function () {
 		this.dispatchEvent( new Event('settings') );
 	};
 
+	/**
+	 * @description Toggles class on host to move the palette list.
+	 */
 	CardProto.togglePalette = function () {
 		this.validateHost();
 		if (this.host.classList.contains('edit-theme')) {
@@ -63,23 +71,46 @@
 		}
 	};
 
+	/**
+	 * @description Gets the 'data-theme' value of clicked element and sends an event.
+	 */
 	CardProto.modifyTheme = function () {
-		var theme = event.target.getAttribute('data-theme');	
-		this.host.setAttribute('theme', theme);
+		var theme = null;
+		
+		if (event.target.hasAttribute('data-theme')) {
+			theme = event.target.getAttribute('data-theme');
+		}
+		
+		window.dispatchEvent( 
+			new CustomEvent('theme-change', { detail: theme })
+		);
 	};
 
+	/**
+	 * @description Adds 'is-edit' class to host and dispatches 'edit' event.
+	 */
 	CardProto.editCard = function () {
 		this.validateHost();
 		this.host.classList.add('fx', 'is-edit');
 		this.edit.dispatchEvent( new Event('edit') );
 	};
 
+	/**
+	 * @description Removes 'is-edit' class to host and dispatches 'save' event.
+	 */
 	CardProto.saveCard = function () {
 		this.validateHost();
-		this.host.classList.remove('fx', 'is-edit', 'edit-theme');
+		this.host.classList.remove('is-edit', 'edit-theme');
 		this.save.dispatchEvent( new Event('save') );
+
+		this.host.addEventListener('transitionend', function (event) {
+			this.host.classList.remove('fx');
+		}.bind(this));
 	};
 
+	/**
+	 * @description Adds 'is-delete' class to host and dispatches 'remove' event.
+	 */
 	CardProto.removeCard = function () {
 		this.validateHost();
 		this.host.classList.add('fx', 'is-delete');

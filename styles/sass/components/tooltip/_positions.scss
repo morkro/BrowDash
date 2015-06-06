@@ -1,0 +1,33 @@
+/*
+ * TOOLTIP: POSITIONS
+ */
+[data-tooltip-pos="top"] {
+	&:before {
+		top: 0;
+		transform: translateX(-50%) translateY(-120%);
+	}
+}
+
+[data-tooltip-pos="bottom"] {
+	&:before {
+		bottom: 0;
+		transform: translateX(-50%) translateY(120%);
+	}
+}
+
+[data-tooltip-pos="left"] {
+	&:before {
+		top: 50%;
+		left: -15px;
+		transform: translateY(-50%) translateX(-100%);
+	}
+}
+
+[data-tooltip-pos="right"] {
+	&:before {
+		top: 50%;
+		right: -15px;
+		left: auto;
+		transform: translateY(-50%) translateX(100%);
+	}
+}

@@ -4,6 +4,32 @@
 	left: 0;
 	right: 0;
 	z-index: z($modals, footer);
-	height: 100px;
-	width: 100%;
+	height: auto;
+	width: 65px;
+	margin: 0 auto;
+	transform: translateY(80%);
+	transition-delay: 250ms;
+
+	&:hover {
+		transform: translateY(-9px);
+		transition-delay: 0s;
+
+		#footer__add {
+			top: 82.7%;
+			transition-delay: 0s;
+			svg-icon { transform: rotate(45deg); }
+		}
+
+		.footer__select {
+			opacity: 1;
+			transform: translateY(-25%);
+			transition-delay: 0s;
+		}
+
+		.footer__select__list li {
+			opacity: 1;
+			transform:  translateY(0) !important;
+			&:before { opacity: 1; }
+		}
+	}
 }

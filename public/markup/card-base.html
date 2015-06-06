@@ -4,35 +4,54 @@
 		:host { display: block; }
 		:host-context(.edit-theme) .module__theme {
 			transform: translateY(0);
+			opacity: 1;
+		}
+		:host-context([theme="blue"]) [data-theme="blue"] svg-icon {
+			opacity: 1;
 		}
 		:host-context([theme="blue"]) .module,
 		.module__theme [data-theme="blue"] {
 			background: #2196F3;
 			color: white;
 		}
+		:host-context([theme="green"]) [data-theme="green"] svg-icon {
+			opacity: 1;
+		}
 		:host-context([theme="green"]) .module,
 		.module__theme [data-theme="green"] {
 			background: #8BC34A;
 			color: white;
+		}
+		:host-context([theme="red"]) [data-theme="red"] svg-icon {
+			opacity: 1;
 		}
 		:host-context([theme="red"]) .module,
 		.module__theme [data-theme="red"] {
 			background: #f44336;
 			color: white;
 		}
+		:host-context([theme="pink"]) [data-theme="pink"] svg-icon {
+			opacity: 1;
+		}
 		:host-context([theme="pink"]) .module,
 		.module__theme [data-theme="pink"] {
 			background: #ec407a;
 			color: white;
+		}
+		:host-context([theme="brown"]) [data-theme="brown"] svg-icon {
+			opacity: 1;
 		}
 		:host-context([theme="brown"]) .module,
 		.module__theme [data-theme="brown"] {
 			background: #795548;
 			color: white;
 		}
+		:host-context([theme="white"]) [data-theme="white"] svg-icon {
+			opacity: 1;
+		}
 		.module__theme {
 			position: absolute; 
-			z-index: 1;
+			z-index: 0;
 			top: -50px;
 			width: 100%;
 			height: 50px;
@@ -40,8 +59,9 @@
 			border-top-left-radius: 2px;
 			border-top-right-radius: 2px;
 			overflow: hidden;
+			opacity: 0;
 			transform: translateY(55px);
-			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+			transition: all 333ms cubic-bezier(0.86, 0, 0.07, 1);
 		}
 			.module__theme ul { 
 				height: 100%;
@@ -49,12 +69,13 @@
 				display: flex; 
 				margin: 0 auto; 
 				padding: 0;
-				list-style: none; 
+				list-style: none;
+				box-shadow: inset 0px -1px 12px -4px rgba(0,0,0,.5);
 			}
 			.module__theme ul li { 
 				display: inline-block; 
 				height: 100%; 
-				width: 25%; 
+				width: 20%; 
 				position: relative; 
 				cursor: pointer;
 			}
@@ -191,6 +212,9 @@
 			</li>
 			<li data-theme="brown">
 				<svg-icon icon="save" color="white"></svg-icon>
+			</li>
+			<li data-theme="white">
+				<svg-icon icon="save" color="black"></svg-icon>
 			</li>
 		</ul>
 	</div>

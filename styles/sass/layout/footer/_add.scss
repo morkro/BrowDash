@@ -1,18 +1,20 @@
 #footer__add {
 	position: absolute;
 	z-index: z($footer, button);
-	top: 50%;
+	top: 0;
 	left: 50%;
 	width: 56px;
 	height: 55px;
-	transform: translate(-50%, -50%);
-
-	&[data-tooltip]:before {
-		width: 150%;
-	}
+	transform: translateX(-50%);
+	transition: top 0ms ease;
+	transition-delay: 250ms;
 
 	&.editmode {
 		cursor: not-allowed;
 		opacity: 0.6;
+	}
+
+	svg-icon {
+		transition: transform 150ms $easeInOutQuint;
 	}
 }

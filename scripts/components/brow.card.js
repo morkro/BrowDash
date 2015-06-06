@@ -8,7 +8,7 @@ BrowCard = (function (Brow) {
 	class BrowCard {
 		constructor (config) {
 			if (!config) config = {};
-		
+			
 			// settings
 			this.isEditMode	= false;
 			this.config			= { elem: null };
@@ -19,12 +19,17 @@ BrowCard = (function (Brow) {
 			this.type			= (config.type) ? config.type : 'text';
 			this.guid			= (config.guid) ? config.guid : Brow.GUID();
 			this.content		= (config.content) ? config.content : {};
+			this.theme			= (config.style) ? config.style.theme : false;
 			this.storage		= { 
 				module: true, 
 				type: this.type, 
 				guid: this.guid, 
 				content: this.content,
-				style: { width: 1, stamp: false }
+				style: { 
+					width: 1, 
+					stamp: false, 
+					theme: false
+				}
 			};
 
 			// events

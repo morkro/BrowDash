@@ -57,28 +57,52 @@
 
 	<!-- Dashboard Footer -->
 	<footer id="brow__footer">
-		<!-- Select card type -->
-		<div class="footer__select colored-bg-opposite trigger-cardlist">
-			<ul class="footer__select__list">
-				<!-- TextCard -->
-				<li data-tooltip-identifier="textcard" data-tooltip="Add a simple text card" data-tooltip-pos="top">
-					<button class="btn trigger-newcard" data-create-card="text">
-						<svg-icon icon="calendar-text" color="white"></svg-icon>
-					</button>
-				</li><!-- /TextCard -->
-				<!-- WeatherCard -->
-				<li data-tooltip-identifier="weathercard" data-tooltip="Add a weather card" data-tooltip-pos="top">
-					<button class="btn trigger-newcard" data-create-card="weather">
-						<svg-icon icon="balance-sunny" color="white"></svg-icon>
-					</button>
-				</li><!-- /WeatherCard -->
-			</ul>
-		</div><!-- /Select card type -->
-
 		<!-- Add button -->
 		<button id="footer__add" class="btn btn--round trigger-selection colored-bg-opposite">
 			<svg-icon icon="plus" color="white"></svg-icon>
 		</button><!-- /Add button -->
+
+		<!-- Select card type -->
+		<div class="footer__select trigger-cardlist">
+			<ul class="footer__select__list">
+				<!-- TextCard -->
+				<li data-tooltip-identifier="textcard" 
+					data-tooltip="Text"
+					data-tooltip-pos="left" 
+					data-tooltip-fx="false">
+					<button class="btn btn--round trigger-newcard colored-bg-opposite" data-create-card="text">
+						<svg-icon icon="calendar-text" color="white"></svg-icon>
+					</button>
+				</li><!-- /TextCard -->
+				<!-- WeatherCard -->
+				<li data-tooltip-identifier="weathercard" 
+					data-tooltip="Weather"
+					data-tooltip-pos="left" 
+					data-tooltip-fx="false">
+					<button class="btn btn--round trigger-newcard colored-bg-opposite" data-create-card="weather">
+						<svg-icon icon="balance-sunny" color="white"></svg-icon>
+					</button>
+				</li><!-- /WeatherCard -->
+				<!-- ToDoCard -->
+				<li data-tooltip-identifier="todocard" 
+					data-tooltip="ToDo List"
+					data-tooltip-pos="left" 
+					data-tooltip-fx="false">
+					<button class="btn btn--round trigger-newcard colored-bg-opposite" data-create-card="todo">
+						<svg-icon icon="balance-sunny" color="white"></svg-icon>
+					</button>
+				</li><!-- /ToDoCard -->
+				<!-- NotificationsCard -->
+				<li data-tooltip-identifier="notifycard" 
+					data-tooltip="Notifications"
+					data-tooltip-pos="left" 
+					data-tooltip-fx="false">
+					<button class="btn btn--round trigger-newcard colored-bg-opposite" data-create-card="notify">
+						<svg-icon icon="balance-sunny" color="white"></svg-icon>
+					</button>
+				</li><!-- /NotificationsCard -->
+			</ul>
+		</div><!-- /Select card type -->
 	</footer><!-- /Dashboard Footer -->
 
 	<!-- Scripts -->

@@ -1,56 +1,44 @@
 .footer__select {
 	position: relative;
-	width: 0%;
-	height: 100%;
+	width: 60px;
+	height: auto;
 	margin: 0 auto;
+	padding-bottom: 65px;
 	z-index: z($footer, selection);
-	transform: translateY(100%);
-	transition: width 150ms $easeInOut;
-
-	&.show {
-		transition: width 150ms $easeInOut 150ms;
-		transform: translateY(0%);
-		width: 100vw;
-
-		ul { opacity: 1; }
-	}
-
-	&.hide {
-		width: 0%;
-		ul { opacity: 0; }
-	}
-
-	ul {
-		opacity: 0;
-		transition: opacity 150ms $easeInOut 150ms;
-	}
+	bottom: -80px;
+	opacity: 0;
+	transform: translateY(0);
+	transition-delay: 250ms;
 }
 
 .footer__select__list {
 	list-style: none;
-	width: 90px;
-	height: 32px;
+	width: 56px;
+	height: auto;
 	margin: 0 auto;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
-
-	[data-tooltip-identifier="textcard"]:before {
-		width: 500%;
-	}
-
-	[data-tooltip-identifier="weathercard"]:before {
-		width: 450%;
-	}
 
 	li {
-		position: relative;
 		display: inline-block;
-		margin-right: 20px;
-		width: 32px;
-		height: 32px;
+		margin-bottom: 10px;
+		width: 56px;
+		height: 56px;
+		opacity: 0;
+		transition: all 150ms $easeInOutQuint;
 
-		&:last-child { margin-right: 0; }
+		&:before { 
+			opacity: 0; 
+			transition-duration: 100ms;
+		}
+
+		&:last-child { margin-bottom: 0; }
+	}
+
+	@for $i from length($cardCount) through 1 {
+		li:nth-of-type(#{$i}) {
+			transform: translateY((length($cardCount) - $i + 1) * 118%);
+			transition-delay: (length($cardCount) - $i + 1) * 30ms;
+			&:before { transition-delay: (length($cardCount) - $i + 1) * 50ms; }
+		}
 	}
 	
 	svg { fill: white; }

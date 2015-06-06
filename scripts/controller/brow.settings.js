@@ -39,8 +39,6 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addEvents = function () {
 		// Elements
-		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
-		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
 		[].forEach.call(browElements.onClickNewCard, function (item) {
 			item.addEventListener('click', _addNewCard);
 		});
@@ -133,7 +131,8 @@ Brow.Settings = (function (Brow) {
 				type: storageItem['type'],
 				guid: storageItem['guid'],
 				title: storageItem['title'],
-				content: storageItem['content']
+				content: storageItem['content'],
+				style: storageItem['style']
 			});
 			browElements['CONTENT'].appendChild( browCard );
 		}
@@ -146,40 +145,6 @@ Brow.Settings = (function (Brow) {
 	const _checkIfCustomBrowCards = function () {
 		if (!localStorage[BROW_CARDS]) {
 			localStorage[BROW_CARDS] = true;
-		}
-	};
-
-	/**
-	 * @description	Displays list of cards.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _showCardList = function (event) {
-		event.preventDefault();
-		browElements.SELECTION.removeEventListener(_closeCardList);
-
-		if (!Brow.isEditMode) {
-			isSelectionState = true;
-			browElements['SELECTION'].classList.add('show');
-		}
-	};
-
-	/**
-	 * @description	Hides list of cards on mouseout.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _closeCardList = function (event) {
-		let selectionTopPosition	= browElements['SELECTION'].parentNode.getBoundingClientRect().top - 1;
-		let selectionIsVisible		= browElements['SELECTION'].classList.contains('show');
-		let movedOut					= event.clientY <= selectionTopPosition;
-
-		if (movedOut && isSelectionState) {
-			browElements.onClickSelectionList.removeEventListener(_showCardList);
-			browElements['SELECTION'].classList.add('hide');
-			setTimeout(function () {
-				browElements['SELECTION'].classList.remove('show', 'hide');
-			}, 300);
 		}
 	};
 

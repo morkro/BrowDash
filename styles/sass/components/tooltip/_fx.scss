@@ -1,0 +1,8 @@
+/*
+ * TOOLTIP: FX
+ */
+[data-tooltip-fx="false"] {
+	&:before {
+		opacity: 1;
+	}
+}

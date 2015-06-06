@@ -99,8 +99,6 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _addEvents = function () {
 		// Elements
-		browElements.onClickSelectionList.addEventListener('mouseover', _showCardList);
-		browElements.SELECTION.addEventListener('mouseout', _closeCardList);
 		[].forEach.call(browElements.onClickNewCard, function (item) {
 			item.addEventListener('click', _addNewCard);
 		});
@@ -193,7 +191,8 @@ Brow.Settings = (function (Brow) {
 				type: storageItem['type'],
 				guid: storageItem['guid'],
 				title: storageItem['title'],
-				content: storageItem['content']
+				content: storageItem['content'],
+				style: storageItem['style']
 			});
 			browElements['CONTENT'].appendChild( browCard );
 		}
@@ -206,40 +205,6 @@ Brow.Settings = (function (Brow) {
 	const _checkIfCustomBrowCards = function () {
 		if (!localStorage[BROW_CARDS]) {
 			localStorage[BROW_CARDS] = true;
-		}
-	};
-
-	/**
-	 * @description	Displays list of cards.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _showCardList = function (event) {
-		event.preventDefault();
-		browElements.SELECTION.removeEventListener(_closeCardList);
-
-		if (!Brow.isEditMode) {
-			isSelectionState = true;
-			browElements['SELECTION'].classList.add('show');
-		}
-	};
-
-	/**
-	 * @description	Hides list of cards on mouseout.
-	 * @private
-	 * @param			{Object} event
-	 */
-	const _closeCardList = function (event) {
-		let selectionTopPosition	= browElements['SELECTION'].parentNode.getBoundingClientRect().top - 1;
-		let selectionIsVisible		= browElements['SELECTION'].classList.contains('show');
-		let movedOut					= event.clientY <= selectionTopPosition;
-
-		if (movedOut && isSelectionState) {
-			browElements.onClickSelectionList.removeEventListener(_showCardList);
-			browElements['SELECTION'].classList.add('hide');
-			setTimeout(function () {
-				browElements['SELECTION'].classList.remove('show', 'hide');
-			}, 300);
 		}
 	};
 
@@ -626,11 +591,19 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Makes an element sticky
+		 * Makes an element sticky.
 		 * @param {NodeList|HTMLElement} config
 		 */
 		stamp (elem) {
 			this.packery.stamp( elem );
+		}
+
+		/**
+		 * Unstamps an element.
+		 * @param {NodeList|HTMLElement} config
+		 */
+		unstamp (elem) {
+			this.packery.unstamp( elem );
 		}
 
 		/**
@@ -813,7 +786,7 @@ BrowCard = (function (Brow) {
 	class BrowCard {
 		constructor (config) {
 			if (!config) config = {};
-		
+			
 			// settings
 			this.isEditMode	= false;
 			this.config			= { elem: null };
@@ -824,12 +797,17 @@ BrowCard = (function (Brow) {
 			this.type			= (config.type) ? config.type : 'text';
 			this.guid			= (config.guid) ? config.guid : Brow.GUID();
 			this.content		= (config.content) ? config.content : {};
+			this.theme			= (config.style) ? config.style.theme : false;
 			this.storage		= { 
 				module: true, 
 				type: this.type, 
 				guid: this.guid, 
 				content: this.content,
-				style: { width: 1, stamp: false }
+				style: { 
+					width: 1, 
+					stamp: false, 
+					theme: false
+				}
 			};
 
 			// events
@@ -959,10 +937,16 @@ TextCard = (function () {
 			this.elem		= document.createElement('text-card');
 			this.headline	= this.createHeadline();
 			this.content	= this.previewContent();
+			this.theme		= this.parent.theme;
 
 			this.elem.appendChild( this.headline );
 			this.elem.appendChild( this.content );
-			this.elem.setAttribute('theme', this.parent.theme);
+			this.addTheme(this.parent.theme);
+
+			window.addEventListener('theme-change', function (event) {
+				this.theme = event.detail;
+				this.addTheme(this.theme);
+			}.bind(this));
 		}
 
 		/**
@@ -995,6 +979,12 @@ TextCard = (function () {
 			return headElem;
 		}
 
+		addTheme (theme) {
+			if (theme) {
+				this.elem.setAttribute('theme', theme);
+			}
+		}
+
 		/**
 		 * @description	Returns the entire module <text-card> element.
 		 * @public
@@ -1012,6 +1002,7 @@ TextCard = (function () {
 			this.elem.save();
 			this.parent.storage['content'] = this.elem.storage;
 			this.parent.content.headline = this.headline.innerHTML;
+			this.parent.storage['style']['theme'] = this.theme;
 			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
 		}
 	}

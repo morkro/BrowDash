@@ -4,11 +4,12 @@
 [data-tooltip] {
 	&:before {
 		opacity: 0;
-		display: block;
+		display: inline-block;
 		content: attr(data-tooltip);
 		text-align: center;
-		width: 100%;
+		width: auto;
 		height: 24px;
+		padding: 0 10px;
 		position: absolute;
 		left: 50%;
 		background: rgba(0, 0, 0, .54);
@@ -17,25 +18,12 @@
 		line-height: 22px;
 		text-transform: initial;
 		font-size: 14px;
+		white-space: nowrap;
 		transition: opacity 150ms $easeInOut 0s;
 	}
 
 	&:hover:before {
 		opacity: 1;
 		transition: opacity 150ms $easeInOut;
-	}
-}
-
-[data-tooltip-pos="top"] {
-	&:before {
-		top: 0;
-		transform: translateX(-50%) translateY(-120%);
-	}
-}
-
-[data-tooltip-pos="bottom"] {
-	&:before {
-		bottom: 0;
-		transform: translateX(-50%) translateY(120%);
 	}
 }

@@ -11,10 +11,16 @@ TextCard = (function () {
 			this.elem		= document.createElement('text-card');
 			this.headline	= this.createHeadline();
 			this.content	= this.previewContent();
+			this.theme		= this.parent.theme;
 
 			this.elem.appendChild( this.headline );
 			this.elem.appendChild( this.content );
-			this.elem.setAttribute('theme', this.parent.theme);
+			this.addTheme(this.parent.theme);
+
+			window.addEventListener('theme-change', function (event) {
+				this.theme = event.detail;
+				this.addTheme(this.theme);
+			}.bind(this));
 		}
 
 		/**
@@ -47,6 +53,12 @@ TextCard = (function () {
 			return headElem;
 		}
 
+		addTheme (theme) {
+			if (theme) {
+				this.elem.setAttribute('theme', theme);
+			}
+		}
+
 		/**
 		 * @description	Returns the entire module <text-card> element.
 		 * @public
@@ -64,6 +76,7 @@ TextCard = (function () {
 			this.elem.save();
 			this.parent.storage['content'] = this.elem.storage;
 			this.parent.content.headline = this.headline.innerHTML;
+			this.parent.storage['style']['theme'] = this.theme;
 			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
 		}
 	}

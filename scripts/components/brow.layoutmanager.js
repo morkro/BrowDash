@@ -50,11 +50,19 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Makes an element sticky
+		 * Makes an element sticky.
 		 * @param {NodeList|HTMLElement} config
 		 */
 		stamp (elem) {
 			this.packery.stamp( elem );
+		}
+
+		/**
+		 * Unstamps an element.
+		 * @param {NodeList|HTMLElement} config
+		 */
+		unstamp (elem) {
+			this.packery.unstamp( elem );
 		}
 
 		/**

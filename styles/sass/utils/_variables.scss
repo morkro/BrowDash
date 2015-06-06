@@ -32,4 +32,9 @@ $easeInOutQuart:	cubic-bezier(0.77, 0, 0.175, 1);
  */
 $modals: content, footer, overlay, dialog, header;
 $content: cards, cardshover, overlay, editmode;
-$footer: button, selection;
+$footer: selection, button;
+
+/**
+ * AVAILABLE CARDS
+ */
+$cardCount: textcard, weathercard, todocard, notifycard;

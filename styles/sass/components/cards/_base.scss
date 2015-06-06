@@ -33,17 +33,3 @@
 .module--longshadow {
 	box-shadow: $shadow-z4;
 }
-
-/**
- * ANIMATION
- */
-@keyframes cardSlideIn {
-	from {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}

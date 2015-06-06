@@ -20,7 +20,7 @@
 		}
 		:host-context(.is-edit) .weather__temperature,
 		:host-context(.is-edit) .weather__location {
-			transform: translateY(100%);
+			transform: translateY(150px);
 		}
 		.weather__loading {
 			background: #448aff;
@@ -152,11 +152,6 @@
 			color: rgba(255, 255, 255, .75);
 			width: calc(100% - 40px);
 			display: inline-block;
-		}
-		@keyframes fadeInOverlay {
-			0% { display: none; opacity: 0; }
-			1% { display: block; opacity: 0; }
-			100% { display: block; opacity: 1; }
 		}
 	</style>
 	<card-base palette="false">

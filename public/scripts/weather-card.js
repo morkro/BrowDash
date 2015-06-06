@@ -65,7 +65,7 @@
 			// // Create content
 			this.createContent();
 
-			console.log(weatherResponse);
+			//console.log(weatherResponse);
 		}.bind(this))
 		.catch(function (error) {
 			console.log(error);
@@ -115,8 +115,8 @@
 
 	WeatherCard.kelvinCalculator = function (temp) {
 		let absZeroTempInC	= 273.15; // -273.15 °C
-		let absZeroTempInF	= 459.67; // -459.67 °F
 		let calcCelcius		= Math.floor(temp - absZeroTempInC);
+		let calcFahrenheit	= Math.floor(calcCelcius * 1.8 + 32);
 		this.curDegrees		= calcCelcius;
 	};
 
