@@ -33,28 +33,16 @@
 			margin-right: 10px; 
 			display: block;
 		}
-		.module__heading ::content h1:read-write:focus,
-		.module__heading ::content h1:read-write:hover { 
+		.module__heading ::content h1:read-write:focus { 
 			outline: none; 
-			border-radius: 2px;
-			background: rgba(0, 0, 0, .05);
 		}
 		/* Content */
 		.module__content {
 			padding: 0 20px 20px; 
 			display: block;
 		}
-		.module__content ::content div:focus,
-		.module__content ::content div:read-write:hover {
+		.module__content ::content div:focus {
 			outline: none;
-			border-radius: 2px;
-			background: rgba(0, 0, 0, .05);
-		}
-		.module__content ::content div:empty:not(:focus):after {
-			cursor: text;
-			content: attr(data-text-preview);
-			font-style: italic;
-			color: rgba(0, 0, 0, .3);
 		}
 		.module__content ::content div ol {
 			padding-left: 20px;

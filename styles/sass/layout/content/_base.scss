@@ -1,4 +1,4 @@
-#brow__content {
+#brow-content {
 	position: relative;
 	max-width: $max-width;
 	padding: 0;
@@ -13,31 +13,31 @@
 	}
 }
 
-.brow__content--gutter {
+.brow-content--gutter {
 	width: 1.25%;
 }
 
-.brow__content__module,
-.brow__content--sizer {
+.brow-content__module,
+.brow-content--sizer {
 	width: 32%;
 }
 
-.brow__content__module {
+.brow-content__module {
 	position: absolute;
 }
 
 @media #{$max-desktop} {
-	#brow__content { width: 90%; }
+	#brow-content { width: 90%; }
 
-	.brow__content__module,
-	.brow__content--sizer {
+	.brow-content__module,
+	.brow-content--sizer {
 		width: 48%;
 	}
 }
 
 @media #{$max-mobile} {
-	.brow__content__module,
-	.brow__content--sizer {
+	.brow-content__module,
+	.brow-content--sizer {
 		width: 100%;
 	}
 }

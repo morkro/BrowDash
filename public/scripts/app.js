@@ -26,6 +26,24 @@ var t=this;this.handleDraggabilly={dragStart:function(){t.itemDragStart(this.ele
 	 * @description	Allows to loop over NodeList ('querySelectorAll').
 	 */
 	NodeList.prototype.forEach = Array.prototype.forEach;
+
+	String.prototype.capitalize = function () {
+		return this.charAt(0).toUpperCase() + this.slice(1);
+	};
+
+	/**
+	 * @description	Returns a Globally Unique Identifer as string
+	 * @return			{String}
+	 */
+	window.uuid = function () {
+		var perf = performance.now();
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = (perf + Math.random() * 16) % 16 | 0;
+			perf = Math.floor(perf / 16);
+			return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		});
+		return uuid;
+	};
 	
 })(window);
 /**
@@ -40,33 +58,6 @@ var Brow = window.Brow = {};
  * @public
  */
 Brow.isEditMode = false;
-
-/**
- * @name				Brow.activeCard
- * @description	Holds current state of an active card.
- * @public
- */
-Brow.activeCard = null;
-
-/**
- * @name				Brow.GUID
- * @description	Returns a Globally Unique Identifer as string
- * @public
- * @return			{String}
- */
-Brow.GUID = (function () {
-	'use strict';
-	
-	const s4 = function s4 () {
-		return Math.floor((1 + Math.random()) * 0x10000)
-				.toString(16).substring(1);
-	};
-
-	return function() {
-		return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-				s4() + '-' + s4() + s4() + s4();
-	};
-})();
 /**
  * @name				Brow.Settings
  * @description	Stores all necessary HTMLElements, sets the theme and 
@@ -179,6 +170,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _validateBrowCards = function (storage) {
 		if (!localStorage[BROW_CARDS] || localStorage.length <= 1) {
+			localStorage.setItem(BROW_CARDS, true);
 			let defaultCard = new BrowCard({ type: 'text' });
 			browElements['CONTENT'].appendChild( defaultCard );
 		} else {
@@ -194,12 +186,14 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Number|String} index
 	 */	
 	const _parseCardsFromStorage = function (index) {
-		let storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
+		let storageItem = JSON.parse(
+			localStorage.getItem( localStorage.key(index) )
+		);
+
 		if (storageItem['module']) {
 			let browCard = new BrowCard({
 				type: storageItem['type'],
 				guid: storageItem['guid'],
-				title: storageItem['title'],
 				content: storageItem['content'],
 				style: storageItem['style']
 			});
@@ -558,13 +552,13 @@ BrowLayoutManager = (function (window, Brow) {
 
 	class BrowLayoutManager {
 		constructor (container) {
-			this.dragSelector = '.brow__content__module /deep/ .dragg-area';
+			this.dragSelector = '.brow-content__module /deep/ .dragg-area';
 			this.transition	= 0;
 			this.pkrOptions	= {
-				itemSelector: '.brow__content__module',
+				itemSelector: '.brow-content__module',
 				transitionDuration: this.transition,
-				columnWidth: '.brow__content--sizer',
-				gutter: '.brow__content--gutter',
+				columnWidth: '.brow-content--sizer',
+				gutter: '.brow-content--gutter',
 				stamp: '.is-stamp',
 				isInitLayout: false
 			};
@@ -575,15 +569,15 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Will initialise the Packery layout.
+		 * @description	Will initialise the Packery layout.
 		 */
 		layout () {
 			this.packery.layout();
 		}
 
 		/**
-		 * Adds a new item to the Packery layout.
-		 * @param {NodeList|HTMLElement} elem
+		 * @description	Adds a new item to the Packery layout.
+		 * @param 			{NodeList|HTMLElement} elem
 		 */
 		add (elem) {
 			this.packery.appended( elem );
@@ -591,8 +585,8 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Removes passed element from the Packery layout.
-		 * @param {NodeList|HTMLElement} config
+		 * @description	Removes passed element from the Packery layout.
+		 * @param 			{NodeList|HTMLElement} config
 		 */
 		remove (elem) {
 			this.packery.remove( elem );
@@ -600,23 +594,23 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Makes an element sticky.
-		 * @param {NodeList|HTMLElement} config
+		 * @description	Makes an element sticky.
+		 * @param 			{NodeList|HTMLElement} config
 		 */
 		stamp (elem) {
 			this.packery.stamp( elem );
 		}
 
 		/**
-		 * Unstamps an element.
-		 * @param {NodeList|HTMLElement} config
+		 * @description	Unstamps an element.
+		 * @param 			{NodeList|HTMLElement} config
 		 */
 		unstamp (elem) {
 			this.packery.unstamp( elem );
 		}
 
 		/**
-		 * Initialises Draggabilly.
+		 * @description	Initialises Draggabilly.
 		 */
 		addDraggabilly () {
 			const _self = this;
@@ -624,12 +618,12 @@ BrowLayoutManager = (function (window, Brow) {
 			cards.forEach(function (item) {
 				let draggie = new Draggabilly(item, _self.dragOptions);
 				_self.packery.bindDraggabillyEvents( draggie );
-				draggie.on('pointerDown', _self.validateBrowMode.bind(draggie));
+				draggie.on('pointerDown', _self.validateEditMode.bind(draggie));
 			});
 		}
 
 		/**
-		 * Adds EventListener.
+		 * @description	Adds EventListener.
 		 */
 		addEvents () {
 			window.addEventListener('card-edit', this.validateLayoutState.bind(this));
@@ -640,11 +634,22 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Checks event type and validates the layout's state.
-		 * @param  {Object} event
+		 * @description	Deactivates editMode and removes classes from content overlay.
+		 */
+		deactivateEditMode () {
+			Brow.isEditMode = false;
+			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('is-fading');
+			setTimeout(function () {
+				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('is-visible', 'is-fading');
+			}, 100);
+		}
+
+		/**
+		 * @description	Checks event type and validates the layout's state.
+		 * @param  			{Object} event
 		 */
 		validateLayoutState (event) {
-			let elem = document.querySelector(`[data-module-guid="${event.detail}"]`);
+			let elem = document.querySelector(`[data-guid="${event.detail}"]`);
 
 			// activated editing mode
 			if (event.type === 'card-edit') {
@@ -654,11 +659,7 @@ BrowLayoutManager = (function (window, Brow) {
 
 			// saved card or remove card
 			if (event.type === 'card-save' || event.type === 'card-remove') {
-				Brow.isEditMode = false;
-				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('is-fading');
-				setTimeout(function () {
-					Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('is-visible', 'is-fading');
-				}, 100);
+				this.deactivateEditMode();
 				
 				if (event.type === 'card-save') {
 					this.layout();
@@ -668,22 +669,23 @@ BrowLayoutManager = (function (window, Brow) {
 				if (event.type === 'card-remove') {
 					this.remove(elem);
 					Brow.activeCard = null;
-					localStorage.removeItem( event.detail );
 				}
 			}
 
-			else if (event.type === 'click' && Brow.isEditMode && Brow.activeCard.isEditMode) {
-				Brow.activeCard.saveState();
-				Brow.activeCard.wrapper.elem.classList.remove('fx', 'is-edit');
+			else if (event.type === 'click' && Brow.isEditMode) {
+				elem = Brow.Settings.getElem()['CONTENT'].querySelector('.is-edit');
+				elem.saveToStorage();
+				elem.classList.remove('fx', 'is-edit');
+				this.deactivateEditMode();
 			}
 		}
 
 		/**
-		 * Checks if editMode is active and weither disables or enables the dragging.
-		 * @param  {Object} event
+		 * @description	Checks if editMode is active and weither disables or enables the dragging.
+		 * @param  			{Object} event
 		 */
-		validateBrowMode (event) {
-			if (Brow.isEditMode && Brow.activeCard.isEditMode) {
+		validateEditMode (event) {
+			if (Brow.isEditMode) {
 				this.disable();
 			} else {
 				this.enable();
@@ -789,354 +791,174 @@ BrowTimer = (function() {
  * @name				BrowCard
  * @description	/
  */
-BrowCard = (function (Brow) {
+BrowCard = (function (window) {
 	'use strict';
 
 	class BrowCard {
 		constructor (config) {
 			if (!config) config = {};
 			
-			// settings
-			this.isEditMode	= false;
-			this.config			= { elem: null };
-			this.saveState		= this.saveCardChanges;
-			this.wrapper		= null;
+			this.config = config;
+			this.elem = this.createCard();
+			this.initialiseCard();
 
-			// initialisation
-			this.type			= (config.type) ? config.type : 'text';
-			this.guid			= (config.guid) ? config.guid : Brow.GUID();
-			this.content		= (config.content) ? config.content : {};
-			this.theme			= (config.style) ? config.style.theme : false;
-			this.storage		= { 
-				module: true, 
-				type: this.type, 
-				guid: this.guid, 
-				content: this.content,
-				style: { 
-					width: 1, 
-					stamp: false, 
-					theme: false
-				}
-			};
-
-			// events
-			this.eventOption	= { 'detail': this.guid };
-			this.editEvent		= new CustomEvent('card-edit', this.eventOption);
-			this.saveEvent		= new CustomEvent('card-save', this.eventOption);
-			this.removeEvent	= new CustomEvent('card-remove', this.eventOption);
-
-			return this.createCard();
+			return this.elem;
 		}
 
 		/**
-		 * @name				BrowCard.createCard
-		 * @description	Creates a new card module
-		 * @public
+		 * @description	Returns a new card element.
+		 * @return 			{HTMLElement}
 		 */
 		createCard () {
-			switch (this.type) {
-				case 'text':
-					this.wrapper = new TextCard( this );
-					break;
-				case 'weather':
-					this.wrapper = new WeatherCard( this );
-					break;
-				case 'todo':
-					this.wrapper = new TodoCard( this );
-					break;
-				default:
-					this.wrapper = new TextCard( this );
-					break;
-			}
-
-			this.applyCardData();
-			this.addEvents( this.wrapper.getContent );
-
-			return this.wrapper.getContent;
-		}
-
-		/**
-		 * @description	Applies classes and data-attributes to DOM element.
-		 * @private
-		 */
-		applyCardData () {
-			this.wrapper.getContent.classList.add('brow__content__module');
-			this.wrapper.getContent.setAttribute('data-module-width', this.storage.style.width);
-			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
-			this.wrapper.getContent.setAttribute('data-module-type', this.type);
-		}
-
-		/**
-		 * @description	Sets eventListener on current card element.
-		 * @private
-		 * @param			{Object} event
-		 */
-		addEvents (elem) {
-			elem.addEventListener('settings', this.setCardEvents.bind(this) );
-			elem.addEventListener('edit', this.activateEditMode.bind(this) );
-			elem.addEventListener('save', this.saveCardChanges.bind(this) );
-			elem.addEventListener('remove', this.removeCard.bind(this) );
-		}
-
-		/**
-		 * @description	Stores event target into class.
-		 * @private
-		 * @param			{Object} event
-		 */
-		setCardEvents (event) {
-			if (this.config.elem === null) {
-				this.config.elem = event.target;
+			switch (this.config.type) {
+				case 'text': return document.createElement('text-card');
+				case 'weather': return document.createElement('weather-card');
+				case 'todo': return document.createElement('todo-card');
+				default: return document.createElement('text-card');
 			}
 		}
 
 		/**
-		 * @description	Shows the save button and makes editing possible.
-		 * @private
-		 * @param			{Object} event
+		 * @description	Applies class element and calls initialise().
 		 */
-		activateEditMode (event) {
-			// config
-			Brow.activeCard = this;
-			this.isEditMode = true;
-			this.wrapper.getContent.edit();
-			// fire custom event
-			window.dispatchEvent( this.editEvent );
-		}
-
-		/**
-		 * @description	Shows the edit button and saves the content to localStorage.
-		 * @private
-		 * @param			{Object} event
-		 */
-		saveCardChanges (event) {
-			// config
-			this.isEditMode = false;
-			this.wrapper.save();
-			// fire custom event
-			window.dispatchEvent( this.saveEvent );
-		}
-
-		/**
-		 * @description	Removes a card from localStorage.
-		 * @private
-		 * @param			{Object} event
-		 */
-		removeCard (event) {
-			this.config.elem.addEventListener('transitionend', 
-				function (event) {
-					// Only listen to the last transition.
-					if (event.propertyName === 'transform') {
-						this.isEditMode = false;
-						window.dispatchEvent( this.removeEvent );
-					}
-				}.bind(this)
-			);
+		initialiseCard () {
+			this.elem.initialise( this.config );
+			this.elem.classList.add('brow-content__module');
 		}
 	}
 
 	return BrowCard;
-})(Brow);
-/**
- * @name				TextCard
- * @description	/
- */
-TextCard = (function () {
-	'use strict';
+})(window);
 
-	class TextCard {
-		constructor (card) {
-			this.parent		= card;
-			this.elem		= document.createElement('text-card');
-			this.headline	= this.createHeadline();
-			this.content	= this.createContent();
-			this.theme		= this.parent.theme;
+// BrowCard = (function (Brow) {
+// 	'use strict';
 
-			this.elem.appendChild( this.headline );
-			this.elem.appendChild( this.content );
-			this.addTheme(this.parent.theme);
-
-			window.addEventListener('theme-change', function (event) {
-				this.theme = event.detail;
-				this.addTheme(this.theme);
-			}.bind(this));
-		}
-
-		/**
-		 * @description	Sets the preview content
-		 * @public
-		 * @return 			{HTMLElement}
-		 */
-		createContent () {
-			let textElem			= document.createElement('div');
-			let defaultContent	= Brow.Data.Content('text')['default'];
-			let storedContent		= this.parent.content.text;
+// 	class BrowCard {
+// 		constructor (config) {
+// 			if (!config) config = {};
 			
-			if (storedContent) {
-				textElem.innerHTML = storedContent;
-			}
+// 			// settings
+// 			this.isEditMode	= false;
+// 			this.config			= { elem: null };
+// 			this.saveState		= this.saveCardChanges;
+// 			this.wrapper		= null;
 
-			textElem.setAttribute('data-text-preview', defaultContent);
-			return textElem;
-		}
+// 			// initialisation
+// 			this.type			= (config.type) ? config.type : 'text';
+// 			this.guid			= (config.guid) ? config.guid : uuid();
+// 			this.content		= (config.content) ? config.content : {};
+// 			this.theme			= (config.style) ? config.style.theme : false;
+// 			this.storage		= { 
+// 				module: true, 
+// 				type: this.type, 
+// 				guid: this.guid, 
+// 				content: this.content,
+// 				style: { 
+// 					width: 1, 
+// 					stamp: false, 
+// 					theme: false
+// 				}
+// 			};
 
-		/**
-		 * @description	Creates the heading
-		 * @private
-		 * @return 			{HTMLElement}
-		 */	
-		createHeadline () {
-			let headElem		= document.createElement('h1');
-			let cardHasTitle	= this.parent.content.headline;
-			headElem.innerHTML = (cardHasTitle) ? cardHasTitle : Brow.Data.Header('text');
-			return headElem;
-		}
+// 			// events
+// 			this.eventOption	= { 'detail': this.guid };
+// 			this.editEvent		= new CustomEvent('card-edit', this.eventOption);
+// 			this.saveEvent		= new CustomEvent('card-save', this.eventOption);
 
-		addTheme (theme) {
-			if (theme) {
-				this.elem.setAttribute('theme', theme);
-			}
-		}
+// 			return this.createCard();
+// 		}
 
-		/**
-		 * @description	Returns the entire module <text-card> element.
-		 * @public
-		 * @return 			{HTMLElement}
-		 */	
-		get getContent () {
-			return this.elem;
-		}
+// 		/**
+// 		 * @name				BrowCard.createCard
+// 		 * @description	Creates a new card module
+// 		 * @public
+// 		 */
+// 		createCard () {
+// 			switch (this.type) {
+// 				case 'text':
+// 					this.wrapper = new TextCard( this );
+// 					break;
+// 				case 'weather':
+// 					this.wrapper = new WeatherCard( this );
+// 					break;
+// 				case 'todo':
+// 					this.wrapper = new TodoCard( this );
+// 					break;
+// 				default:
+// 					this.wrapper = new TextCard( this );
+// 					break;
+// 			}
 
-		/**
-		 * @description	Removes attributes, updates Object and saves it to localStorage.
-		 * @public
-		 */	
-		save () {
-			this.elem.save();
-			this.parent.storage['content'] = this.elem.storage;
-			this.parent.content.headline = this.headline.innerHTML;
-			this.parent.storage['style']['theme'] = this.theme;
-			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-		}
-	}
+// 			this.applyCardData();
+// 			this.addEvents( this.wrapper.getContent );
 
-	return TextCard;
-})();
-/**
- * @name				WeatherCard
- * @description	/
- */
-WeatherCard = (function () {
-	'use strict';
+// 			return this.wrapper.getContent;
+// 		}
 
-	class WeatherCard {
-		constructor (card) {
-			this.parent		= card;
-			this.elem		= document.createElement('weather-card');
-			this.confTemp	= this.parent.content.temperature;
+// 		/**
+// 		 * @description	Applies classes and data-attributes to DOM element.
+// 		 * @private
+// 		 */
+// 		applyCardData () {
+// 			this.wrapper.getContent.classList.add('brow-content__module');
+// 			this.wrapper.getContent.setAttribute('data-module-width', this.storage.style.width);
+// 			this.wrapper.getContent.setAttribute('data-module-guid', this.guid);
+// 			this.wrapper.getContent.setAttribute('data-module-type', this.type);
+// 		}
 
-			if (!!this.confTemp) {
-				this.elem.setTemperature(this.confTemp);
-			}
-		}
+// 		/**
+// 		 * @description	Sets eventListener on current card element.
+// 		 * @private
+// 		 * @param			{Object} event
+// 		 */
+// 		addEvents (elem) {
+// 			elem.addEventListener('settings', this.setCardEvents.bind(this) );
+// 			elem.addEventListener('edit', this.activateEditMode.bind(this) );
+// 			elem.addEventListener('save', this.saveCardChanges.bind(this) );
+// 			elem.addEventListener('remove', this.removeCard.bind(this) );
+// 		}
 
-		/**
-		 * @description	Returns the entire module wrapper element.
-		 * @public
-		 * @return 			{HTMLElement}
-		 */	
-		get getContent () {
-			return this.elem;
-		}
+// 		/**
+// 		 * @description	Stores event target into class.
+// 		 * @private
+// 		 * @param			{Object} event
+// 		 */
+// 		setCardEvents (event) {
+// 			if (this.config.elem === null) {
+// 				this.config.elem = event.target;
+// 			}
+// 		}
 
-		save () {
-			this.elem.save();
-			this.parent.storage['content'] = this.elem.storage;
-			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-		}
-	}
+// 		/**
+// 		 * @description	Shows the save button and makes editing possible.
+// 		 * @private
+// 		 * @param			{Object} event
+// 		 */
+// 		activateEditMode (event) {
+// 			// config
+// 			Brow.activeCard = this;
+// 			this.isEditMode = true;
+// 			this.wrapper.getContent.edit();
+// 			// fire custom event
+// 			window.dispatchEvent( this.editEvent );
+// 		}
 
-	return WeatherCard;
-})();
-/**
- * @name				TodoCard
- * @description	/
- */
-TodoCard = (function () {
-	'use strict';
+// 		/**
+// 		 * @description	Shows the edit button and saves the content to localStorage.
+// 		 * @private
+// 		 * @param			{Object} event
+// 		 */
+// 		saveCardChanges (event) {
+// 			// config
+// 			this.isEditMode = false;
+// 			this.wrapper.save();
+// 			// fire custom event
+// 			window.dispatchEvent( this.saveEvent );
+// 		}
+// 	}
 
-	class TodoCard {
-		constructor (card) {
-			this.parent	= card;
-			this.elem	= document.createElement('todo-card');
-		}
-
-		/**
-		 * @description	Returns the entire module wrapper element.
-		 * @public
-		 * @return 			{HTMLElement}
-		 */	
-		get getContent () {
-			return this.elem;
-		}
-
-		save () {
-			localStorage[this.parent.guid] = JSON.stringify(this.parent.storage);
-		}
-	}
-
-	return TodoCard;
-})();
-/**
- * @name				Brow.Data
- * @description	Stores all module related data like default content.
- * @param			{Object} Brow
- * @return			{Function} Header
- * @return			{Function} Content
- */
-Brow.Data = (function (Brow) {
-	'use strict';
-
-	/* Constants */
-	const _cardDefaultTitles = {
-		'text': 'Save any content you want.',
-		'todo': 'Task list'
-	};
-
-	const _cardDefaultContents = {
-		'text': {
-			'default': `Just click the edit button and enter any content you want.
-							It's possible to remove all styles of your copied text using the "unstyle"-button.`
-		}
-	};
-
-	/**
-	 * @name				BrowDash.Data.Header
-	 * @description	Returns the default title of each module
-	 * @public
-	 * @param			{String} type
-	 */
-	const _getDefaultHeader = function (type) {
-		if (typeof type !== 'string') return;
-		return _cardDefaultTitles[type];
-	};
-
-	/**
-	 * @name				BrowDash.Data.Content
-	 * @description	Returns the default content of each module
-	 * @public
-	 * @param			{String} type
-	 */
-	const _getDefaultContent = function (type) {
-		if (typeof type !== 'string') return;
-		return _cardDefaultContents[type];
-	};	
-
-	/* Public API */
-	return {
-		Header: _getDefaultHeader,
-		Content: _getDefaultContent
-	};
-})(Brow);
+// 	return BrowCard;
+// })(Brow);
 (function (window) {
 	'use strict';
 

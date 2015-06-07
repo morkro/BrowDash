@@ -50,7 +50,6 @@ module.exports = function(grunt) {
 			},
 			scripts: [
 				/* Libraries */
-				//'<%= app.directory.build.scripts %>/libs/fetch.polyfill.js',
 				'<%= app.directory.build.scripts %>/libs/draggabilly.pkgd.min.js',
 				'<%= app.directory.build.scripts %>/libs/packery.pkgd.min.js',
 				/* Helpers */
@@ -63,11 +62,6 @@ module.exports = function(grunt) {
 				'<%= app.directory.build.scripts %>/components/brow.layoutmanager.js',
 				'<%= app.directory.build.scripts %>/components/brow.timer.js',
 				'<%= app.directory.build.scripts %>/components/brow.card.js',
-				'<%= app.directory.build.scripts %>/components/brow.card.text.js',
-				'<%= app.directory.build.scripts %>/components/brow.card.weather.js',
-				'<%= app.directory.build.scripts %>/components/brow.card.todo.js',
-				/* Data */
-				'<%= app.directory.build.scripts %>/model/brow.data.js',
 				/* App initialisation */
 				'<%= app.directory.build.scripts %>/app.init.js'
 			]

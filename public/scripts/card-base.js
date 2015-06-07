@@ -6,17 +6,35 @@
 	var template	= doc.querySelector('#card-base');
 	var CardProto	= Object.create(HTMLDivElement.prototype);
 	
-	CardProto.availableColors = ['red', 'pink', 'blue', 'green', 'brown', 'white'];
+	/**
+	 * @description	Returns a Globally Unique Identifer as string
+	 * @return			{String}
+	 */
+	CardProto.GUID = function () {
+		var perf = performance.now();
+		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+			var r = (perf + Math.random() * 16) % 16 | 0;
+			perf = Math.floor(perf / 16);
+			return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+		});
+		return uuid;
+	};
 
 	/**
-	 * @description An instance of the element is created.
+	 * @description	Sets an UUID to host element.
+	 */
+	CardProto.setGUID = function (guid) {
+		let _guid = guid ? guid : this.GUID();
+		this.getHost().setAttribute('data-guid', _guid);
+	};
+
+	/**
+	 * @description	An instance of the element is created.
 	 */
 	CardProto.createdCallback = function () {
 		this.root = this.createShadowRoot();
 		this.root.appendChild( document.importNode(template.content, true) );
 		
-		this.host			= this;
-		this.settings		= this.root.querySelector('.module__settings');
 		this.confPalette	= this.root.querySelector('.settings__palette');
 		this.palette		= this.root.querySelector('.module__theme');
 		this.edit			= this.root.querySelector('.settings__edit');
@@ -24,14 +42,12 @@
 		this.remove			= this.root.querySelector('.settings__remove');
 		
 		this.addEvents();
-		this.validateHost();
 	};
 
 	/**
 	 * @description	Sets eventListener on current card element.
 	 */
 	CardProto.addEvents = function () {
-		this.settings.addEventListener('mouseover', this.enableEvent.bind(this));
 		this.confPalette.addEventListener('click', this.togglePalette.bind(this));
 		this.palette.addEventListener('click', this.modifyTheme.bind(this));
 		this.edit.addEventListener('click', this.editCard.bind(this));
@@ -42,28 +58,23 @@
 	/**
 	 * @description	Checks if <card-base> is inside another host.
 	 */
-	CardProto.validateHost = function () {
+	CardProto.getHost = function () {
+		let _host = this;
 		if (!!this.parentNode.host) {
-			this.host = this.parentNode.host;
-		} else { this.host = this; }
-	};
-
-	/**
-	 * @description Dispatches 'settings' event.
-	 */
-	CardProto.enableEvent = function () {
-		this.dispatchEvent( new Event('settings') );
+			_host = this.parentNode.host;
+		}
+		return _host;
 	};
 
 	/**
 	 * @description Toggles class on host to move the palette list.
 	 */
 	CardProto.togglePalette = function () {
-		this.validateHost();
-		if (this.host.classList.contains('edit-theme')) {
-			this.host.classList.remove('edit-theme');
+		let _host = this.getHost();
+		if (_host.classList.contains('edit-theme')) {
+			_host.classList.remove('edit-theme');
 		} else {
-			this.host.classList.add('edit-theme');
+			_host.classList.add('edit-theme');
 		}
 	};
 
@@ -86,31 +97,47 @@
 	 * @description Adds 'is-edit' class to host and dispatches 'edit' event.
 	 */
 	CardProto.editCard = function () {
-		this.validateHost();
-		this.host.classList.add('fx', 'is-edit');
-		this.edit.dispatchEvent( new Event('edit') );
+		let host = this.getHost();
+		let detail = { detail: host.getAttribute('data-guid') };
+		let editEvent = new CustomEvent('card-edit', detail);
+
+		host.classList.add('fx', 'is-edit');
+		window.dispatchEvent(editEvent);
 	};
 
 	/**
 	 * @description Removes 'is-edit' class to host and dispatches 'save' event.
 	 */
 	CardProto.saveCard = function () {
-		this.validateHost();
-		this.host.classList.remove('is-edit', 'edit-theme');
-		this.save.dispatchEvent( new Event('save') );
+		let host = this.getHost();
+		let detail = { detail: host.getAttribute('data-guid') };
+		let saveEvent = new CustomEvent('card-save', detail);
+		
+		host.saveToStorage();
+		window.dispatchEvent(saveEvent);
 
-		this.host.addEventListener('transitionend', function (event) {
-			this.host.classList.remove('fx');
-		}.bind(this));
+		host.classList.remove('is-edit', 'edit-theme');
+		host.addEventListener('transitionend', 
+			function () { host.classList.remove('fx'); }
+		);
 	};
 
 	/**
-	 * @description Adds 'is-delete' class to host and dispatches 'remove' event.
+	 * @description Adds 'is-delete' class to host, dispatches 'card-remove' event
+	 *              and removes it from localStorage.
 	 */
 	CardProto.removeCard = function () {
-		this.validateHost();
-		this.host.classList.add('fx', 'is-delete');
-		this.dispatchEvent( new Event('remove') );
+		let host = this.getHost();
+		let detail = { detail: host.getAttribute('data-guid') };
+		let removeEvent = new CustomEvent('card-remove', detail);
+
+		host.classList.add('fx', 'is-delete');
+		host.addEventListener('transitionend', function (event) {
+			if (event.propertyName === 'transform') {
+				window.dispatchEvent(removeEvent);
+				localStorage.removeItem( detail.detail );
+			}
+		});
 	};
 	
 	/* Register element in document */

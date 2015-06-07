@@ -13,14 +13,43 @@
 	WeatherCard.curWeather	= 'cloudy';
 	WeatherCard.daytime		= 'day';
 	WeatherCard.tempElem		= null;
-	WeatherCard.storage		= { temperature: 'celsius' };
+	WeatherCard.config		= { module: true, type: 'weather', content: {} };
+
+	/**
+	 * @description	Initialises data.
+	 * @param 			{Object} config
+	 */
+	WeatherCard.initialise = function (config) {
+		// Assign GUID
+		if (config.guid) {
+			this.config.guid = config.guid;
+		} else {
+			this.config.guid = this.root.children[1].GUID();
+		}
+
+		// Eval content
+		if (config.content && typeof config.content === 'object') {
+			this.config.content = config.content;	
+		} else {
+			this.config.content = {};
+		}
+		
+		// Set possible default temperature
+		if (!this.config.content.temperature) {
+			this.config.content.temperature = 'celsius';
+		}
+
+		this.root.children[1].setGUID(this.config.guid);
+		this.saveToStorage();
+	};
 
 	/**
 	 * @description	An instance of the element is created.
 	 */
 	WeatherCard.createdCallback = function () {
-		this.root		= this.createShadowRoot();
+		this.root = this.createShadowRoot();
 		this.root.appendChild( document.importNode(template.content, true) );
+
 		this.settings	= this.root.querySelector('.weather__settings ul');
 		this.inputC		= this.root.querySelector('#celsius');
 		this.inputF		= this.root.querySelector('#fahrenheit');
@@ -36,8 +65,14 @@
 		this.appendContent();
 
 		this.settings.addEventListener('click', this.validateSettings.bind(this));
-
 		this.getGeolocation();
+	};
+
+	/**
+	 * @description	Saves this.config to localStorage.
+	 */
+	WeatherCard.saveToStorage = function () {
+		localStorage.setItem(this.config.guid, JSON.stringify(this.config));
 	};
 
 	/**
@@ -46,6 +81,7 @@
 	WeatherCard.validateSettings = function (event) {
 		if (event.target.type === 'radio') {
 			this.setTemperature(event.target.id);
+			this.saveToStorage();
 		}
 	};
 
@@ -90,7 +126,7 @@
 			// Create content
 			this.updateContent();
 			this.removeAttribute('loading');
-			this.setTemperature(this.storage.temperature);
+			this.setTemperature(this.config.content.temperature);
 		}.bind(this))
 		.catch(function (error) {
 			console.log(error);
@@ -99,7 +135,7 @@
 
 	/**
 	 * @description	Saves the weather string and sets 'weather=""' attribute.
-	 * @param  {String} weather
+	 * @param  			{String} weather
 	 */
 	WeatherCard.validateWeather = function (weather) {
 		this.curWeather = weather.toString().toLowerCase();
@@ -108,7 +144,7 @@
 
 	/**
 	 * @description	Validates current time and sets 'time=""' attribute.
-	 * @param  {Object} config
+	 * @param  			{Object} config
 	 */
 	WeatherCard.validateDaytime = function (config) {
 		const MS		= 1000; // milliseconds
@@ -145,12 +181,12 @@
 		}
 
 		this.tempElem.innerText = tempOutput;
-		this.storage.temperature = degrees;
+		this.config.content.temperature = degrees;
 	};
 
 	/**
 	 * @description	Takes a number and calculates celsius/fahrenheit. 
-	 * @param {Number} temp
+	 * @param 			{Number} temp
 	 */
 	WeatherCard.kelvinCalculator = function (temp) {
 		let absZeroTempInC	= 273.15; // -273.15 °C
@@ -160,7 +196,7 @@
 
 	/**
 	 * @description	Validates this.daytime & this.curWeather and returns string.
-	 * @return {String}
+	 * @return 			{String}
 	 */
 	WeatherCard.validateCurrentWeather = function () {
 		let curWeather = this.curWeather;
@@ -169,9 +205,6 @@
 			curWeather = 'night';
 		}
 		else if (curWeather === 'clear' && this.daytime === 'day') {
-			curWeather = 'sunny';
-		}
-		else {
 			curWeather = 'sunny';
 		}
 
@@ -209,15 +242,6 @@
 		this.city.innerText = _curCity;
 		this.location.innerText = 'Current location';
 	};
-
-	WeatherCard.edit = function () {};
-
-	/**
-	 * @description	Saves the current state of temperature settings.
-	 */
-	WeatherCard.save = function () {
-		this.setTemperature(this.storage.temperature);
-	};	
 	
 	/* Register element in document */
 	document.registerElement('weather-card', { prototype: WeatherCard });

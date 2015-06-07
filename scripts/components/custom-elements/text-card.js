@@ -1,14 +1,60 @@
 (function() {
 	'use strict';
-	console.log('kek');
+
 	/* Constants */
 	var doc			= document.currentScript.ownerDocument;
 	var template	= doc.querySelector('#text-card');
 	var TextCard	= Object.create(HTMLDivElement.prototype);
 
-	TextCard.headlineElement	= null;
-	TextCard.textElement			= null;
-	TextCard.storage				= { headline: null, text: null };
+	TextCard.config = { module: true, type: 'text', content: {} };
+	TextCard.default = {
+		headline: 'What do you want to write?',
+		copy: `Just mark any text to format it.`
+	};
+
+	/**
+	 * @description	Initialises data.
+	 * @param 			{Object} config
+	 */
+	TextCard.initialise = function (config) {
+		// Assign GUID
+		if (config.guid) {
+			this.config.guid = config.guid;
+		} else {
+			this.config.guid = this.root.children[1].GUID();
+		}
+
+		// Eval content
+		if (config.content && typeof config.content === 'object') {
+			this.config.content = config.content;	
+		} else {
+			this.config.content = {};
+		}
+
+		// Headline?
+		if (this.config.content.headline) {
+			this.headlineElement.innerHTML = this.config.content.headline;
+		} else {
+			this.headlineElement.innerHTML = this.default.headline;
+		}
+
+		// Text?
+		if (this.config.content.text) {
+			this.textElement.innerHTML	= this.config.content.text;
+		} else {
+			this.textElement.innerHTML = this.default.copy;
+		}
+		
+		this.root.children[1].setGUID(this.config.guid);
+		this.saveToStorage();
+	};
+
+	/**
+	 * @description	Saves this.config to localStorage.
+	 */
+	TextCard.saveToStorage = function () {
+		localStorage.setItem(this.config.guid, JSON.stringify(this.config));
+	};
 
 	/**
 	 * @description	An instance of the element is created.
@@ -16,44 +62,55 @@
 	TextCard.createdCallback = function () {
 		this.root = this.createShadowRoot();
 		this.root.appendChild( document.importNode(template.content, true) );
-
-		this.editor = this.root.querySelector('.module__editor');
+		
+		// Editor
+		this.editor	= this.root.querySelector('.module__editor');
 		this.editor.addEventListener('click', this.execEditor.bind(this), true);
+		// Headline
+		this.headlineElement	= document.createElement('h1');
+		this.headlineElement.addEventListener('input', this.evalContent.bind(this));
+		// Copy
+		this.textElement = document.createElement('div');
+		this.textElement.addEventListener('input', this.evalContent.bind(this));
+
+		this.appendContent();
 	};
 
 	/**
-	 * @description	An instance was inserted into the document.
+	 * @description	Sets contenteditable, updates content and appends to <text-card>.
 	 */
-	TextCard.attachedCallback = function () {
-		this.headlineElement = this.querySelector('h1');
-		this.textElement = this.querySelector('div');
-	};
+	TextCard.appendContent = function () {
+		this.headlineElement.contentEditable = true;
+		this.textElement.contentEditable = true;
 
-	/**
-	 * @description	Sets 'contenteditable="true"' to all elements.
-	 */	
-	TextCard.edit = function () {
-		this.headlineElement.setAttribute('contenteditable', true);
-		this.textElement.setAttribute('contenteditable', true);
-	};
+		this.updateContent();
 
-	/**
-	 * @description	Removes attributes and stores data internally.
-	 */	
-	TextCard.save = function () {
-		this.storeInternalData();
-		this.headlineElement.removeAttribute('contenteditable');
-		this.textElement.removeAttribute('contenteditable');
+		// Append elements
+		this.appendChild( this.headlineElement );
+		this.appendChild( this.textElement );
 	};
 
 	/**
 	 * @description	Stores content of <h1> and <p>.
 	 */	
-	TextCard.storeInternalData = function () {
-		this.storage['headline'] = this.headlineElement.innerHTML;
-		this.storage['text'] = this.textElement.innerHTML;
+	TextCard.updateContent = function () {
+		this.config.content.headline = this.headlineElement.innerHTML;
+		this.config.content.text = this.textElement.innerHTML;
 	};
 
+	/**
+	 * @description	Saves to localStorage on each input event.
+	 * @param 			{Object} event
+	 */
+	TextCard.evalContent = function (event) {
+		this.updateContent();
+		this.saveToStorage();
+	};
+
+	/**
+	 * @description	Executes text formatting.
+	 * @param 			{Object} event
+	 */
 	TextCard.execEditor = function (event) {
 		let target		= event.target;
 		let btn			= 'BUTTON';

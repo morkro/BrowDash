@@ -8,13 +8,13 @@ BrowLayoutManager = (function (window, Brow) {
 
 	class BrowLayoutManager {
 		constructor (container) {
-			this.dragSelector = '.brow__content__module /deep/ .dragg-area';
+			this.dragSelector = '.brow-content__module /deep/ .dragg-area';
 			this.transition	= 0;
 			this.pkrOptions	= {
-				itemSelector: '.brow__content__module',
+				itemSelector: '.brow-content__module',
 				transitionDuration: this.transition,
-				columnWidth: '.brow__content--sizer',
-				gutter: '.brow__content--gutter',
+				columnWidth: '.brow-content--sizer',
+				gutter: '.brow-content--gutter',
 				stamp: '.is-stamp',
 				isInitLayout: false
 			};
@@ -25,15 +25,15 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Will initialise the Packery layout.
+		 * @description	Will initialise the Packery layout.
 		 */
 		layout () {
 			this.packery.layout();
 		}
 
 		/**
-		 * Adds a new item to the Packery layout.
-		 * @param {NodeList|HTMLElement} elem
+		 * @description	Adds a new item to the Packery layout.
+		 * @param 			{NodeList|HTMLElement} elem
 		 */
 		add (elem) {
 			this.packery.appended( elem );
@@ -41,8 +41,8 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Removes passed element from the Packery layout.
-		 * @param {NodeList|HTMLElement} config
+		 * @description	Removes passed element from the Packery layout.
+		 * @param 			{NodeList|HTMLElement} config
 		 */
 		remove (elem) {
 			this.packery.remove( elem );
@@ -50,23 +50,23 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Makes an element sticky.
-		 * @param {NodeList|HTMLElement} config
+		 * @description	Makes an element sticky.
+		 * @param 			{NodeList|HTMLElement} config
 		 */
 		stamp (elem) {
 			this.packery.stamp( elem );
 		}
 
 		/**
-		 * Unstamps an element.
-		 * @param {NodeList|HTMLElement} config
+		 * @description	Unstamps an element.
+		 * @param 			{NodeList|HTMLElement} config
 		 */
 		unstamp (elem) {
 			this.packery.unstamp( elem );
 		}
 
 		/**
-		 * Initialises Draggabilly.
+		 * @description	Initialises Draggabilly.
 		 */
 		addDraggabilly () {
 			const _self = this;
@@ -74,12 +74,12 @@ BrowLayoutManager = (function (window, Brow) {
 			cards.forEach(function (item) {
 				let draggie = new Draggabilly(item, _self.dragOptions);
 				_self.packery.bindDraggabillyEvents( draggie );
-				draggie.on('pointerDown', _self.validateBrowMode.bind(draggie));
+				draggie.on('pointerDown', _self.validateEditMode.bind(draggie));
 			});
 		}
 
 		/**
-		 * Adds EventListener.
+		 * @description	Adds EventListener.
 		 */
 		addEvents () {
 			window.addEventListener('card-edit', this.validateLayoutState.bind(this));
@@ -90,11 +90,22 @@ BrowLayoutManager = (function (window, Brow) {
 		}
 
 		/**
-		 * Checks event type and validates the layout's state.
-		 * @param  {Object} event
+		 * @description	Deactivates editMode and removes classes from content overlay.
+		 */
+		deactivateEditMode () {
+			Brow.isEditMode = false;
+			Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('is-fading');
+			setTimeout(function () {
+				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('is-visible', 'is-fading');
+			}, 100);
+		}
+
+		/**
+		 * @description	Checks event type and validates the layout's state.
+		 * @param  			{Object} event
 		 */
 		validateLayoutState (event) {
-			let elem = document.querySelector(`[data-module-guid="${event.detail}"]`);
+			let elem = document.querySelector(`[data-guid="${event.detail}"]`);
 
 			// activated editing mode
 			if (event.type === 'card-edit') {
@@ -104,11 +115,7 @@ BrowLayoutManager = (function (window, Brow) {
 
 			// saved card or remove card
 			if (event.type === 'card-save' || event.type === 'card-remove') {
-				Brow.isEditMode = false;
-				Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.add('is-fading');
-				setTimeout(function () {
-					Brow.Settings.getElem()['CONTENT_OVERLAY'].classList.remove('is-visible', 'is-fading');
-				}, 100);
+				this.deactivateEditMode();
 				
 				if (event.type === 'card-save') {
 					this.layout();
@@ -118,22 +125,23 @@ BrowLayoutManager = (function (window, Brow) {
 				if (event.type === 'card-remove') {
 					this.remove(elem);
 					Brow.activeCard = null;
-					localStorage.removeItem( event.detail );
 				}
 			}
 
-			else if (event.type === 'click' && Brow.isEditMode && Brow.activeCard.isEditMode) {
-				Brow.activeCard.saveState();
-				Brow.activeCard.wrapper.elem.classList.remove('fx', 'is-edit');
+			else if (event.type === 'click' && Brow.isEditMode) {
+				elem = Brow.Settings.getElem()['CONTENT'].querySelector('.is-edit');
+				elem.saveToStorage();
+				elem.classList.remove('fx', 'is-edit');
+				this.deactivateEditMode();
 			}
 		}
 
 		/**
-		 * Checks if editMode is active and weither disables or enables the dragging.
-		 * @param  {Object} event
+		 * @description	Checks if editMode is active and weither disables or enables the dragging.
+		 * @param  			{Object} event
 		 */
-		validateBrowMode (event) {
-			if (Brow.isEditMode && Brow.activeCard.isEditMode) {
+		validateEditMode (event) {
+			if (Brow.isEditMode) {
 				this.disable();
 			} else {
 				this.enable();

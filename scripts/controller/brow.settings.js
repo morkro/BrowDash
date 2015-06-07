@@ -110,6 +110,7 @@ Brow.Settings = (function (Brow) {
 	 */
 	const _validateBrowCards = function (storage) {
 		if (!localStorage[BROW_CARDS] || localStorage.length <= 1) {
+			localStorage.setItem(BROW_CARDS, true);
 			let defaultCard = new BrowCard({ type: 'text' });
 			browElements['CONTENT'].appendChild( defaultCard );
 		} else {
@@ -125,12 +126,14 @@ Brow.Settings = (function (Brow) {
 	 * @param			{Number|String} index
 	 */	
 	const _parseCardsFromStorage = function (index) {
-		let storageItem = JSON.parse( localStorage.getItem( localStorage.key(index) ) );
+		let storageItem = JSON.parse(
+			localStorage.getItem( localStorage.key(index) )
+		);
+
 		if (storageItem['module']) {
 			let browCard = new BrowCard({
 				type: storageItem['type'],
 				guid: storageItem['guid'],
-				title: storageItem['title'],
 				content: storageItem['content'],
 				style: storageItem['style']
 			});
