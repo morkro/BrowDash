@@ -15,11 +15,11 @@ Having a full customisable dashboard with a set of different modules, called _ca
 - **TextCard:** the basic one; saves simple text. Options: *bold', _italic_, underline, strikethrough, link, erase style.
 - **WeatherCard:** displays the current weather based on your location.
 - **Timer:** changing the time to 12h _(including AM/PM)_ or 24h is possible. _Default: 24h._
+- **TodoCard:** don't need to explain that.
 
 ### Planned features
 
 - **NotificationsCard:** setting personal alarm messages.
-- **TodoCard:** don't need to explain that.
 - **DeviceCard:** statistics about your device _(like battery status and more)_.
 - **Offline message:** user is suddenly offline? be nice and tell him.
 - **LockScreen:** user should be able to set a password and timeout, so that his content is protected/hidden
