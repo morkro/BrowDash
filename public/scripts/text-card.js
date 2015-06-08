@@ -66,6 +66,7 @@
 		// Editor
 		this.editor	= this.root.querySelector('.module__editor');
 		this.editor.addEventListener('click', this.execEditor.bind(this), true);
+		this.addEventListener('mouseup', this.triggerEditor.bind(this));
 		// Headline
 		this.headlineElement	= document.createElement('h1');
 		this.headlineElement.addEventListener('input', this.evalContent.bind(this));
@@ -105,6 +106,48 @@
 	TextCard.evalContent = function (event) {
 		this.updateContent();
 		this.saveToStorage();
+	};
+
+	TextCard.triggerEditor = function (event) {
+		let selection			= window.getSelection();
+		let selectedString	= selection.toString();
+		let editorIsActive	= this.editor.classList.contains('is-active');
+
+		if (selectedString.length > 0 && selectedString !== '') {
+			let range	= selection.getRangeAt(0);
+			let rect		= this.getRelativePos( range.getBoundingClientRect() );
+			
+			if (!editorIsActive) {
+				console.log(rect);
+				this.editor.classList.add('is-active');
+				this.editor.style.top = `${rect.top}px`;
+				this.editor.style.left = `${rect.left + (rect.width / 2)}px`;
+			} else {
+				this.editor.classList.remove('is-active');
+				this.clearEditorPos();
+			}
+		}
+
+		else if (editorIsActive) {
+			this.editor.classList.remove('is-active'); 
+			this.clearEditorPos();
+		}
+	};
+
+	TextCard.getRelativePos = function (rect) {
+		parent = this.getBoundingClientRect();
+		return { 
+			top: rect.top - parent.top, 
+			left: rect.left - parent.left, 
+			right: rect.right - parent.right, 
+			bottom: rect.bottom - parent.bottom,
+			width: rect.width
+		};
+	};
+
+	TextCard.clearEditorPos = function () {
+		this.editor.style.left = '';
+		this.editor.style.top = '';
 	};
 
 	/**

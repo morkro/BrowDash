@@ -158,6 +158,36 @@ td, th { padding: 0; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-Black.ttf") format('truetype'); font-weight: 600; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-BlackItalic.ttf") format('truetype'); font-weight: 600; font-style: italic; }
 /** FONT-FAMILY VARIABLES  Usage: Overall font-family. */
+.theme-blue-a400 a { color: #2979ff; }
+.theme-blue-a400 .colored-bg-opposite a, .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-red ::selection a, .theme-red .theme-blue-a400 ::selection a, .theme-blue-a400 .colored-bg a { color: white; }
+.theme-blue-a400 .colored-bg-opposite, .theme-blue-a400 ::selection, .theme-blue-a400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-teal-400 ::selection, .theme-teal-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-pink-400 ::selection, .theme-pink-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-red ::selection, .theme-red .theme-blue-a400 ::selection { background-color: #f44336; }
+.theme-blue-a400 .colored-bg { background-color: #2979ff; }
+.theme-blue-a400 ::selection { color: white; }
+
+.theme-indigo-400 a { color: #5c6bc0; }
+.theme-indigo-400 .colored-bg-opposite a, .theme-indigo-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-indigo-400 ::selection a, .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-red ::selection a, .theme-red .theme-indigo-400 ::selection a, .theme-indigo-400 .colored-bg a { color: white; }
+.theme-indigo-400 .colored-bg-opposite, .theme-indigo-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-indigo-400 ::selection, .theme-indigo-400 ::selection, .theme-indigo-400 .theme-teal-400 ::selection, .theme-teal-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-pink-400 ::selection, .theme-pink-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-red ::selection, .theme-red .theme-indigo-400 ::selection { background-color: #e91e63; }
+.theme-indigo-400 .colored-bg { background-color: #5c6bc0; }
+.theme-indigo-400 ::selection { color: white; }
+
+.theme-teal-400 a { color: #26a69a; }
+.theme-teal-400 .colored-bg-opposite a, .theme-teal-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-teal-400 ::selection a, .theme-teal-400 ::selection a, .theme-teal-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-red ::selection a, .theme-red .theme-teal-400 ::selection a, .theme-teal-400 .colored-bg a { color: white; }
+.theme-teal-400 .colored-bg-opposite, .theme-teal-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-teal-400 ::selection, .theme-teal-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-teal-400 ::selection, .theme-teal-400 ::selection, .theme-teal-400 .theme-pink-400 ::selection, .theme-pink-400 .theme-teal-400 ::selection, .theme-teal-400 .theme-red ::selection, .theme-red .theme-teal-400 ::selection { background-color: #e91e63; }
+.theme-teal-400 .colored-bg { background-color: #26a69a; }
+.theme-teal-400 ::selection { color: white; }
+
+.theme-pink-400 a { color: #ec407a; }
+.theme-pink-400 .colored-bg-opposite a, .theme-pink-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-pink-400 ::selection a, .theme-pink-400 ::selection a, .theme-pink-400 .theme-red ::selection a, .theme-red .theme-pink-400 ::selection a, .theme-pink-400 .colored-bg a { color: white; }
+.theme-pink-400 .colored-bg-opposite, .theme-pink-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-pink-400 ::selection, .theme-pink-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-pink-400 ::selection, .theme-pink-400 .theme-teal-400 ::selection, .theme-teal-400 .theme-pink-400 ::selection, .theme-pink-400 ::selection, .theme-pink-400 .theme-red ::selection, .theme-red .theme-pink-400 ::selection { background-color: #00bcd4; }
+.theme-pink-400 .colored-bg { background-color: #ec407a; }
+.theme-pink-400 ::selection { color: white; }
+
+.theme-red a { color: #f44336; }
+.theme-red .colored-bg-opposite a, .theme-red .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-red ::selection a, .theme-red .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-red ::selection a, .theme-red .theme-teal-400 ::selection a, .theme-teal-400 .theme-red ::selection a, .theme-red .theme-pink-400 ::selection a, .theme-pink-400 .theme-red ::selection a, .theme-red ::selection a, .theme-red .colored-bg a { color: white; }
+.theme-red .colored-bg-opposite, .theme-red .theme-blue-a400 ::selection, .theme-blue-a400 .theme-red ::selection, .theme-red .theme-indigo-400 ::selection, .theme-indigo-400 .theme-red ::selection, .theme-red .theme-teal-400 ::selection, .theme-teal-400 .theme-red ::selection, .theme-red .theme-pink-400 ::selection, .theme-pink-400 .theme-red ::selection, .theme-red ::selection { background-color: #2979ff; }
+.theme-red .colored-bg { background-color: #f44336; }
+.theme-red ::selection { color: white; }
+
 /** SYSTEM ==============================  General */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -205,31 +235,6 @@ input[type="checkbox"]:checked + label:before, input[type="radio"]:checked + lab
 input[type="checkbox"] + label:before { border-radius: 2px; }
 
 input[type="radio"] + label:before { border-radius: 50%; }
-
-.theme-blue-a400 a { color: #2979ff; }
-.theme-blue-a400 .colored-bg-opposite a, .theme-blue-a400 .colored-bg a { color: white; }
-.theme-blue-a400 .colored-bg-opposite { background-color: #f44336; }
-.theme-blue-a400 .colored-bg { background-color: #2979ff; }
-
-.theme-indigo-400 a { color: #5c6bc0; }
-.theme-indigo-400 .colored-bg-opposite a, .theme-indigo-400 .colored-bg a { color: white; }
-.theme-indigo-400 .colored-bg-opposite { background-color: #e91e63; }
-.theme-indigo-400 .colored-bg { background-color: #5c6bc0; }
-
-.theme-teal-400 a { color: #26a69a; }
-.theme-teal-400 .colored-bg-opposite a, .theme-teal-400 .colored-bg a { color: white; }
-.theme-teal-400 .colored-bg-opposite { background-color: #e91e63; }
-.theme-teal-400 .colored-bg { background-color: #26a69a; }
-
-.theme-pink-400 a { color: #ec407a; }
-.theme-pink-400 .colored-bg-opposite a, .theme-pink-400 .colored-bg a { color: white; }
-.theme-pink-400 .colored-bg-opposite { background-color: #00bcd4; }
-.theme-pink-400 .colored-bg { background-color: #ec407a; }
-
-.theme-red a { color: #f44336; }
-.theme-red .colored-bg-opposite a, .theme-red .colored-bg a { color: white; }
-.theme-red .colored-bg-opposite { background-color: #2979ff; }
-.theme-red .colored-bg { background-color: #f44336; }
 
 @-webkit-keyframes fadeInOverlay { 0% { display: none; opacity: 0; }
   1% { display: block; opacity: 0; }

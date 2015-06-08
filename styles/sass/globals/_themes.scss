@@ -7,6 +7,11 @@
 
 	.colored-bg-opposite { background-color: $red; }
 	.colored-bg { background-color: $blue-a400; }
+
+	& ::selection { 
+		@extend .colored-bg-opposite; 
+		color: white;
+	}
 }
 
 // Indigo
@@ -18,6 +23,11 @@
 
 	.colored-bg-opposite { background-color: $pink; }
 	.colored-bg { background-color: $indigo-400; }
+
+	& ::selection { 
+		@extend .colored-bg-opposite; 
+		color: white;
+	}
 }
 
 // Teal
@@ -29,6 +39,11 @@
 
 	.colored-bg-opposite { background-color: $pink; }
 	.colored-bg { background-color: $teal-400; }
+
+	& ::selection { 
+		@extend .colored-bg-opposite; 
+		color: white;
+	}
 }
 
 // Pink
@@ -40,6 +55,11 @@
 
 	.colored-bg-opposite { background-color: $cyan; }
 	.colored-bg { background-color: $pink-400; }
+
+	& ::selection { 
+		@extend .colored-bg-opposite; 
+		color: white;
+	}
 }
 
 // Red
@@ -51,4 +71,9 @@
 
 	.colored-bg-opposite { background-color: $blue-a400; }
 	.colored-bg { background-color: $red; }
+
+	& ::selection { 
+		@extend .colored-bg-opposite; 
+		color: white;
+	}
 }

@@ -57,6 +57,8 @@
 			this.config.content.tasks.push(item);
 		}
 
+		console.log(this.config);
+
 		this.taskCounter(this.config.content.tasks.length);
 		this.root.children[1].setGUID(this.config.guid);
 		this.saveToStorage();
@@ -161,12 +163,14 @@
 	};
 
 	TodoCard.updateItem = function (item) {
+		let itemID = parseInt(item.parentNode.getAttribute('data-todo'), 10);
+
 		item.checked = !item.checked;
 	};
 
 	/**
 	 * @description	If ENTER_KEY is pressed, creates a new list item and clears input.
-	 * @param  {Object} event
+	 * @param  			{Object} event
 	 */
 	TodoCard.updateList = function (event) {
 		if (event.keyCode === this.ENTER_KEY) {
@@ -182,6 +186,10 @@
 		}
 	};
 
+	/**
+	 * @description	Validates target and updates items.
+	 * @param  			{Object} event
+	 */
 	TodoCard.editList = function (event) {
 		// Delete item
 		if (event.target.matches('svg-icon')) {

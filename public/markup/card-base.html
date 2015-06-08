@@ -161,6 +161,108 @@
 		:host-context([palette="false"]) [data-settings="palette"]  { 
 			display: none; 
 		}
+		/* Button */
+		::content .btn {
+			background: none;
+			border: none;
+			text-transform: uppercase;
+			font-weight: 600;
+			font-size: 12px;
+			color: white;
+			padding: 6px 12px;
+			border-radius: 2px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+			cursor: pointer;
+			transition: all 150ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+			::content .btn[data-color="white"] {
+				background-color: white;
+				color: black;
+			}
+			::content .btn[data-color="red"] {
+				background-color: #f44336;
+			}
+			::content .btn[data-color="blue"] {
+				background-color: #2979ff;
+			}
+			::content .btn:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 2px 6px rgba(0, 0, 0, .4)
+			}
+			::content .btn:active {
+				background: rgba(0, 0, 0, .1);
+			}
+			::content .btn[disabled] {
+				box-shadow: none;
+				color: rgba(0, 0, 0, .3);
+				cursor: not-allowed;
+			}
+			::content .btn[disabled]:hover {
+				transform: none;
+				box-shadow: inherit;
+				background: 0 0;
+			}
+		/* Input */
+		::content input[type="checkbox"],
+		::content input[type="radio"] {
+			margin-right: 20px;
+			visibility: hidden;
+		}
+		::content label {
+			cursor: pointer;
+			position: relative;
+		}
+			::content input[type="checkbox"] + label:before,
+			::content input[type="radio"] + label:before {
+				content: "";
+				position: absolute;
+				width: 14px;
+				height: 14px;
+				left: -35px;
+				font-size: 14px;
+				line-height: 14px;
+				transition: all 150ms cubic-bezier(0.86, 0, 0.07, 1);
+			}
+			::content input[type="checkbox"] + label:before {
+				top: 50%;
+				color: white;
+				border: 2px solid #616161;
+				border-radius: 2px;
+				background: white;
+				transform: translateY(-50%);
+			}
+			::content input[type="radio"] + label:before {
+				top: 1px;
+				color: #616161;
+				border: 2px solid white;
+				border-radius: 50%;
+				background: transparent;
+			}
+			::content input[type="radio"] + label:after {
+				content: "";
+				position: absolute;
+				background: white;
+				height: 10px;
+				width: 10px;
+				border-radius: 50%;
+				left: -31px;
+				top: 5px;
+				transform: scale(0);
+				transition: transform 100ms cubic-bezier(0.86, 0, 0.07, 1);
+			}
+			::content input[type="checkbox"]:checked + label:before {
+				content: "✔";
+				padding-left: 1px;
+				width: 13px;
+				background: #8BC34A;
+				border-color: #8BC34A;
+			}
+			::content input[type="radio"]:checked + label:before {
+				border-color: white;	
+			}
+			::content input[type="radio"]:checked + label:after {
+				transform: scale(1);
+			}
 		/* Draggable */
 		.dragg-area {
 			position: absolute;

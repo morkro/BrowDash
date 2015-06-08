@@ -30,8 +30,6 @@
 		// Eval content
 		if (config.content && typeof config.content === 'object') {
 			this.config.content = config.content;	
-		} else {
-			this.config.content = {};
 		}
 		
 		// Set possible default temperature
