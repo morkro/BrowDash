@@ -1,249 +1,181 @@
-/**
- * Grunt setup to build and watch your application.
- * ==============================
- * 
- * Usage:
- *	'grunt dev'			=>		Sets up development environment.
- *	'grunt css'			=>		Compiles Sass to valid CSS, adds relevant vendor prefixes and minifies. 
- * 'grunt watch'		=>		Runs our predefined tasks whenever a file is updated. 
- *									Should be active the whole time while developing.
- */
 module.exports = function(grunt) {
 	'use strict';
-	
-	// Loads all required grunt tasks which are defined in devDepencies.
+
+	// Loads all required grunt tasks
 	require('load-grunt-tasks')(grunt);
-
-	// Displays execution time of each task in Terminal.
+	// Displays execution time of each task
 	require('time-grunt')(grunt);
-
-	// Register all grunt tasks.
+	// Register all tasks
 	grunt.loadTasks('tasks');
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
-
 		/**
 		 * Application settings.
 		 * ==============================
 		 */
-		app: {
-			title: 'BrowDash',
-			description: 'Chrome Dashboard Extension',
-			update: grunt.template.today('h:mm:s'),
-			directory: {
-				dest: {
-					'public'	: 'public',
-					'assets'	: '<%= app.directory.dest.public %>/assets',
-					'scripts': '<%= app.directory.dest.public %>/scripts',
-					'markup'	: '<%= app.directory.dest.public %>/markup',
-					'css'		: '<%= app.directory.dest.public %>/css'
-				},
-				build: {
-					'sass'	: 'styles/sass',
-					'css'		: 'styles/css',
-					'assets'	: 'assets',	
-					'fonts'	: '<%= app.directory.build.assets %>/fonts',
-					'scripts': 'scripts',
-					'markup'	: 'markup'
-				}
-			},
-			scripts: [
-				/* Libraries */
-				'<%= app.directory.build.scripts %>/libs/draggabilly.pkgd.min.js',
-				'<%= app.directory.build.scripts %>/libs/packery.pkgd.min.js',
-				/* Helpers */
-				'<%= app.directory.build.scripts %>/app.helper.js',
-				/* Application */
-				'<%= app.directory.build.scripts %>/controller/brow.core.js',
-				'<%= app.directory.build.scripts %>/controller/brow.settings.js',
-				/* Components */
-				'<%= app.directory.build.scripts %>/components/brow.dialog.js',
-				'<%= app.directory.build.scripts %>/components/brow.layoutmanager.js',
-				'<%= app.directory.build.scripts %>/components/brow.timer.js',
-				'<%= app.directory.build.scripts %>/components/brow.card.js',
-				/* App initialisation */
-				'<%= app.directory.build.scripts %>/app.init.js'
-			]
+		dir: {
+			'public'	: 'public',
+			'sass'	: 'src/styles/sass',
+			'css'		: 'src/styles/css',
+			'assets'	: 'src/assets',
+			'scripts': 'src/scripts',
+			'markup'	: 'src/markup'
 		},
-
 		/**
-		 * Copies files into directory.
-		 * ==============================
+		 * Clean build folder.
+		 */
+		clean: ['<%= dir.public %>/'],
+		/**
+		 * Move all files to public.
 		 */
 		copy: {
 			index: {
-				src		: '<%= app.directory.build.markup %>/views/index.html',
-				dest		: '<%= app.directory.dest.public %>/index.html'
+				src: '<%= dir.markup %>/views/index.html',
+				dest: '<%= dir.public %>/index.html'
 			},
 			componentsmarkup: {
-				expand	: true,
-				src		: [
-					'<%= app.directory.build.markup %>/components/svg-icon.html',
-					'<%= app.directory.build.markup %>/components/card-base.html',
-					'<%= app.directory.build.markup %>/components/text-card.html',
-					'<%= app.directory.build.markup %>/components/weather-card.html',
-					'<%= app.directory.build.markup %>/components/todo-card.html'
-				],
-				dest		: '<%= app.directory.dest.markup %>/',
-				flatten	: true,
-				filter	: 'isFile'
+				expand: true,
+				flatten: true,
+				filter: 'isFile',
+				cwd: '<%= dir.markup %>/components/',
+				src: '**',
+				dest: '<%= dir.public %>/markup',
 			},
 			componentsscript: {
-				expand	: true,
-				src		: [
-					'<%= app.directory.build.scripts %>/components/custom-elements/svg-icon.js',
-					'<%= app.directory.build.scripts %>/components/custom-elements/card-base.js',
-					'<%= app.directory.build.scripts %>/components/custom-elements/text-card.js',
-					'<%= app.directory.build.scripts %>/components/custom-elements/weather-card.js',
-					'<%= app.directory.build.scripts %>/components/custom-elements/todo-card.js'
-				],
-				dest		: '<%= app.directory.dest.scripts %>',
-				flatten	: true,
-				filter	: 'isFile'
+				expand: true,
+				flatten: true,
+				filter: 'isFile',
+				cwd: '<%= dir.scripts %>/custom-elements/',
+				src: '**',
+				dest: '<%= dir.public %>/scripts',
 			},
 			views: {
-				expand	: true,
-				src		: [
-					'<%= app.directory.build.markup %>/views/dialog-about.html',
-					'<%= app.directory.build.markup %>/views/dialog-settings.html'
+				expand: true,
+				flatten: true,
+				filter: 'isFile',
+				src: [
+					'<%= dir.markup %>/views/dialog-about.html',
+					'<%= dir.markup %>/views/dialog-settings.html'
 				],
-				dest		: '<%= app.directory.dest.markup %>',
-				flatten	: true,
-				filter	: 'isFile'
+				dest: '<%= dir.public %>/markup',
 			},
 			assets: {
-				expand	: true,
-				src		: '<%= app.directory.build.assets %>/**/*.*',
-				dest		: '<%= app.directory.dest.public %>'
+				expand: true,
+				filter: 'isFile',
+				cwd: '<%= dir.assets %>/',
+				src: '**',
+				dest: '<%= dir.public %>/assets'
 			},
 			manifest: {
-				src		: 'manifest.json',
-				dest		: '<%= app.directory.dest.public %>/manifest.json'
+				src: 'manifest.json',
+				dest: '<%= dir.public %>/manifest.json'
 			}
 		},
-
 		/**
-		 * Deletes files
-		 * ==============================
+		 * Write ES6 today, compile it to ES5.
 		 */
-		clean: {
-			build: {
-				src: ['<%= app.directory.dest.public %>']
+		browserify: {
+			dist: {
+				options: {
+					transform: [
+						['babelify', { loose: 'all' }]
+					],
+					browserifyOptions: { debug: true },
+					exclude: ''
+				},
+				files: {
+					'<%= dir.scripts %>/es5/app.js': ['<%= dir.scripts %>/es6/**/*.js']
+				}
 			}
 		},
-
 		/**
 		 * Concatinates files.
-		 * ==============================
 		 */
-		concat: {
-			app: {
-				src: '<%= app.scripts %>',
-				dest: '<%= app.directory.dest.scripts %>/app.js'
+		uglify: {
+			dev: {
+				options: {
+					screwIE8: true,
+					preserveComments: 'all',
+					beautify: true
+				},
+				files: {
+					'<%= dir.public %>/app.min.js': ['<%= dir.scripts %>/libs/*.js', '<%= dir.scripts %>/es5/app.js']
+				}
 			},
+			prod: {
+				options: { screwIE8: true },
+				files: {
+					'<%= dir.public %>/app.min.js': ['<%= dir.scripts %>/libs/*.js', '<%= dir.scripts %>/es5/app.js']
+				}
+			}
 		},
-
 		/**
-		 * Validates your .js files via JSHint.
-		 * ==============================
+		 * Validates ES6 files via ESLint.
 		 */
-		jshint: {
+		eslint: {
 			options: {
-				reporter	: require('jshint-stylish'),
-				strict	: true,
-				eqeqeq	: true,
-				noempty	: true,
-				sub		: true,
-				esnext	: true,
-				ignores	: '<%= app.directory.build.scripts %>/libs/*.js'
+				format: require('eslint-tap'),
+				configFile: '.eslintrc'
 			},
-			beforeconcat: '<%= app.directory.build.scripts %>/**/*.js'
+			target: '<%= dir.scripts %>/es6/**/*.js'
 		},
-
 		/**
-		 * Compiles Sass into valid CSS.
-		 * ==============================
+		 * Compiles Sass to valid CSS.
 		 */
 		sass: {
-			options: {
-				style: 'compact'
-			},
+			options: { style: 'compact' },
 			files: {
-				src	:  '<%= app.directory.build.sass %>/main.scss',
-				dest	: '<%= app.directory.build.css %>/main.unprefixed.css'
+				src:  '<%= dir.sass %>/main.scss',
+				dest: '<%= dir.css %>/main.unprefixed.css'
 			}
 		},
-
 		/**
-		 * Adds all relevant prefix based on Caniuse.com database.
-		 * ==============================
+		 * Adds prefix to CSS based on browser matrix.
 		 */
 		autoprefixer: {
-			options: {
-				browsers: ['last 2 Chrome versions']
-			},
+			options: { browsers: ['last 2 Chrome versions'] },
 			files: {
-				src	: '<%= app.directory.build.css %>/main.unprefixed.css',
-				dest	: '<%= app.directory.build.css %>/main.css'
+				src: '<%= dir.css %>/main.unprefixed.css',
+				dest: '<%= dir.css %>/main.css'
 			}
 		},
-
 		/**
-		 * Minifies CSS.
-		 * ==============================
+		 * Minifies CSS
 		 */
 		cssmin: {
-			main: {
-				options: {
-					keepSpecialComments: 0
-				},
-				files: [{
-					expand	: true,
-					cwd		: '<%= app.directory.build.css %>',
-					src		: 'main.css',
-					dest		: '<%= app.directory.dest.css %>',
-					ext		: '.min.css'
-				}]
+			options: { keepSpecialComments: 0 },
+			files: {
+				src: '<%= dir.css %>/main.css',
+				dest: '<%= dir.public %>/main.min.css'
 			}
 		},
-
 		/**
 		 * Run predefined tasks whenever watched file patterns are added, changed or deleted.
-		 * ==============================
 		 */
 		watch: {
 			markup: {
-				files: ['<%= app.directory.build.markup %>/**/*.html'],
+				files: ['<%= dir.markup %>/**/*.html'],
 				tasks: ['copy:index', 'copy:componentsmarkup', 'copy:views']
 			},
-			css: {
-				files: [
-					'<%= app.directory.build.sass %>/**/*.scss',
-					'<%= app.directory.build.css %>/**/*.css'
-				],
+			styles: {
+				files: ['<%= dir.sass %>/**/*.scss', '<%= dir.css %>/**/*.css'],
 				tasks: ['css']
 			},
-			js: {
-				files: [
-					'!<%= app.directory.build.scripts %>/libs/*.js',
-					'<%= app.directory.build.scripts %>/**/*.js'
-				],
-				tasks: ['jshint', 'concat']
+			scripts: {
+				files: ['<%= dir.scripts %>/es6/**/*.js'],
+				tasks: ['browserify', 'eslint', 'uglify:dev']
 			},
 			components: {
-				files: '<%= app.directory.build.scripts %>/components/**/*.js',
+				files: ['<%= dir.scripts %>/custom-elements/*.js'],
 				tasks: ['copy:componentsscript']
 			},
 			assets: {
-				files: '<%= app.directory.build.assets %>/**/*.*',
+				files: ['<%= dir.assets %>/**/*.*'],
 				tasks: ['copy:assets']
 			}
 		},
-
 		/**
 		 * Awesome task which shows notifications on your Desktop when a specific task is finished.
-		 * ==============================
 		 */
 		notify: {
 			build: {

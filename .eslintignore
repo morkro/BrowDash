@@ -1,0 +1,2 @@
+# Ignore libraries
+src/scripts/es6/libs/**/*.js

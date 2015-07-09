@@ -1,23 +1,72 @@
-/**
- * Grunt: Tasks
- */
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 	'use strict';
-	
-	// Combines all CSS related tasks.
+
+	/**
+	 * Task: grunt css
+	 * Combines all CSS related tasks.
+	 */
 	grunt.registerTask('css', [
 		'sass',
 		'autoprefixer',
 		'cssmin'
-	]); 
+	]);
 
-	// Task to build the dev environment.
+	/**
+	 * Task: grunt js
+	 * Compiles & lints ES6 and uglifies output.
+	 */
+	grunt.registerTask('js', [
+		'browserify',
+		'eslint',
+		'uglify:dev'
+	]);
+
+	/**
+	 * Task: grunt build
+	 * Builds the environment.
+	 */
+	grunt.registerTask('build', [
+		'clean',
+		'copy',
+		'css',
+		'js',
+		'notify:build'
+	]);
+
+	/**
+	 * Task: grunt server
+	 * Starts the web server.
+	 */
+	grunt.registerTask('server', function () {
+		require('../server.js');
+	});
+
+	/**
+	 * Task: grunt dev
+	 * Only for development purposes.
+	 */
 	grunt.registerTask('dev', [
-		'clean',		// Remove public folder
-		'css',		// Sass, Autoprefixer, CSSmin
-		'copy',		// Copy files into /public folder
-		'jshint',	// JSHint all JavaScript
-		'concat',	// Concat JS, copy libraries into /public and add auth url.
-		'notify'		// Note user that everything went fine.
+		'server',
+		'clean',
+		'copy',
+		'css',
+		'browserify',
+		'eslint',
+		'uglify:dev',
+		'notify:build',
+		'watch'
+	]);
+
+	/**
+	 * Task: grunt prod
+	 * Only for production purposes.
+	 */
+	grunt.registerTask('prod', [
+		'clean',
+		'copy',
+		'css',
+		'browserify',
+		'eslint',
+		'uglify:prod'
 	]);
 };

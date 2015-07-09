@@ -1,9 +1,9 @@
 <!--
- ____     ____    _____   __      __  ____    ______  ____    __  __     
-/\  _`\  /\  _`\ /\  __`\/\ \  __/\ \/\  _`\ /\  _  \/\  _`\ /\ \/\ \    
-\ \ \L\ \\ \ \L\ \ \ \/\ \ \ \/\ \ \ \ \ \/\ \ \ \L\ \ \,\L\_\ \ \_\ \   
- \ \  _ <'\ \ ,  /\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  __ \/_\__ \\ \  _  \  
-  \ \ \L\ \\ \ \\ \\ \ \_\ \ \ \_/ \_\ \ \ \_\ \ \ \/\ \/\ \L\ \ \ \ \ \ 
+ ____     ____    _____   __      __  ____    ______  ____    __  __
+/\  _`\  /\  _`\ /\  __`\/\ \  __/\ \/\  _`\ /\  _  \/\  _`\ /\ \/\ \
+\ \ \L\ \\ \ \L\ \ \ \/\ \ \ \/\ \ \ \ \ \/\ \ \ \L\ \ \,\L\_\ \ \_\ \
+ \ \  _ <'\ \ ,  /\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \  __ \/_\__ \\ \  _  \
+  \ \ \L\ \\ \ \\ \\ \ \_\ \ \ \_/ \_\ \ \ \_\ \ \ \/\ \/\ \L\ \ \ \ \ \
    \ \____/ \ \_\ \_\ \_____\ `\___x___/\ \____/\ \_\ \_\ `\____\ \_\ \_\
     \/___/   \/_/\/ /\/_____/'\/__//__/  \/___/  \/_/\/_/\/_____/\/_/\/_/
 -->
@@ -13,7 +13,7 @@
 	<title>New Tab</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<link rel="stylesheet" type="text/css" href="css/main.min.css">
+	<link rel="stylesheet" type="text/css" href="main.min.css">
 	<link rel="import" href="markup/svg-icon.html">
 	<link rel="import" href="markup/card-base.html">
 	<link rel="import" href="markup/text-card.html">
@@ -40,65 +40,65 @@
 		</nav>
 		<!-- Timer -->
 		<div class="header__timer">
-			<h1 class="trigger-timer">00:00:00</h1>
+			<h1 class="js-timer">00:00:00</h1>
 		</div>
 	</header><!-- /Dashboard Header -->
 
 	<!-- Dashboard Content -->
-	<main id="brow-content" class="trigger-content" role="main" data-column="3">
+	<main id="brow-content" class="js-content" role="main" data-column="3">
 		<div class="brow-content--gutter"></div>
 		<div class="brow-content--sizer"></div>
 		<div class="content__overlay"></div>
 	</main><!-- /Dashboard Content -->
 
 	<!-- Settings -->
-	<div id="brow__dialog" class="trigger-dialog colored-bg">
+	<div id="brow__dialog" class="js-dialog colored-bg">
 		<section class="dialog__inner clearfix"></section>
 	</div><!-- /Settings -->
 
 	<!-- Dashboard Footer -->
 	<footer id="brow-footer">
 		<!-- Add button -->
-		<button id="footer__add" class="btn btn--round trigger-selection colored-bg-opposite">
+		<button id="footer__add" class="btn btn--round js-selection colored-bg-opposite">
 			<svg-icon icon="plus" color="white"></svg-icon>
 		</button><!-- /Add button -->
 
 		<!-- Select card type -->
-		<div class="footer__select trigger-cardlist">
+		<div class="footer__select js-cardlist">
 			<ul class="footer__select__list">
 				<!-- TextCard -->
-				<li data-tooltip-identifier="textcard" 
+				<li data-tooltip-identifier="textcard"
 					data-tooltip="Text"
-					data-tooltip-pos="left" 
+					data-tooltip-pos="left"
 					data-tooltip-fx="false">
-					<button class="btn btn--round trigger-newcard colored-bg" data-create-card="text">
+					<button class="btn btn--round js-newcard colored-bg" data-create-card="text">
 						<svg-icon icon="format-size" color="white"></svg-icon>
 					</button>
 				</li><!-- /TextCard -->
 				<!-- WeatherCard -->
-				<li data-tooltip-identifier="weathercard" 
+				<li data-tooltip-identifier="weathercard"
 					data-tooltip="Weather"
-					data-tooltip-pos="left" 
+					data-tooltip-pos="left"
 					data-tooltip-fx="false">
-					<button class="btn btn--round trigger-newcard colored-bg" data-create-card="weather">
+					<button class="btn btn--round js-newcard colored-bg" data-create-card="weather">
 						<svg-icon icon="partly-cloudy" color="white"></svg-icon>
 					</button>
 				</li><!-- /WeatherCard -->
 				<!-- ToDoCard -->
-				<li data-tooltip-identifier="todocard" 
+				<li data-tooltip-identifier="todocard"
 					data-tooltip="ToDo List"
-					data-tooltip-pos="left" 
+					data-tooltip-pos="left"
 					data-tooltip-fx="false">
-					<button class="btn btn--round trigger-newcard colored-bg" data-create-card="todo">
+					<button class="btn btn--round js-newcard colored-bg" data-create-card="todo">
 						<svg-icon icon="clipboard" color="white"></svg-icon>
 					</button>
 				</li><!-- /ToDoCard -->
 				<!-- NotificationsCard -->
-				<li data-tooltip-identifier="notifycard" 
+				<li data-tooltip-identifier="notifycard"
 					data-tooltip="Notifications"
-					data-tooltip-pos="left" 
+					data-tooltip-pos="left"
 					data-tooltip-fx="false">
-					<button class="btn btn--round trigger-newcard colored-bg" data-create-card="notify">
+					<button class="btn btn--round js-newcard colored-bg" data-create-card="notify">
 						<svg-icon icon="alarm" color="white"></svg-icon>
 					</button>
 				</li><!-- /NotificationsCard -->
@@ -107,6 +107,6 @@
 	</footer><!-- /Dashboard Footer -->
 
 	<!-- Scripts -->
-	<script type="text/javascript" src="scripts/app.js"></script>
+	<script type="text/javascript" src="app.min.js"></script>
 </body>
 </html>
