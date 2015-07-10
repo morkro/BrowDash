@@ -1,23 +1,26 @@
 # BrowDash
-> [**Brow**ser**Dash**board] - creative, he? ;) 
+> [**Brow**ser**Dash**board] - creative, he? ;)
 
 
 
-A simple and customisable "new tab" Chrome extension using Google Material Design.
+A simple and customisable "new tab" Chrome extension.
 _This extension isn't downloadable before version 1.0.0. Until then, I prepared a preview link to see the current status._
 
-### Goals
 
-Having a full customisable dashboard with a set of different modules, called _cards_, using bleeding edge technologies _(such as the new ECMAScript 6 features)_ and Google's material design. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
+## Goals
 
-### Available features:
+Having a full customisable dashboard with a set of different modules, called _cards_, using bleeding edge technologies _(i.e. ES6, Web Components, Web Battery API, ...)_. The user can create new cards, delete them, change the order and theme of each card as well as the entire dashboards theme.
+
+
+## Available features:
 
 - **TextCard:** the basic one; saves simple text. Options: *bold', _italic_, underline, strikethrough, link, erase style.
 - **WeatherCard:** displays the current weather based on your location.
 - **Timer:** changing the time to 12h _(including AM/PM)_ or 24h is possible. _Default: 24h._
 - **TodoCard:** don't need to explain that.
 
-### Planned features
+
+## Planned features
 
 - **NotificationsCard:** setting personal alarm messages.
 - **DeviceCard:** statistics about your device _(like battery status and more)_.
@@ -25,31 +28,26 @@ Having a full customisable dashboard with a set of different modules, called _ca
 - **LockScreen:** user should be able to set a password and timeout, so that his content is protected/hidden
 - _More features to be defined._
 
-### Technologies
 
-- All currently available ES6 features in Chrome 
-  - ES6 Classes
-  - Template Strings
-  - `const`, `let`
-- localStorage API
-- Device API's
-- Web Crypto API
-- Web Components (HTML imports, Custom Elements)
+## Technologies
+- [FrontBook](https://github.com/morkro/FrontBook): Browserify + Babel, ESLint
+- native Web Components
 
-# How to use
 
-BrowDash is currently **still in heavy development** and not even alpha. As soon as a first beta is available to download, I'll will let you know. In the meantime you can visit [this][7] preview link and hope the current state is online.
+## How to use
 
-# Contribution
+BrowDash is currently **still in heavy development** and not even alpha. As soon as a first beta is available to download, I'll will let you know. In the meantime you can visit [this preview link][7].
+
+## Contribution
 
 - You have an idea of a new card and whish to use it in your dashboard? No problem! Just write me and I will get back to you as soon as I can.
 - You found a bug or better way of doing something? Create a pull request!
 
-# License
+## License
 
 This projected is licensed under the terms of the [MIT license][1].
 
-# Credits
+## Credits
 
 - [Grunt][2] - A JavaScript Task Runner
 - [Node.js][3] - JavaScript platform. Mainly used for Grunt.
