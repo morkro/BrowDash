@@ -1,8 +1,6 @@
 # BrowDash
 > [**Brow**ser**Dash**board] - creative, he? ;)
 
-
-
 A simple and customisable "new tab" Chrome extension.
 _This extension isn't downloadable before version 1.0.0. Until then, I prepared a preview link to see the current status._
 
@@ -22,11 +20,7 @@ Having a full customisable dashboard with a set of different modules, called _ca
 
 ## Planned features
 
-- **NotificationsCard:** setting personal alarm messages.
-- **DeviceCard:** statistics about your device _(like battery status and more)_.
-- **Offline message:** user is suddenly offline? be nice and tell him.
-- **LockScreen:** user should be able to set a password and timeout, so that his content is protected/hidden
-- _More features to be defined._
+Open features are listed in the [**wiki page**](https://github.com/morkro/BrowDash/wiki/Open-features).
 
 
 ## Technologies
@@ -38,14 +32,17 @@ Having a full customisable dashboard with a set of different modules, called _ca
 
 BrowDash is currently **still in heavy development** and not even alpha. As soon as a first beta is available to download, I'll will let you know. In the meantime you can visit [this preview link][7].
 
+
 ## Contribution
 
 - You have an idea of a new card and whish to use it in your dashboard? No problem! Just write me and I will get back to you as soon as I can.
 - You found a bug or better way of doing something? Create a pull request!
 
+
 ## License
 
 This projected is licensed under the terms of the [MIT license][1].
+
 
 ## Credits
 
