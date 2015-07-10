@@ -318,11 +318,11 @@ input[type="radio"] + label:before { border-radius: 50%; }
 .dialog-is-visible #brow-header { color: white; box-shadow: none; background: transparent; transition: color 50ms ease-in-out, background 0ms ease-in-out 0ms, box-shadow 50ms ease-in-out 0ms; }
 
 .header__timer { float: right; background: #eeeeee; border-top-left-radius: 2px; border-bottom-left-radius: 2px; transition: background 0ms ease-in-out 200ms; }
-.dialog-is-visible .header__timer { background: transparent; transition: background 0ms ease-in-out 0ms; }
+.theme-headerbar .header__timer, .dialog-is-visible .header__timer { background: transparent; transition: background 0ms ease-in-out 0ms; }
 .header__timer h1 { line-height: 26px; text-align: center; padding: 0px 4px; }
 
 .header__nav { float: right; height: 26px; background: #eeeeee; padding-bottom: 1px; padding-right: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; transition: background 0ms ease-in-out 200ms; }
-.dialog-is-visible .header__nav { background: transparent; transition: background 0ms ease-in-out 0ms; }
+.theme-headerbar .header__nav, .dialog-is-visible .header__nav { background: transparent; transition: background 0ms ease-in-out 0ms; }
 .header__nav ul { height: 24px; }
 .header__nav li { float: left; list-style: none; margin-left: 24px; line-height: 24px; }
 .header__nav svg-icon:not([color="white"]) { opacity: .6; transition: all 150ms ease-in-out; }

@@ -8,7 +8,7 @@
 	border-bottom-right-radius: 2px;
 	transition: background 0ms $easeInOut 200ms;
 
-	.dialog-is-visible & {
+	.theme-headerbar &, .dialog-is-visible & {
 		background: transparent;
 		transition: background 0ms $easeInOut 0ms;
 	}
@@ -22,13 +22,13 @@
 		line-height: 24px;
 	}
 
-	svg-icon:not([color="white"]) { 
+	svg-icon:not([color="white"]) {
 		opacity: .6;
 		transition: all 150ms $easeInOut;
 
-		.dialog-is-visible & { 
+		.dialog-is-visible & {
 			opacity: .2;
-			cursor: not-allowed; 
+			cursor: not-allowed;
 		}
 	}
 }

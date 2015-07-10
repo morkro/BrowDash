@@ -5,8 +5,8 @@
 	border-bottom-left-radius: 2px;
 	transition: background 0ms $easeInOut 200ms;
 
-	.dialog-is-visible & { 
-		background: transparent; 
+	.theme-headerbar &, .dialog-is-visible & {
+		background: transparent;
 		transition: background 0ms $easeInOut 0ms;
 	}
 
