@@ -1,8 +1,8 @@
 /**
- * @name				BrowCard
+ * @name				Card
  * @description	/
  */
-class BrowCard {
+class Card {
 	constructor (config = {}) {
 		this.config = config;
 		this.elem = this.createCard();
@@ -33,4 +33,4 @@ class BrowCard {
 	}
 }
 
-export default BrowCard;
+export default Card;

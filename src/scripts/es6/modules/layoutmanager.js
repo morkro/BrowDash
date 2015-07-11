@@ -3,10 +3,10 @@
 import { hasCustomCards } from '../utils/helper';
 
 /**
- * @name				BrowLayoutManager
+ * @name				LayoutManager
  * @description	/
  */
-class BrowLayoutManager {
+class LayoutManager {
 	constructor (container, overlay) {
 		this.transition = 0;
 		this.dragOptions = {
@@ -23,7 +23,6 @@ class BrowLayoutManager {
 		this.packery = new Packery(container, this.pkrOptions);
 		this.content = container;
 		this.overlay = overlay;
-		console.log(this);
 		this.addEvents();
 		this.addDraggabilly();
 	}
@@ -149,4 +148,4 @@ class BrowLayoutManager {
 	}
 }
 
-export default BrowLayoutManager;
+export default LayoutManager;

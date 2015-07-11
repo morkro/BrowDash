@@ -2,14 +2,14 @@
 	position: fixed;
 	z-index: z($modals, dialog);
 	top: 0;
-	right: 0; 
+	right: 0;
 	width: 100vw;
 	height: 0;
 	overflow: hidden;
 	align-items: center;
 	justify-content: center;
 	display: flex;
-	transition: all 150ms $easeInOut;
+	transition: height 150ms $easeInOut;
 
 	.dialog-is-visible & {
 		height: 100vh;

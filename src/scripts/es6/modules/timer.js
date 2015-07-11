@@ -1,9 +1,9 @@
 /**
- * @name				BrowTimer
+ * @name				Timer
  * @description	Class which appends a time string to an element
  *              	and updates it every second.
  */
-class BrowTimer {
+class Timer {
 	constructor (elem) {
 		if (!(elem && elem.nodeName)) {
 			throw new Error(`You haven't passed a valid HTMLElement!`);
@@ -83,4 +83,4 @@ class BrowTimer {
 	}
 }
 
-export default BrowTimer;
+export default Timer;

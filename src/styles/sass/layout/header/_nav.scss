@@ -24,7 +24,7 @@
 
 	svg-icon:not([color="white"]) {
 		opacity: .6;
-		transition: all 150ms $easeInOut;
+		transition: opacity 150ms $easeInOut;
 
 		.dialog-is-visible & {
 			opacity: .2;

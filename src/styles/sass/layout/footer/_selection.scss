@@ -23,10 +23,10 @@
 		width: 56px;
 		height: 56px;
 		opacity: 0;
-		transition: all 150ms $easeInOutQuint;
+		transition: opacity 150ms $easeInOutQuint, transform 150ms $easeInOutQuint;
 
-		&:before { 
-			opacity: 0; 
+		&:before {
+			opacity: 0;
 			transition-duration: 100ms;
 		}
 
@@ -40,6 +40,6 @@
 			&:before { transition-delay: (length($cardCount) - $i + 1) * 50ms; }
 		}
 	}
-	
+
 	svg { fill: white; }
 }

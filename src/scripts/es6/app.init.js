@@ -3,10 +3,10 @@ import { timer, openDialog, dialog, newCard, content, contentOverlay } from './u
 import { BROW_SETTINGS, BROW_CARDS } from './utils/constants';
 import { setTheme } from './utils/helper';
 import dialogSettingsCallback from './views/dialog.settings';
-import BrowTimer from './modules/browtimer';
-import BrowDialog from './modules/browdialog';
-import BrowCard from './modules/browcard';
-import BrowLayoutManager from './modules/browlayoutmanager';
+import Timer from './modules/timer';
+import Dialog from './modules/dialog';
+import Card from './modules/card';
+import LayoutManager from './modules/layoutmanager';
 
 /* Variables */
 let browTimer = null;
@@ -15,8 +15,8 @@ let browGrid = null;
 /**
  *	@description Validates the users timer settings.
  */
-let validateBrowTimer = function () {
-	browTimer = new BrowTimer(timer);
+let validateTimer = function () {
+	browTimer = new Timer(timer);
 	let dateSettings = { dateFormat: null, abbreviations: false };
 
 	if (!localStorage[BROW_SETTINGS]) {
@@ -51,12 +51,12 @@ let initDialogs = function () {
 			dialogCallback = dialogSettingsCallback;
 		}
 
-		let browDialog = new BrowDialog({
+		let browDialog = new Dialog({
 			elem: item,
 			dialogElem: dialog,
 			content: `${currentLocation}/markup/dialog-${dialogContent}.html`,
 			callback: dialogCallback,
-			params: { browTimer }
+			params: { Timer }
 		});
 
 		browDialog.init();
@@ -73,7 +73,7 @@ let parseCardsFromStorage = function (index) {
 	);
 
 	if (storageItem.module) {
-		let browCard = new BrowCard({
+		let browCard = new Card({
 			type: storageItem.type,
 			guid: storageItem.guid,
 			content: storageItem.content,
@@ -87,7 +87,7 @@ let parseCardsFromStorage = function (index) {
  * @description	Calls the LayoutManager class.
  */
 let initLayoutManager = function () {
-	browGrid = new BrowLayoutManager( content, contentOverlay );
+	browGrid = new LayoutManager( content, contentOverlay );
 	browGrid.layout();
 };
 
@@ -98,7 +98,7 @@ let initLayoutManager = function () {
 let validateBrowCards = function () {
 	if (!localStorage[BROW_CARDS] || localStorage.length <= 1) {
 		localStorage.setItem(BROW_CARDS, true);
-		let defaultCard = new BrowCard({ type: 'text' });
+		let defaultCard = new Card({ type: 'text' });
 		content.appendChild( defaultCard );
 	} else {
 		for (let i = 0; i < localStorage.length; i++) {
@@ -115,7 +115,7 @@ let addNewCard = function (event) {
 	event.preventDefault();
 
 	let selectedCard = this.getAttribute('data-create-card');
-	let browCard = new BrowCard({ type: `${selectedCard}` });
+	let browCard = new Card({ type: `${selectedCard}` });
 
 	content.appendChild( browCard );
 	browGrid.add( browCard );
@@ -133,7 +133,7 @@ let addEvents = function () {
 /* Initialise app */
 window.isEditMode = false;
 validateBrowCards();
-validateBrowTimer();
+validateTimer();
 initLayoutManager();
 initDialogs();
 setTheme();

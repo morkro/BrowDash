@@ -1,8 +1,8 @@
 /**
- * @name				BrowDialog
+ * @name				Dialog
  * @description	Shows/hides the dialog.
  */
-class BrowDialog {
+class Dialog {
 	constructor (config) {
 		this.elem = config.elem;
 		this.button	= this.elem.children[0];
@@ -86,4 +86,4 @@ class BrowDialog {
 	}
 }
 
-export default BrowDialog;
+export default Dialog;

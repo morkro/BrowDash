@@ -6,3 +6,4 @@ export let contentOverlay = document.querySelector('.content__overlay');
 export let openDialog = document.querySelectorAll('.open-dialog');
 export let newCard = document.querySelectorAll('.js-newcard');
 export let selectionList = document.querySelector('.js-selection');
+export let snackbar = document.querySelector('.js-snackbar');

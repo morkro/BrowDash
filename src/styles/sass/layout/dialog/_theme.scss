@@ -14,7 +14,7 @@
 		cursor: pointer;
 		border-radius: 2px;
 		box-shadow: $shadow-btn;
-		transition: all 150ms $easeInOut;
+		transition: box-shadow 150ms $easeInOut, transform 150ms $easeInOut;
 		position: relative;
 
 		&:hover {
@@ -27,7 +27,7 @@
 	[data-settings-theme="blue-a400"] {
 		background: $blue-a200;
 		&:hover { background: $blue-a400; }
-		
+
 		.theme-blue-a400 & {
 			cursor: default;
 			box-shadow: $shadow-btn-inset;
@@ -39,7 +39,7 @@
 	[data-settings-theme="pink-400"] {
 		background: $pink-400;
 		&:hover { background: $pink; }
-		
+
 		.theme-pink-400 & {
 			cursor: default;
 			box-shadow: $shadow-btn-inset;
@@ -51,7 +51,7 @@
 	[data-settings-theme="teal-400"] {
 		background: $teal-400;
 		&:hover { background: $teal; }
-		
+
 		.theme-teal-400 & {
 			cursor: default;
 			box-shadow: $shadow-btn-inset;
@@ -63,7 +63,7 @@
 	[data-settings-theme="indigo-400"] {
 		background: $indigo-400;
 		&:hover { background: $indigo; }
-		
+
 		.theme-indigo-400 & {
 			cursor: default;
 			box-shadow: $shadow-btn-inset;
@@ -75,7 +75,7 @@
 	[data-settings-theme="red"] {
 		background: $red;
 		&:hover { background: $red-600; }
-		
+
 		.theme-red & {
 			cursor: default;
 			box-shadow: $shadow-btn-inset;

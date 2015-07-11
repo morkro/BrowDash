@@ -1,0 +1,19 @@
+#brow-snackbar {
+	max-width: 860px;
+	width: 80%;
+	z-index: z($modals, snackbar);
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%) translateY(100%);
+	color: white;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	background: rgba(0, 0, 0, .7);
+	padding: 15px 20px;
+	transition: transform 150ms ease-in-out;
+
+	&.is-visible {
+		transform: translateX(-50%) translateY(0);
+	}
+}
