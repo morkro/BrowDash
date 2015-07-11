@@ -27,6 +27,7 @@ module.exports = function (grunt) {
 	 */
 	grunt.registerTask('build', [
 		'clean',
+		'bake',
 		'copy',
 		'css',
 		'js',
@@ -48,6 +49,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('dev', [
 		'server',
 		'clean',
+		'bake',
 		'copy',
 		'css',
 		'browserify',
@@ -63,6 +65,7 @@ module.exports = function (grunt) {
 	 */
 	grunt.registerTask('prod', [
 		'clean',
+		'bake',
 		'copy',
 		'css',
 		'browserify',

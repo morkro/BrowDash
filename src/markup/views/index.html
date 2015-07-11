@@ -9,104 +9,14 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>New Tab</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<link rel="stylesheet" type="text/css" href="main.min.css">
-	<link rel="import" href="markup/svg-icon.html">
-	<link rel="import" href="markup/card-base.html">
-	<link rel="import" href="markup/text-card.html">
-	<link rel="import" href="markup/weather-card.html">
-	<link rel="import" href="markup/todo-card.html">
-</head>
+<!--(bake ../includes/meta.html)-->
 <body>
-	<!-- Dashboard Header -->
-	<header id="brow-header">
-		<!-- Navigation -->
-		<nav class="header__nav">
-			<ul>
-				<li><!-- About -->
-					<button class="btn btn--fx header__about open-dialog" data-dialog="about">
-						<svg-icon icon="info"></svg-icon>
-					</button>
-				</li><!-- /About -->
-				<li><!-- Settings -->
-					<button class="btn btn--fx header__settings open-dialog" data-dialog="settings">
-						<svg-icon icon="settings"></svg-icon>
-					</button>
-				</li><!-- /Settings -->
-			</ul>
-		</nav>
-		<!-- Timer -->
-		<div class="header__timer">
-			<h1 class="js-timer">00:00:00</h1>
-		</div>
-	</header><!-- /Dashboard Header -->
+	<!--(bake ../includes/header.html)-->
+	<!--(bake ../includes/content.html)-->
+	<!--(bake ../includes/dialog.html)-->
+	<!--(bake ../includes/footer.html)-->
+	<!--(bake ../includes/snackbar.html)-->
 
-	<!-- Dashboard Content -->
-	<main id="brow-content" class="js-content" role="main" data-column="3">
-		<div class="brow-content--gutter"></div>
-		<div class="brow-content--sizer"></div>
-		<div class="content__overlay"></div>
-	</main><!-- /Dashboard Content -->
-
-	<!-- Settings -->
-	<div id="brow__dialog" class="js-dialog colored-bg">
-		<section class="dialog__inner clearfix"></section>
-	</div><!-- /Settings -->
-
-	<!-- Dashboard Footer -->
-	<footer id="brow-footer">
-		<!-- Add button -->
-		<button id="footer__add" class="btn btn--round js-selection colored-bg-opposite">
-			<svg-icon icon="plus" color="white"></svg-icon>
-		</button><!-- /Add button -->
-
-		<!-- Select card type -->
-		<div class="footer__select js-cardlist">
-			<ul class="footer__select__list">
-				<!-- TextCard -->
-				<li data-tooltip-identifier="textcard"
-					data-tooltip="Text"
-					data-tooltip-pos="left"
-					data-tooltip-fx="false">
-					<button class="btn btn--round js-newcard colored-bg" data-create-card="text">
-						<svg-icon icon="format-size" color="white"></svg-icon>
-					</button>
-				</li><!-- /TextCard -->
-				<!-- WeatherCard -->
-				<li data-tooltip-identifier="weathercard"
-					data-tooltip="Weather"
-					data-tooltip-pos="left"
-					data-tooltip-fx="false">
-					<button class="btn btn--round js-newcard colored-bg" data-create-card="weather">
-						<svg-icon icon="partly-cloudy" color="white"></svg-icon>
-					</button>
-				</li><!-- /WeatherCard -->
-				<!-- ToDoCard -->
-				<li data-tooltip-identifier="todocard"
-					data-tooltip="ToDo List"
-					data-tooltip-pos="left"
-					data-tooltip-fx="false">
-					<button class="btn btn--round js-newcard colored-bg" data-create-card="todo">
-						<svg-icon icon="clipboard" color="white"></svg-icon>
-					</button>
-				</li><!-- /ToDoCard -->
-				<!-- NotificationsCard -->
-				<li data-tooltip-identifier="notifycard"
-					data-tooltip="Notifications"
-					data-tooltip-pos="left"
-					data-tooltip-fx="false">
-					<button class="btn btn--round js-newcard colored-bg" data-create-card="notify">
-						<svg-icon icon="alarm" color="white"></svg-icon>
-					</button>
-				</li><!-- /NotificationsCard -->
-			</ul>
-		</div><!-- /Select card type -->
-	</footer><!-- /Dashboard Footer -->
-
-	<!-- Scripts -->
 	<script type="text/javascript" src="app.min.js"></script>
 </body>
 </html>

@@ -29,10 +29,6 @@ module.exports = function(grunt) {
 		 * Move all files to public.
 		 */
 		copy: {
-			index: {
-				src: '<%= dir.markup %>/views/index.html',
-				dest: '<%= dir.public %>/index.html'
-			},
 			componentsmarkup: {
 				expand: true,
 				flatten: true,
@@ -69,6 +65,16 @@ module.exports = function(grunt) {
 			manifest: {
 				src: 'manifest.json',
 				dest: '<%= dir.public %>/manifest.json'
+			}
+		},
+		/**
+		 * Creates all markup templates.
+		 */
+		bake: {
+			english: {
+				files: {
+					'<%= dir.public %>/index.html': '<%= dir.markup %>/views/index.html',
+				}
 			}
 		},
 		/**
@@ -155,7 +161,7 @@ module.exports = function(grunt) {
 		watch: {
 			markup: {
 				files: ['<%= dir.markup %>/**/*.html'],
-				tasks: ['copy:index', 'copy:componentsmarkup', 'copy:views']
+				tasks: ['bake', 'copy:componentsmarkup', 'copy:views']
 			},
 			styles: {
 				files: ['<%= dir.sass %>/**/*.scss', '<%= dir.css %>/**/*.css'],

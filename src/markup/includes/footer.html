@@ -1,0 +1,48 @@
+<footer id="brow-footer">
+	<!-- Add button -->
+	<button id="footer__add" class="btn btn--round js-selection colored-bg-opposite">
+		<svg-icon icon="plus" color="white"></svg-icon>
+	</button><!-- /Add button -->
+
+	<!-- Select card type -->
+	<div class="footer__select js-cardlist">
+		<ul class="footer__select__list">
+			<!-- TextCard -->
+			<li data-tooltip-identifier="textcard"
+				data-tooltip="Text"
+				data-tooltip-pos="left"
+				data-tooltip-fx="false">
+				<button class="btn btn--round js-newcard colored-bg" data-create-card="text">
+					<svg-icon icon="format-size" color="white"></svg-icon>
+				</button>
+			</li><!-- /TextCard -->
+			<!-- WeatherCard -->
+			<li data-tooltip-identifier="weathercard"
+				data-tooltip="Weather"
+				data-tooltip-pos="left"
+				data-tooltip-fx="false">
+				<button class="btn btn--round js-newcard colored-bg" data-create-card="weather">
+					<svg-icon icon="partly-cloudy" color="white"></svg-icon>
+				</button>
+			</li><!-- /WeatherCard -->
+			<!-- ToDoCard -->
+			<li data-tooltip-identifier="todocard"
+				data-tooltip="ToDo List"
+				data-tooltip-pos="left"
+				data-tooltip-fx="false">
+				<button class="btn btn--round js-newcard colored-bg" data-create-card="todo">
+					<svg-icon icon="clipboard" color="white"></svg-icon>
+				</button>
+			</li><!-- /ToDoCard -->
+			<!-- NotificationsCard -->
+			<li data-tooltip-identifier="notifycard"
+				data-tooltip="Notifications"
+				data-tooltip-pos="left"
+				data-tooltip-fx="false">
+				<button class="btn btn--round js-newcard colored-bg" data-create-card="notify">
+					<svg-icon icon="alarm" color="white"></svg-icon>
+				</button>
+			</li><!-- /NotificationsCard -->
+		</ul>
+	</div><!-- /Select card type -->
+</footer>

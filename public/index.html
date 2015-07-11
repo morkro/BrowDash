@@ -21,7 +21,6 @@
 	<link rel="import" href="markup/todo-card.html">
 </head>
 <body>
-	<!-- Dashboard Header -->
 	<header id="brow-header">
 		<!-- Navigation -->
 		<nav class="header__nav">
@@ -42,27 +41,21 @@
 		<div class="header__timer">
 			<h1 class="js-timer">00:00:00</h1>
 		</div>
-	</header><!-- /Dashboard Header -->
-
-	<!-- Dashboard Content -->
+	</header>
 	<main id="brow-content" class="js-content" role="main" data-column="3">
 		<div class="brow-content--gutter"></div>
 		<div class="brow-content--sizer"></div>
 		<div class="content__overlay"></div>
-	</main><!-- /Dashboard Content -->
-
-	<!-- Settings -->
+	</main>
 	<div id="brow__dialog" class="js-dialog colored-bg">
 		<section class="dialog__inner clearfix"></section>
-	</div><!-- /Settings -->
-
-	<!-- Dashboard Footer -->
+	</div>
 	<footer id="brow-footer">
 		<!-- Add button -->
 		<button id="footer__add" class="btn btn--round js-selection colored-bg-opposite">
 			<svg-icon icon="plus" color="white"></svg-icon>
 		</button><!-- /Add button -->
-
+	
 		<!-- Select card type -->
 		<div class="footer__select js-cardlist">
 			<ul class="footer__select__list">
@@ -104,9 +97,13 @@
 				</li><!-- /NotificationsCard -->
 			</ul>
 		</div><!-- /Select card type -->
-	</footer><!-- /Dashboard Footer -->
+	</footer>
+	<div id="brow-snackbar" class="js-snackbar">
+		<div class="snackbar__inner">
+			<p>Oh noes! You went offline :(</p>
+		</div>
+	</div>
 
-	<!-- Scripts -->
 	<script type="text/javascript" src="app.min.js"></script>
 </body>
 </html>
