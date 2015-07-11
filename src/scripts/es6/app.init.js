@@ -3,6 +3,7 @@ import { timer, openDialog, dialog, newCard, content, contentOverlay } from './u
 import { BROW_SETTINGS, BROW_CARDS } from './utils/constants';
 import { setTheme } from './utils/helper';
 import dialogSettingsCallback from './views/dialog.settings';
+import dialogInformationCallback from './views/dialog.information';
 import Timer from './modules/timer';
 import Dialog from './modules/dialog';
 import Card from './modules/card';
@@ -58,6 +59,17 @@ let validateTimer = function () {
 };
 
 /**
+ * @description	Returns correct callback function.
+ */
+let evalCallback = function (name) {
+	switch (name) {
+		case 'settings': return dialogSettingsCallback;
+		case 'info': return dialogInformationCallback;
+		default: return false;
+	}
+};
+
+/**
  * @description	Adds all dialog.
  */
 let initDialogs = function () {
@@ -65,17 +77,12 @@ let initDialogs = function () {
 
 	[].forEach.call(openDialog, function (item) {
 		let dialogContent	= item.getAttribute('data-dialog');
-		let dialogCallback = false;
-
-		if (dialogContent === 'settings') {
-			dialogCallback = dialogSettingsCallback;
-		}
 
 		let browDialog = new Dialog({
 			elem: item,
 			dialogElem: dialog,
 			content: `${currentLocation}/markup/dialog-${dialogContent}.html`,
-			callback: dialogCallback,
+			callback: evalCallback(dialogContent),
 			params: { browTimer }
 		});
 

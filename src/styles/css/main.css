@@ -159,33 +159,38 @@ td, th { padding: 0; }
 @font-face { font-family: "Roboto"; src: url("../assets/fonts/Roboto-BlackItalic.ttf") format('truetype'); font-weight: 600; font-style: italic; }
 /** FONT-FAMILY VARIABLES  Usage: Overall font-family. */
 .theme-blue-a400 a { color: #2979ff; }
-.theme-blue-a400 .colored-bg-opposite a, .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-red ::selection a, .theme-red .theme-blue-a400 ::selection a, .theme-blue-a400 .colored-bg a { color: white; }
+.theme-blue-a400 .colored-bg-opposite a, .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-red ::selection a, .theme-red .theme-blue-a400 ::selection a, .theme-blue-a400 .highlight-bg a, .theme-blue-a400 .dialog__sidebar li::after a, .dialog__sidebar .theme-blue-a400 li::after a, .theme-blue-a400 .colored-bg a { color: white; }
 .theme-blue-a400 .colored-bg-opposite, .theme-blue-a400 ::selection, .theme-blue-a400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-teal-400 ::selection, .theme-teal-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-pink-400 ::selection, .theme-pink-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-red ::selection, .theme-red .theme-blue-a400 ::selection { background-color: #f44336; }
 .theme-blue-a400 .colored-bg { background-color: #2979ff; }
+.theme-blue-a400 .highlight-bg, .theme-blue-a400 .dialog__sidebar li::after, .dialog__sidebar .theme-blue-a400 li::after { background-color: #ff9800; }
 .theme-blue-a400 ::selection { color: white; }
 
 .theme-indigo-400 a { color: #5c6bc0; }
-.theme-indigo-400 .colored-bg-opposite a, .theme-indigo-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-indigo-400 ::selection a, .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-red ::selection a, .theme-red .theme-indigo-400 ::selection a, .theme-indigo-400 .colored-bg a { color: white; }
+.theme-indigo-400 .colored-bg-opposite a, .theme-indigo-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-indigo-400 ::selection a, .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-red ::selection a, .theme-red .theme-indigo-400 ::selection a, .theme-indigo-400 .highlight-bg a, .theme-indigo-400 .dialog__sidebar li::after a, .dialog__sidebar .theme-indigo-400 li::after a, .theme-indigo-400 .colored-bg a { color: white; }
 .theme-indigo-400 .colored-bg-opposite, .theme-indigo-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-indigo-400 ::selection, .theme-indigo-400 ::selection, .theme-indigo-400 .theme-teal-400 ::selection, .theme-teal-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-pink-400 ::selection, .theme-pink-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-red ::selection, .theme-red .theme-indigo-400 ::selection { background-color: #e91e63; }
 .theme-indigo-400 .colored-bg { background-color: #5c6bc0; }
+.theme-indigo-400 .highlight-bg, .theme-indigo-400 .dialog__sidebar li::after, .dialog__sidebar .theme-indigo-400 li::after { background-color: #ff9800; }
 .theme-indigo-400 ::selection { color: white; }
 
 .theme-teal-400 a { color: #26a69a; }
-.theme-teal-400 .colored-bg-opposite a, .theme-teal-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-teal-400 ::selection a, .theme-teal-400 ::selection a, .theme-teal-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-red ::selection a, .theme-red .theme-teal-400 ::selection a, .theme-teal-400 .colored-bg a { color: white; }
+.theme-teal-400 .colored-bg-opposite a, .theme-teal-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-teal-400 ::selection a, .theme-teal-400 ::selection a, .theme-teal-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-red ::selection a, .theme-red .theme-teal-400 ::selection a, .theme-teal-400 .highlight-bg a, .theme-teal-400 .dialog__sidebar li::after a, .dialog__sidebar .theme-teal-400 li::after a, .theme-teal-400 .colored-bg a { color: white; }
 .theme-teal-400 .colored-bg-opposite, .theme-teal-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-teal-400 ::selection, .theme-teal-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-teal-400 ::selection, .theme-teal-400 ::selection, .theme-teal-400 .theme-pink-400 ::selection, .theme-pink-400 .theme-teal-400 ::selection, .theme-teal-400 .theme-red ::selection, .theme-red .theme-teal-400 ::selection { background-color: #e91e63; }
 .theme-teal-400 .colored-bg { background-color: #26a69a; }
+.theme-teal-400 .highlight-bg, .theme-teal-400 .dialog__sidebar li::after, .dialog__sidebar .theme-teal-400 li::after { background-color: #ff9800; }
 .theme-teal-400 ::selection { color: white; }
 
 .theme-pink-400 a { color: #ec407a; }
-.theme-pink-400 .colored-bg-opposite a, .theme-pink-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-pink-400 ::selection a, .theme-pink-400 ::selection a, .theme-pink-400 .theme-red ::selection a, .theme-red .theme-pink-400 ::selection a, .theme-pink-400 .colored-bg a { color: white; }
+.theme-pink-400 .colored-bg-opposite a, .theme-pink-400 .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-pink-400 ::selection a, .theme-pink-400 .theme-teal-400 ::selection a, .theme-teal-400 .theme-pink-400 ::selection a, .theme-pink-400 ::selection a, .theme-pink-400 .theme-red ::selection a, .theme-red .theme-pink-400 ::selection a, .theme-pink-400 .highlight-bg a, .theme-pink-400 .dialog__sidebar li::after a, .dialog__sidebar .theme-pink-400 li::after a, .theme-pink-400 .colored-bg a { color: white; }
 .theme-pink-400 .colored-bg-opposite, .theme-pink-400 .theme-blue-a400 ::selection, .theme-blue-a400 .theme-pink-400 ::selection, .theme-pink-400 .theme-indigo-400 ::selection, .theme-indigo-400 .theme-pink-400 ::selection, .theme-pink-400 .theme-teal-400 ::selection, .theme-teal-400 .theme-pink-400 ::selection, .theme-pink-400 ::selection, .theme-pink-400 .theme-red ::selection, .theme-red .theme-pink-400 ::selection { background-color: #00bcd4; }
 .theme-pink-400 .colored-bg { background-color: #ec407a; }
+.theme-pink-400 .highlight-bg, .theme-pink-400 .dialog__sidebar li::after, .dialog__sidebar .theme-pink-400 li::after { background-color: #ff9800; }
 .theme-pink-400 ::selection { color: white; }
 
 .theme-red a { color: #f44336; }
-.theme-red .colored-bg-opposite a, .theme-red .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-red ::selection a, .theme-red .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-red ::selection a, .theme-red .theme-teal-400 ::selection a, .theme-teal-400 .theme-red ::selection a, .theme-red .theme-pink-400 ::selection a, .theme-pink-400 .theme-red ::selection a, .theme-red ::selection a, .theme-red .colored-bg a { color: white; }
+.theme-red .colored-bg-opposite a, .theme-red .theme-blue-a400 ::selection a, .theme-blue-a400 .theme-red ::selection a, .theme-red .theme-indigo-400 ::selection a, .theme-indigo-400 .theme-red ::selection a, .theme-red .theme-teal-400 ::selection a, .theme-teal-400 .theme-red ::selection a, .theme-red .theme-pink-400 ::selection a, .theme-pink-400 .theme-red ::selection a, .theme-red ::selection a, .theme-red .highlight-bg a, .theme-red .dialog__sidebar li::after a, .dialog__sidebar .theme-red li::after a, .theme-red .colored-bg a { color: white; }
 .theme-red .colored-bg-opposite, .theme-red .theme-blue-a400 ::selection, .theme-blue-a400 .theme-red ::selection, .theme-red .theme-indigo-400 ::selection, .theme-indigo-400 .theme-red ::selection, .theme-red .theme-teal-400 ::selection, .theme-teal-400 .theme-red ::selection, .theme-red .theme-pink-400 ::selection, .theme-pink-400 .theme-red ::selection, .theme-red ::selection { background-color: #2979ff; }
 .theme-red .colored-bg { background-color: #f44336; }
+.theme-red .highlight-bg, .theme-red .dialog__sidebar li::after, .dialog__sidebar .theme-red li::after { background-color: #ff9800; }
 .theme-red ::selection { color: white; }
 
 /** SYSTEM ==============================  General */
@@ -269,14 +274,23 @@ input[type="radio"] + label:before { border-radius: 50%; }
 .dialog__heading h1 { font-weight: 400; font-size: 48px; }
 .dialog__heading button { align-self: center; }
 
-.dialog__content { color: white; }
+.dialog__content { color: white; display: flex; flex-wrap: wrap; }
 .dialog__content h2 { margin-bottom: 20px; text-transform: uppercase; font-size: 24px; }
 .dialog__content span { font-style: italic; color: rgba(255, 255, 255, 0.6); }
 .dialog__content section:not(:last-of-type) { margin-bottom: 40px; }
 .dialog__content a:hover { text-decoration: underline; }
 
-.dialog__block { display: flex; justify-content: space-between; }
-.dialog__block > section { flex-basis: 45%; }
+.dialog__block { width: 70%; }
+
+.dialog__sidebar { width: 20%; margin-right: 50px; }
+.dialog__sidebar ul { list-style: none; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24); border-radius: 2px; }
+.dialog__sidebar li { border-bottom: 1px solid rgba(0, 0, 0, 0.1); position: relative; }
+.dialog__sidebar li::after { content: ""; position: absolute; border-radius: 50%; width: 20px; height: 20px; top: 50%; right: -10px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24); transform: translateY(-50%) scale(0); transition: transform 150ms ease-in-out; }
+.dialog__sidebar li.is-active::after { transform: translateY(-50%) scale(1); }
+.dialog__sidebar li.is-active a { background: rgba(0, 0, 0, 0.1); }
+.dialog__sidebar li:last-child { border-bottom: none; }
+.dialog__sidebar a { display: block; width: 100%; padding: 15px 20px; transition: background 150ms ease-in-out; cursor: pointer; font-weight: 400; }
+.dialog__sidebar a:hover { text-decoration: none; background: rgba(0, 0, 0, 0.1); }
 
 /* CARDS */
 .brow-content__module { position: relative; z-index: 1; transition: box-shadow 150ms ease-in-out; }
@@ -377,7 +391,8 @@ input[type="radio"] + label:before { border-radius: 50%; }
 .theme-red .settings__theme [data-settings-theme="red"] { cursor: default; box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.48); transform: none; }
 .theme-red .settings__theme [data-settings-theme="red"]:hover { box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.48); }
 
-.content--about .content__author { margin-top: 25px; text-align: center; }
+.content--info section { display: none; }
+.content--info section.is-visible { display: block; }
 
 .content__time .dialog__content { padding: 0 0 0 5px; }
 

@@ -1,0 +1,7 @@
+.content--info {
+	section {
+		display: none;
+
+		&.is-visible { display: block; }
+	}
+}

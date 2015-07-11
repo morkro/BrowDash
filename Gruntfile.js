@@ -49,10 +49,8 @@ module.exports = function(grunt) {
 				expand: true,
 				flatten: true,
 				filter: 'isFile',
-				src: [
-					'<%= dir.markup %>/views/dialog-about.html',
-					'<%= dir.markup %>/views/dialog-settings.html'
-				],
+				cwd: '<%= dir.markup %>/views/',
+				src: '**',
 				dest: '<%= dir.public %>/markup',
 			},
 			assets: {

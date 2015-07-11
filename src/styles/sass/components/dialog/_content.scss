@@ -1,5 +1,7 @@
 .dialog__content {
 	color: white;
+	display: flex;
+	flex-wrap: wrap;
 
 	h2 {
 		margin-bottom: 20px;
@@ -20,10 +22,5 @@
 }
 
 .dialog__block {
-	display: flex;
-	justify-content: space-between;
-
-	> section {
-		flex-basis: 45%;
-	}
+	width: 70%;
 }

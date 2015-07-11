@@ -1,0 +1,50 @@
+.dialog__sidebar {
+	width: 20%;
+	margin-right: 50px;
+
+	ul {
+		list-style: none;
+		box-shadow: $shadow-base;
+		border-radius: 2px;
+	}
+
+	li {
+		border-bottom: 1px solid rgba(0, 0, 0, .1);
+		position: relative;
+
+		&::after {
+			@extend .highlight-bg;
+			content: "";
+			position: absolute;
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			top: 50%;
+			right: -10px;
+			box-shadow: $shadow-base;
+			transform: translateY(-50%) scale(0);
+			transition: transform 150ms $easeInOut;
+		}
+
+		&.is-active {
+			&::after { transform: translateY(-50%) scale(1); }
+			a { background: rgba(0, 0, 0, .1); }
+		}
+
+		&:last-child { border-bottom: none; }
+	}
+
+	a {
+		display: block;
+		width: 100%;
+		padding: 15px 20px;
+		transition: background 150ms $easeInOut;
+		cursor: pointer;
+		font-weight: 400;
+
+		&:hover {
+			text-decoration: none;
+			background: rgba(0, 0, 0, .1);
+		}
+	}
+}

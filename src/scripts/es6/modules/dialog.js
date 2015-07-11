@@ -68,6 +68,7 @@ class Dialog {
 	 */
 	loadOrCloseContent (event) {
 		let dialogIsOpen = document.body.classList.contains('dialog-is-visible');
+		this.elem.blur();
 
 		if (dialogIsOpen) {
 			this.closeDialog(event);
