@@ -15,7 +15,6 @@ class Snackbar {
 	alert(msg = this.default) {
 		this.message = msg.trim();
 		this.show();
-		console.log('this');
 	}
 
 	set setDuration (duration) {
@@ -26,6 +25,7 @@ class Snackbar {
 		this.elem.innerHTML = null;
 		this.elem.appendChild( this.createParagraph() );
 		this.elem.classList.add('is-visible');
+
 		setTimeout(() => {
 			this.elem.classList.remove('is-visible');
 			this.message = null;

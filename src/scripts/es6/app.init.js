@@ -76,7 +76,7 @@ let initDialogs = function () {
 			dialogElem: dialog,
 			content: `${currentLocation}/markup/dialog-${dialogContent}.html`,
 			callback: dialogCallback,
-			params: { Timer }
+			params: { browTimer }
 		});
 
 		browDialog.init();

@@ -51,14 +51,14 @@ var updateDateFormat = function (event) {
 			abbrCheckbox.checked = false;
 		}
 
-		this.callbackParams.Timer.setDateFormat({ 'format': timeFormat });
+		this.callbackParams.browTimer.setDateFormat({ 'format': timeFormat });
 		dateSettings.dateFormat = timeFormat;
 		dateSettings.abbreviations = abbrCheckbox.checked;
 	}
 
 	// If abbreviation checkbox is clicked
 	if (!event.target.disabled && event.target.id === 'settings--ampm') {
-		this.callbackParams.Timer.setDateFormat({ 'abbreviations': abbrCheckbox.checked });
+		this.callbackParams.browTimer.setDateFormat({ 'abbreviations': abbrCheckbox.checked });
 		dateSettings.abbreviations = abbrCheckbox.checked;
 	}
 

@@ -259,11 +259,11 @@ input[type="radio"] + label:before { border-radius: 50%; }
 .btn--text:hover { background: rgba(0, 0, 0, 0.1); }
 
 /* DIALOG */
-#brow__dialog { position: fixed; z-index: 4; top: 0; right: 0; width: 100vw; height: 0; overflow: hidden; align-items: center; justify-content: center; display: flex; transition: height 150ms ease-in-out; }
-.dialog-is-visible #brow__dialog { height: 100vh; }
+#brow__dialog { position: fixed; z-index: 4; top: 0; right: 0; width: 100vw; height: 100vh; overflow: auto; padding: 64px 0; align-items: flex-start; justify-content: center; display: flex; transform: translateY(-100%); transition: transform 150ms ease-in-out; }
+.dialog-is-visible #brow__dialog { transform: translateY(0); }
 
-.dialog__inner { position: relative; width: 70vw; height: 0; transition: height 0ms; transition-delay: 250ms; overflow-y: hidden; }
-.dialog-is-visible .dialog__inner { height: 50vh; }
+.dialog__inner { position: relative; width: 100%; height: 0; padding: 0 15vw; transition: height 0ms; transition-delay: 250ms; }
+.dialog-is-visible .dialog__inner { height: auto; }
 
 .dialog__heading { width: 100%; color: #ffffff; position: relative; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-between; margin-bottom: 50px; }
 .dialog__heading h1 { font-weight: 400; font-size: 48px; }
