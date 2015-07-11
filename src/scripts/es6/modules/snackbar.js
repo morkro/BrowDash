@@ -6,22 +6,29 @@ import { snackbar } from '../utils/elements';
  */
 class Snackbar {
 	constructor() {
-		this.duration = 2000;
+		this.duration = 10000;
 		this.elem = snackbar;
-		this.message = 'Ooops, something went wrong! :(';
+		this.default = 'Ooops, something went wrong! :(';
+		this.message = null;
 	}
 
-	alert(msg = this.message) {
+	alert(msg = this.default) {
 		this.message = msg.trim();
 		this.show();
+		console.log('this');
+	}
+
+	set setDuration (duration) {
+		this.duration = duration;
 	}
 
 	show() {
-		this.elem.innerText = this.createParagraph();
+		this.elem.innerHTML = null;
+		this.elem.appendChild( this.createParagraph() );
 		this.elem.classList.add('is-visible');
 		setTimeout(() => {
 			this.elem.classList.remove('is-visible');
-			this.elem.innerText = null;
+			this.message = null;
 		}, this.duration);
 	}
 

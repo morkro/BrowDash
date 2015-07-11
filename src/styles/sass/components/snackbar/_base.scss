@@ -11,7 +11,7 @@
 	border-top-right-radius: 2px;
 	background: rgba(0, 0, 0, .7);
 	padding: 15px 20px;
-	transition: transform 150ms ease-in-out;
+	transition: transform 150ms $easeInOutQuint;
 
 	&.is-visible {
 		transform: translateX(-50%) translateY(0);

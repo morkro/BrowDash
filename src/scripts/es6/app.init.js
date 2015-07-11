@@ -7,10 +7,30 @@ import Timer from './modules/timer';
 import Dialog from './modules/dialog';
 import Card from './modules/card';
 import LayoutManager from './modules/layoutmanager';
+import Snackbar from './modules/snackbar';
 
 /* Variables */
 let browTimer = null;
 let browGrid = null;
+let onlineCounter = 0;
+
+/**
+ * @description Validates if user is online/offline and sends proper notification.
+ */
+let validateOnOfflineState = function () {
+	let snack = new Snackbar();
+
+	if (onlineCounter) {
+		if (!navigator.onLine) {
+			snack.alert(`Your internet connection suddenly went offline. BrowDash will still work like before, but some cards might not update.`);
+		}
+		else {
+			snack.alert(`Your internet connection is stable again, awesome!`);
+		}
+	}
+
+	onlineCounter++;
+};
 
 /**
  *	@description Validates the users timer settings.
@@ -125,6 +145,8 @@ let addNewCard = function (event) {
  * @description	Bind events to elements.
  */
 let addEvents = function () {
+	window.addEventListener('online', validateOnOfflineState);
+	window.addEventListener('offline', validateOnOfflineState);
 	[].forEach.call(newCard, (item) => {
 		item.addEventListener('click', addNewCard);
 	});
@@ -136,5 +158,6 @@ validateBrowCards();
 validateTimer();
 initLayoutManager();
 initDialogs();
+validateOnOfflineState();
 setTheme();
 addEvents();
