@@ -15,6 +15,7 @@
 		&::after {
 			@extend .highlight-bg;
 			content: "";
+			pointer-events: none;
 			position: absolute;
 			border-radius: 50%;
 			width: 20px;

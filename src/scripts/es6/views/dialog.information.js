@@ -1,6 +1,19 @@
+/**
+ * @description	Returns current active list item
+ * @return 			{HTMLElement}
+ */
 var getCurrentActiveItem = (content) => content.querySelector('.dialog__sidebar li.is-active a');
+
+/**
+ * @description	Returns current active section
+ * @return 			{HTMLElement}
+ */
 var getCurrentActiveSection = (content) => content.querySelector('section.is-visible');
 
+/**
+ * @description	Validates new and old content.
+ * @param 			{HTMLElement} content
+ */
 var validateSection = function (content) {
 	let curItem = getCurrentActiveItem(content);
 	let curSection = getCurrentActiveSection(content);
@@ -11,6 +24,10 @@ var validateSection = function (content) {
 	section.classList.add('is-visible');
 };
 
+/**
+ * @description	Adds or removes active state on list and shows/hides content.
+ * @param 			{Object} event
+ */
 var toggleContent = function (event) {
 	event.preventDefault();
 

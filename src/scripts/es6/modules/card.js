@@ -7,7 +7,7 @@ class Card {
 		this.config = config;
 		this.elem = this.createCard();
 		this.initialiseCard();
-
+		console.log(this);
 		return this.elem;
 	}
 
@@ -20,6 +20,7 @@ class Card {
 			case 'text': return document.createElement('text-card');
 			case 'weather': return document.createElement('weather-card');
 			case 'todo': return document.createElement('todo-card');
+			case 'calculator': return document.createElement('calculator-card');
 			default: return document.createElement('text-card');
 		}
 	}

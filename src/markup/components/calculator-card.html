@@ -1,0 +1,94 @@
+<template id="calculator-card">
+	<style>
+		* { box-sizing: border-box; }
+		:host {
+			width: 100%;
+			display: block;
+		}
+		button {
+			background: none;
+			border: none;
+			text-align: center;
+			color: white;
+			font-size: 24px;
+			padding: 15px 0;
+			cursor: pointer;
+		}
+		button:focus, button:active {
+			outline: none;
+		}
+		.calc-result {
+			background-color: #e53935;
+			color: white;
+			border-top-left-radius: 2px;
+			border-top-right-radius: 2px;
+			padding: 10px;
+			display: flex;
+		}
+			.calc-result input {
+				border: none;
+				background: transparent;
+				width: 100%;
+				font-size: 24px;
+				color: white;
+				padding: 15px;
+				text-align: right;
+			}
+			.calc-result input:active,
+			.calc-result input:focus {
+				outline: none;
+			}
+			.calc-result input::-webkit-input-placeholder {
+				color: rgba(255,255,255,0.2);
+			}
+			.calc-result button {
+				margin: 0 15px 0 5px;
+				width: 30px;
+				position: relative;
+				top: 1px;
+			}
+		.calc-options {
+			width: 100%;
+			background-color: #222222;
+			display: flex;
+			flex-wrap: wrap;
+			border-bottom-left-radius: 2px;
+			border-bottom-right-radius: 2px;
+		}
+			.calc-options button {
+				width: 20%;
+			}
+	</style>
+	<card-base>
+		<header class="calc-result">
+			<input type="text" id="calc-input" name="calc-input" placeholder="3 × 3 = ?">
+		</header>
+		<section class="calc-options">
+			<!-- row -->
+			<button type="button" class="calc-seven">7</button>
+			<button type="button" class="calc-eight">8</button>
+			<button type="button" class="calc-nine">9</button>
+			<button type="button" class="calc-backspace"><svg-icon icon="backspace" color="white"></svg-icon></button>
+			<button type="button" class="calc-del"><svg-icon icon="circle-close" color="white"></svg-icon></button>
+			<!-- row -->
+			<button type="button" class="calc-four">4</button>
+			<button type="button" class="calc-five">5</button>
+			<button type="button" class="calc-six">6</button>
+			<button type="button" class="calc-multiply">×</button>
+			<button type="button" class="calc-divide">÷</button>
+			<!-- row -->
+			<button type="button" class="calc-one">1</button>
+			<button type="button" class="calc-two">2</button>
+			<button type="button" class="calc-three">3</button>
+			<button type="button" class="calc-plus">+</button>
+			<button type="button" class="calc-minus">-</button>
+			<!-- row -->
+			<button type="button" class="calc-dot">.</button>
+			<button type="button" class="calc-zero">0</button>
+			<button type="button" class="calc-plusminus">~±</button>
+			<button type="button" class="calc-root">✓</button>
+			<button type="button" class="calc-equal">=</button>
+		</section>
+	</card-base>
+</template>
+<script type="text/javascript" src="../scripts/calculator-card.js"></script>

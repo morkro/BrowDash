@@ -41,5 +41,11 @@
 		}
 	}
 
+	.btn {
+		&:hover {
+			background-color: $orange;
+		}
+	}
+
 	svg { fill: white; }
 }

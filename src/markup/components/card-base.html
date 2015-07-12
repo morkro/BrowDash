@@ -50,7 +50,7 @@
 			opacity: 1;
 		}
 		.module__theme {
-			position: absolute; 
+			position: absolute;
 			z-index: 0;
 			top: -50px;
 			width: 100%;
@@ -63,20 +63,20 @@
 			transform: translateY(55px);
 			transition: all 333ms cubic-bezier(0.86, 0, 0.07, 1);
 		}
-			.module__theme ul { 
+			.module__theme ul {
 				height: 100%;
-				width: 100%; 
-				display: flex; 
-				margin: 0 auto; 
+				width: 100%;
+				display: flex;
+				margin: 0 auto;
 				padding: 0;
 				list-style: none;
 				box-shadow: inset 0px -1px 12px -4px rgba(0,0,0,.5);
 			}
-			.module__theme ul li { 
-				display: inline-block; 
-				height: 100%; 
-				width: 20%; 
-				position: relative; 
+			.module__theme ul li {
+				display: inline-block;
+				height: 100%;
+				width: 20%;
+				position: relative;
 				cursor: pointer;
 			}
 			.module__theme ul li:last-child {
@@ -100,7 +100,10 @@
 			width: 100%;
 			transition: background 150ms ease-in-out;
 		}
-		.module__settings { 
+		:host-context([static]) .module__settings {
+			display: none;
+		}
+		.module__settings {
 			position: absolute;
 			z-index: 100;
 			top: 13px;
@@ -119,47 +122,47 @@
 				transform: translateX(75%) scale(1);
 				box-shadow: 0 0 14px rgba(0,0,0,.24), 0 14px 28px rgba(0,0,0,.48);
 			}
-			section:hover .module__settings li { 
+			section:hover .module__settings li {
 				opacity: 1;
 				transform: scale(1);
 			}
 		.module__settings li {
-			width: 48px; 
-			height: 48px; 
-			margin-bottom: 10px; 
-			background: white; 
-			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24); 
+			width: 48px;
+			height: 48px;
+			margin-bottom: 10px;
+			background: white;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
 			border-radius: 50%;
 			opacity: 0;
 			transform: scale(0.5);
-			transition: all 100ms ease-in-out;
+			transition: opacity 100ms ease-in-out, transform 100ms ease-in-out;
 		}
-			.module__settings li:last-child { 
+			.module__settings li:last-child {
 				transition-delay: 50ms;
 			}
-		.module__settings button { 
-			background: none; 
-			border: none; 
-			cursor: pointer; 
-			height: 100%; 
-			width: 100%; 
-			margin: 0; 
-			padding: 0; 
+		.module__settings button {
+			background: none;
+			border: none;
+			cursor: pointer;
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
 		}
-			.module__settings button:active, 
-			.module__settings button:focus { 
-				outline: none; 
+			.module__settings button:active,
+			.module__settings button:focus {
+				outline: none;
 			}
 			.module__settings button:not(.settings__save) /deep/ svg {
 				fill: #757575;
 			}
-		:host-context(.is-edit) .hidden { 
-			display: block; 
+		:host-context(.is-edit) .hidden {
+			display: block;
 		}
-		.hidden, 
+		.hidden,
 		:host-context(.is-edit) [data-settings="edit"],
-		:host-context([palette="false"]) [data-settings="palette"]  { 
-			display: none; 
+		:host-context([palette="false"]) [data-settings="palette"]  {
+			display: none;
 		}
 		/* Button */
 		::content .btn {
@@ -173,7 +176,9 @@
 			border-radius: 2px;
 			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 			cursor: pointer;
-			transition: all 150ms cubic-bezier(0.86, 0, 0.07, 1);
+			transition: color 150ms cubic-bezier(0.86, 0, 0.07, 1),
+							background-color 150ms cubic-bezier(0.86, 0, 0.07, 1),
+							box-shadow 150ms cubic-bezier(0.86, 0, 0.07, 1);
 		}
 			::content .btn[data-color="white"] {
 				background-color: white;
@@ -258,7 +263,7 @@
 				border-color: #8BC34A;
 			}
 			::content input[type="radio"]:checked + label:before {
-				border-color: white;	
+				border-color: white;
 			}
 			::content input[type="radio"]:checked + label:after {
 				transform: scale(1);
@@ -269,13 +274,16 @@
 			z-index: 99;
 			cursor: -webkit-grab;
 		}
+			:host-context([static]) .dragg-area {
+				display: none;
+			}
 			:host-context(.is-edit) .dragg-area,
 			:host-context(.is-pointer-down.is-edit) .dragg-area  {
 				cursor: default;
 			}
 			:host-context(.is-pointer-down) .dragg-area,
 			:host-context(.is-dragging) .dragg-area {
-				cursor: -webkit-grabbing;		
+				cursor: -webkit-grabbing;
 			}
 			.dragg-area[data-position="top"],
 			.dragg-area[data-position="bottom"] {
