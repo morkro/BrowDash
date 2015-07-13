@@ -5,6 +5,9 @@
 			width: 100%;
 			display: block;
 		}
+		:host /deep/ .dragg-area[data-position="bottom"] {
+			height: 10px;
+		}
 		button {
 			background: none;
 			border: none;
@@ -61,33 +64,33 @@
 	</style>
 	<card-base>
 		<header class="calc-result">
-			<input type="text" id="calc-input" name="calc-input" placeholder="3 × 3 = ?">
+			<input type="text" id="calc-input" name="calc-input" placeholder="3 × 3 = ?" pattern="[^a-zA-Z]">
 		</header>
 		<section class="calc-options">
 			<!-- row -->
-			<button type="button" class="calc-seven">7</button>
-			<button type="button" class="calc-eight">8</button>
-			<button type="button" class="calc-nine">9</button>
-			<button type="button" class="calc-backspace"><svg-icon icon="backspace" color="white"></svg-icon></button>
-			<button type="button" class="calc-del"><svg-icon icon="circle-close" color="white"></svg-icon></button>
+			<button type="button" data-calculator="7">7</button>
+			<button type="button" data-calculator="8">8</button>
+			<button type="button" data-calculator="9">9</button>
+			<button type="button" data-calculator="backspace"><svg-icon icon="backspace" color="white"></svg-icon></button>
+			<button type="button" data-calculator="clear"><svg-icon icon="circle-close" color="white"></svg-icon></button>
 			<!-- row -->
-			<button type="button" class="calc-four">4</button>
-			<button type="button" class="calc-five">5</button>
-			<button type="button" class="calc-six">6</button>
-			<button type="button" class="calc-multiply">×</button>
-			<button type="button" class="calc-divide">÷</button>
+			<button type="button" data-calculator="4">4</button>
+			<button type="button" data-calculator="5">5</button>
+			<button type="button" data-calculator="6">6</button>
+			<button type="button" data-calculator="×">×</button>
+			<button type="button" data-calculator="÷">÷</button>
 			<!-- row -->
-			<button type="button" class="calc-one">1</button>
-			<button type="button" class="calc-two">2</button>
-			<button type="button" class="calc-three">3</button>
-			<button type="button" class="calc-plus">+</button>
-			<button type="button" class="calc-minus">-</button>
+			<button type="button" data-calculator="1">1</button>
+			<button type="button" data-calculator="2">2</button>
+			<button type="button" data-calculator="3">3</button>
+			<button type="button" data-calculator="+">+</button>
+			<button type="button" data-calculator="-">-</button>
 			<!-- row -->
-			<button type="button" class="calc-dot">.</button>
-			<button type="button" class="calc-zero">0</button>
-			<button type="button" class="calc-plusminus">~±</button>
-			<button type="button" class="calc-root">✓</button>
-			<button type="button" class="calc-equal">=</button>
+			<button type="button" data-calculator="decimal">.</button>
+			<button type="button" data-calculator="0">0</button>
+			<button type="button" data-calculator="(">(</button>
+			<button type="button" data-calculator=")">)</button>
+			<button type="button" data-calculator="equal">=</button>
 		</section>
 	</card-base>
 </template>
