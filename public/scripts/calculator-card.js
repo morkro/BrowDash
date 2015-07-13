@@ -118,7 +118,7 @@
 			this.mathResult.value = `I only calculate digits!`;
 			setTimeout(this.clearMath.bind(this), this.timeOut);
 		}
-		else {
+		else if (cleanResult.length) {
 			// This might be a valid use case for 'eval()'.
 			// I know it's considered evil, but I don't want to include
 			// a bloated library nor writing my own parser for that.

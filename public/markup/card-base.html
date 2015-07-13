@@ -107,12 +107,16 @@
 			position: absolute;
 			z-index: 100;
 			top: 13px;
-			right: -24px;
-			width: 48px;
-			padding: 0;
+			right: -57px;
+			width: 57px;
+			padding: 0 0 0 9px;
 			list-style: none;
 			margin: 0;
+			pointer-events: none;
 		}
+			section:hover .module__settings {
+				pointer-events: auto;
+			}
 			:host-context(.is-edit) .module__settings {
 				top: -45px;
 			}
@@ -122,7 +126,8 @@
 				transform: translateX(75%) scale(1);
 				box-shadow: 0 0 14px rgba(0,0,0,.24), 0 14px 28px rgba(0,0,0,.48);
 			}
-			section:hover .module__settings li {
+
+				section:hover .module__settings li {
 				opacity: 1;
 				transform: scale(1);
 			}
