@@ -1,11 +1,11 @@
 (function() {
 	'use strict';
-	
+
 	/* Constants */
 	var doc			= document.currentScript.ownerDocument;
 	var template	= doc.querySelector('#card-base');
 	var CardProto	= Object.create(HTMLDivElement.prototype);
-	
+
 	/**
 	 * @description	Returns a Globally Unique Identifer as string
 	 * @return			{String}
@@ -34,13 +34,11 @@
 	CardProto.createdCallback = function () {
 		this.root = this.createShadowRoot();
 		this.root.appendChild( document.importNode(template.content, true) );
-		
-		this.confPalette	= this.root.querySelector('.settings__palette');
-		this.palette		= this.root.querySelector('.module__theme');
+
 		this.edit			= this.root.querySelector('.settings__edit');
 		this.save			= this.root.querySelector('.settings__save');
 		this.remove			= this.root.querySelector('.settings__remove');
-		
+
 		this.addEvents();
 	};
 
@@ -48,8 +46,6 @@
 	 * @description	Sets eventListener on current card element.
 	 */
 	CardProto.addEvents = function () {
-		this.confPalette.addEventListener('click', this.togglePalette.bind(this));
-		this.palette.addEventListener('click', this.modifyTheme.bind(this));
 		this.edit.addEventListener('click', this.editCard.bind(this));
 		this.save.addEventListener('click', this.saveCard.bind(this));
 		this.remove.addEventListener('click', this.removeCard.bind(this));
@@ -67,28 +63,16 @@
 	};
 
 	/**
-	 * @description Toggles class on host to move the palette list.
-	 */
-	CardProto.togglePalette = function () {
-		let _host = this.getHost();
-		if (_host.classList.contains('edit-theme')) {
-			_host.classList.remove('edit-theme');
-		} else {
-			_host.classList.add('edit-theme');
-		}
-	};
-
-	/**
 	 * @description Gets the 'data-theme' value of clicked element and sends an event.
 	 */
 	CardProto.modifyTheme = function () {
 		var theme = null;
-		
+
 		if (event.target.hasAttribute('data-theme')) {
 			theme = event.target.getAttribute('data-theme');
 		}
-		
-		window.dispatchEvent( 
+
+		window.dispatchEvent(
 			new CustomEvent('theme-change', { detail: theme })
 		);
 	};
@@ -112,12 +96,12 @@
 		let host = this.getHost();
 		let detail = { detail: host.getAttribute('data-guid') };
 		let saveEvent = new CustomEvent('card-save', detail);
-		
+
 		host.saveToStorage();
 		window.dispatchEvent(saveEvent);
 
 		host.classList.remove('is-edit', 'edit-theme');
-		host.addEventListener('transitionend', 
+		host.addEventListener('transitionend',
 			function () { host.classList.remove('fx'); }
 		);
 	};
@@ -139,7 +123,7 @@
 			}
 		});
 	};
-	
+
 	/* Register element in document */
 	document.registerElement('card-base', { prototype: CardProto });
 })();

@@ -9,142 +9,81 @@
 		:host-context([theme="blue"]) [data-theme="blue"] svg-icon {
 			opacity: 1;
 		}
-		:host-context([theme="blue"]) .module,
-		.module__theme [data-theme="blue"] {
+		:host-context([theme="blue"]) .module {
 			background: #2196F3;
 			color: white;
 		}
 		:host-context([theme="green"]) [data-theme="green"] svg-icon {
 			opacity: 1;
 		}
-		:host-context([theme="green"]) .module,
-		.module__theme [data-theme="green"] {
+		:host-context([theme="green"]) .module] {
 			background: #4caf50;
 			color: white;
 		}
 		:host-context([theme="red"]) [data-theme="red"] svg-icon {
 			opacity: 1;
 		}
-		:host-context([theme="red"]) .module,
-		.module__theme [data-theme="red"] {
+		:host-context([theme="red"]) .module {
 			background: #f44336;
 			color: white;
 		}
 		:host-context([theme="pink"]) [data-theme="pink"] svg-icon {
 			opacity: 1;
 		}
-		:host-context([theme="pink"]) .module,
-		.module__theme [data-theme="pink"] {
+		:host-context([theme="pink"]) .module {
 			background: #ec407a;
 			color: white;
 		}
 		:host-context([theme="brown"]) [data-theme="brown"] svg-icon {
 			opacity: 1;
 		}
-		:host-context([theme="brown"]) .module,
-		.module__theme [data-theme="brown"] {
+		:host-context([theme="brown"]) .module {
 			background: #795548;
 			color: white;
 		}
 		:host-context([theme="white"]) [data-theme="white"] svg-icon {
 			opacity: 1;
 		}
-		.module__theme {
-			position: absolute;
-			z-index: 0;
-			top: -50px;
-			width: 100%;
-			height: 50px;
-			background: white;
-			border-top-left-radius: 2px;
-			border-top-right-radius: 2px;
-			overflow: hidden;
-			opacity: 0;
-			transform: translateY(55px);
-			transition: all 333ms cubic-bezier(0.86, 0, 0.07, 1);
-		}
-			.module__theme ul {
-				height: 100%;
-				width: 100%;
-				display: flex;
-				margin: 0 auto;
-				padding: 0;
-				list-style: none;
-				box-shadow: inset 0px -1px 12px -4px rgba(0,0,0,.5);
-			}
-			.module__theme ul li {
-				display: inline-block;
-				height: 100%;
-				width: 20%;
-				position: relative;
-				cursor: pointer;
-			}
-			.module__theme ul li:last-child {
-				border-top-right-radius: 2px;
-			}
-			.module__theme .is-theme svg-icon {
-				opacity: 1;
-			}
-			.module__theme svg-icon {
-				opacity: .3;
-				position: absolute;
-				right: 5px;
-				bottom: 0;
-			}
 		.module  {
 			position: relative;
+			z-index: 1;
 			background: white;
 			display: block;
 			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
 			border-radius: 2px;
 			width: 100%;
-			transition: background 150ms ease-in-out;
+			transition: background 150ms ease-in-out, border 150ms ease-in-out;
+		}
+		:host(:hover) .module {
+			border-top-right-radius: 0;
 		}
 		:host-context([static]) .module__settings {
 			display: none;
 		}
 		.module__settings {
 			position: absolute;
-			z-index: 100;
-			top: 13px;
-			right: -57px;
-			width: 57px;
-			padding: 0 0 0 9px;
+			z-index: 0;
+			top: 0;
+			right: -48px;
+			width: 48px;
+			padding: 0;
 			list-style: none;
 			margin: 0;
-			pointer-events: none;
+			border-top-right-radius: 2px;
+			border-bottom-right-radius: 2px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+			background: white;
+			transform: translateX(calc(-100% - 5px));
+			transition: none;
 		}
-			section:hover .module__settings {
-				pointer-events: auto;
-			}
-			:host-context(.is-edit) .module__settings {
-				top: -45px;
-			}
-			:host-context(.is-edit) section:hover .module__settings li,
-			:host-context(.is-edit) .module__settings li {
-				opacity: 1;
-				transform: translateX(75%) scale(1);
-				box-shadow: 0 0 14px rgba(0,0,0,.24), 0 14px 28px rgba(0,0,0,.48);
-			}
-
-				section:hover .module__settings li {
-				opacity: 1;
-				transform: scale(1);
+			:host(:hover) .module__settings {
+				transform: translateX(0);
+				transition: transform 150ms cubic-bezier(0.86, 0, 0.07, 1);
 			}
 		.module__settings li {
 			width: 48px;
 			height: 48px;
-			margin-bottom: 10px;
-			background: white;
-			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
-			border-radius: 50%;
-			opacity: 0;
-			transform: scale(0.5);
-			transition: opacity 100ms ease-in-out, transform 100ms ease-in-out;
 		}
-			.module__settings li:last-child {
-				transition-delay: 50ms;
-			}
 		.module__settings button {
 			background: none;
 			border: none;
@@ -311,56 +250,29 @@
 				right: 0;
 			}
 	</style>
-	<div class="module__theme">
-		<ul>
-			<li data-theme="red">
-				<svg-icon icon="save" color="white"></svg-icon>
-			</li>
-			<li data-theme="green">
-				<svg-icon icon="save" color="white"></svg-icon>
-			</li>
-			<li data-theme="blue">
-				<svg-icon icon="save" color="white"></svg-icon>
-			</li>
-			<li data-theme="pink">
-				<svg-icon icon="save" color="white"></svg-icon>
-			</li>
-			<li data-theme="brown">
-				<svg-icon icon="save" color="white"></svg-icon>
-			</li>
-			<li data-theme="white">
-				<svg-icon icon="save" color="black"></svg-icon>
-			</li>
-		</ul>
-	</div>
 	<section class="module">
-		<ul class="module__settings">
-			<li class="hidden" data-settings="palette">
-				<button class="settings__palette">
-					<svg-icon icon="palette"></svg-icon>
-				</button>
-			</li>
-			<li data-settings="edit">
-				<button class="settings__edit">
-					<svg-icon icon="edit"></svg-icon>
-				</button>
-			</li>
-			<li class="hidden" data-settings="save">
-				<button class="settings__save">
-					<svg-icon icon="save" color="green"></svg-icon>
-				</button>
-			</li>
-			<li data-settings="remove">
-				<button class="settings__remove">
-					<svg-icon icon="remove"></svg-icon>
-				</button>
-			</li>
-		</ul>
 		<content></content>
 		<div class="dragg-area" data-position="top"></div>
 		<div class="dragg-area" data-position="right"></div>
 		<div class="dragg-area" data-position="bottom"></div>
 		<div class="dragg-area" data-position="left"></div>
 	</section>
+	<ul class="module__settings">
+		<li data-settings="edit">
+			<button class="settings__edit">
+				<svg-icon icon="edit"></svg-icon>
+			</button>
+		</li>
+		<li class="hidden" data-settings="save">
+			<button class="settings__save">
+				<svg-icon icon="save" color="green"></svg-icon>
+			</button>
+		</li>
+		<li data-settings="remove">
+			<button class="settings__remove">
+				<svg-icon icon="remove"></svg-icon>
+			</button>
+		</li>
+	</ul>
 </template>
 <script type="text/javascript" src="../scripts/card-base.js"></script>
