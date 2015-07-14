@@ -1,15 +1,11 @@
 <template id="weather-card">
 	<style>
 		:host { position: relative; }
-		:host /deep/ .module__theme { display: none; }
-		:host /deep/ .module { 
+		:host /deep/ .module {
 			background: #448aff;
 			color: white;
 			min-height: 156px;
 			transition: background 150ms ease-in-out;
-		}
-		:host-context(.is-edit) /deep/ .module__settings {
-			top: 13px;
 		}
 		/* Loader */
 		:host-context([loading]) .weather__loading {
@@ -55,7 +51,7 @@
 			padding: 20px;
 			transform: translateY(-100%);
 			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
-		}	
+		}
 			.weather__settings h1 {
 				font-size: 24px;
 				font-weight: 300;
