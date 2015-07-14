@@ -5,8 +5,21 @@
 			width: 100%;
 			display: block;
 		}
+		:host /deep/ .module {
+			color: white;
+		}
 		:host /deep/ .dragg-area[data-position="bottom"] {
 			height: 10px;
+		}
+		ul {
+			list-style: none;
+			padding: 0;
+		}
+		li {
+			margin-bottom: 20px;
+		}
+		label {
+			transition: all 150ms ease-in-out;
 		}
 		button {
 			background: none;
@@ -14,19 +27,52 @@
 			text-align: center;
 			color: white;
 			font-size: 24px;
-			padding: 15px 0;
+			padding: 12px 0;
 			cursor: pointer;
 		}
 		button:focus, button:active {
 			outline: none;
 		}
-		.calc-result {
+		/* Base */
+		.calc-wrap {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+			position: relative;
+			border-radius: 2px;
 			background-color: #e53935;
+		}
+		/* Settings */
+		.calc-settings {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			padding: 20px;
+			transform: translateY(-100%);
+			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+		:host-context(.is-edit) .calc-settings {
+			transform: translateY(0);
+		}
+			.calc-settings h1 {
+				font-size: 24px;
+				font-weight: 300;
+				margin: 0 0 20px 0;
+			}
+		/* Result */
+		.calc-result {
 			color: white;
 			border-top-left-radius: 2px;
 			border-top-right-radius: 2px;
 			padding: 10px;
 			display: flex;
+			transform: translateY(0);
+			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+		:host-context(.is-edit) .calc-result {
+			transform: translateY(400%);
 		}
 			.calc-result input {
 				border: none;
@@ -34,7 +80,7 @@
 				width: 100%;
 				font-size: 24px;
 				color: white;
-				padding: 15px;
+				padding: 10px 15px;
 				text-align: right;
 			}
 			.calc-result input:active,
@@ -50,6 +96,7 @@
 				position: relative;
 				top: 1px;
 			}
+		/* Options */
 		.calc-options {
 			width: 100%;
 			background-color: #222222;
@@ -57,41 +104,69 @@
 			flex-wrap: wrap;
 			border-bottom-left-radius: 2px;
 			border-bottom-right-radius: 2px;
+			transform: translateY(0);
+			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+		:host-context(.is-edit) .calc-options {
+			transform: translateY(100%);
 		}
 			.calc-options button {
 				width: 20%;
 			}
 	</style>
 	<card-base>
-		<header class="calc-result">
-			<input type="text" id="calc-input" name="calc-input" placeholder="3 × 3 = ?" pattern="[^a-zA-Z]">
-		</header>
-		<section class="calc-options">
-			<!-- row -->
-			<button type="button" data-calculator="7">7</button>
-			<button type="button" data-calculator="8">8</button>
-			<button type="button" data-calculator="9">9</button>
-			<button type="button" data-calculator="backspace"><svg-icon icon="backspace" color="white"></svg-icon></button>
-			<button type="button" data-calculator="clear"><svg-icon icon="circle-close" color="white"></svg-icon></button>
-			<!-- row -->
-			<button type="button" data-calculator="4">4</button>
-			<button type="button" data-calculator="5">5</button>
-			<button type="button" data-calculator="6">6</button>
-			<button type="button" data-calculator="×">×</button>
-			<button type="button" data-calculator="÷">÷</button>
-			<!-- row -->
-			<button type="button" data-calculator="1">1</button>
-			<button type="button" data-calculator="2">2</button>
-			<button type="button" data-calculator="3">3</button>
-			<button type="button" data-calculator="+">+</button>
-			<button type="button" data-calculator="-">-</button>
-			<!-- row -->
-			<button type="button" data-calculator="decimal">.</button>
-			<button type="button" data-calculator="0">0</button>
-			<button type="button" data-calculator="(">(</button>
-			<button type="button" data-calculator=")">)</button>
-			<button type="button" data-calculator="equal"><svg-icon icon="equal" color="white"></svg-icon></button>
-		</section>
+		<div class="calc-wrap">
+			<div class="calc-settings">
+				<h1>Set your mood</h1>
+				<ul class="settings-mood">
+					<li>
+						<input type="radio" id="dark" name="settings-mood">
+						<label for="dark">Dark</label>
+					</li>
+					<li>
+						<input type="radio" id="light" name="settings-mood">
+						<label for="light">Light</label>
+					</li>
+				</ul>
+				<h1>Theme calculator</h1>
+				<ul class="settings-theme">
+				<li data-settings-theme="blue-a400"></li>
+				<li data-settings-theme="pink-400"></li>
+				<li data-settings-theme="teal-400"></li>
+				<li data-settings-theme="indigo-400"></li>
+				<li data-settings-theme="red"></li>
+				</ul>
+			</div>
+			<header class="calc-result">
+				<input type="text" id="calc-input" name="calc-input" placeholder="3 × 3 = ?" pattern="[^a-zA-Z]">
+			</header>
+			<section class="calc-options">
+				<!-- row -->
+				<button type="button" data-calculator="7">7</button>
+				<button type="button" data-calculator="8">8</button>
+				<button type="button" data-calculator="9">9</button>
+				<button type="button" data-calculator="backspace"><svg-icon icon="backspace" color="white"></svg-icon></button>
+				<button type="button" data-calculator="clear"><svg-icon icon="circle-close" color="white"></svg-icon></button>
+				<!-- row -->
+				<button type="button" data-calculator="4">4</button>
+				<button type="button" data-calculator="5">5</button>
+				<button type="button" data-calculator="6">6</button>
+				<button type="button" data-calculator="×">×</button>
+				<button type="button" data-calculator="÷">÷</button>
+				<!-- row -->
+				<button type="button" data-calculator="1">1</button>
+				<button type="button" data-calculator="2">2</button>
+				<button type="button" data-calculator="3">3</button>
+				<button type="button" data-calculator="+">+</button>
+				<button type="button" data-calculator="-">-</button>
+				<!-- row -->
+				<button type="button" data-calculator="decimal">.</button>
+				<button type="button" data-calculator="0">0</button>
+				<button type="button" data-calculator="(">(</button>
+				<button type="button" data-calculator=")">)</button>
+				<button type="button" data-calculator="equal"><svg-icon icon="equal" color="white"></svg-icon></button>
+			</section>
+		</div>
 	</card-base>
 </template>
 <script type="text/javascript" src="../scripts/calculator-card.js"></script>

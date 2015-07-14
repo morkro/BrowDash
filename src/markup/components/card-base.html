@@ -212,6 +212,36 @@
 			::content input[type="radio"]:checked + label:after {
 				transform: scale(1);
 			}
+		/* Theming */
+		::content .settings-theme {
+			display: flex;
+			justify-content: space-between;
+		}
+		::content [data-settings-theme] {
+			width: 16%;
+			height: 50px;
+			margin-bottom: 0;
+			display: inline-block;
+			cursor: pointer;
+			border-radius: 2px;
+			box-shadow: 0 3px 10px rgba(0, 0, 0, .48);
+			transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
+			position: relative;
+		}
+			::content [data-settings-theme]:hover {
+				box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.48);;
+				transform: translateY(-2px);
+			}
+			::content [data-settings-theme="blue-a400"] { background: #448aff; }
+			::content [data-settings-theme="blue-a400"]:hover { background: #2979ff; }
+			::content [data-settings-theme="pink-400"] { background: #ec407a; }
+			::content [data-settings-theme="pink-400"]:hover { background: #e91e63; }
+			::content [data-settings-theme="teal-400"] { background: #26a69a; }
+			::content [data-settings-theme="teal-400"]:hover { background: #009688; }
+			::content [data-settings-theme="indigo-400"] { background: #5c6bc0; }
+			::content [data-settings-theme="indigo-400"]:hover { background: #3f51b5; }
+			::content [data-settings-theme="red"] { background: #f44336; }
+			::content [data-settings-theme="red"]:hover { background: #e53935; }
 		/* Draggable */
 		.dragg-area {
 			position: absolute;
