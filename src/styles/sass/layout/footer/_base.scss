@@ -5,14 +5,15 @@
 	right: 0;
 	z-index: z($modals, footer);
 	height: auto;
-	width: 65px;
+	width: 60px;
 	margin: 0 auto;
-	transform: translateY(80%);
+	transform: translateY(374px);
 	transition-delay: 250ms;
 
 	&:hover {
-		transform: translateY(-9px);
+		transform: translateY(-32px);
 		transition-delay: 0s;
+		width: 125px;
 
 		#footer__add {
 			top: 82.7%;
