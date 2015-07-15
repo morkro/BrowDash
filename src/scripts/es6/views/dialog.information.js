@@ -32,9 +32,10 @@ var toggleContent = function (event) {
 	event.preventDefault();
 
 	let item = event.target;
+	let isLink = item.nodeName === 'A';
 	let curActive = getCurrentActiveItem(this.categoryList).parentNode;
 
-	if (!item.parentNode.classList.contains('is-active')) {
+	if (isLink && !item.parentNode.classList.contains('is-active')) {
 		curActive.classList.remove('is-active');
 		item.parentNode.classList.add('is-active');
 		validateSection(this.dialogContent);
