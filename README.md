@@ -20,7 +20,7 @@ Having a full customisable dashboard with a set of different modules, called _ca
 
 ## Planned features
 
-Open features are listed in the [**wiki page**](https://github.com/morkro/BrowDash/wiki/Open-features).
+Open features are listed and tagged in the [**issue tracker**](https://github.com/morkro/BrowDash/issues?q=is%3Aopen+is%3Aissue+label%3Afeature).
 
 
 ## Technologies
