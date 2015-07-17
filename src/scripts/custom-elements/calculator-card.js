@@ -30,8 +30,20 @@
 			this.config.content = {};
 		}
 
+		// Set possible default mood
+		if (!this.config.content.mood) {
+			this.config.content.mood = 'dark';
+		}
+
+		// Set theme
+		if (!this.config.content.theme) {
+			this.config.content.theme = 'red';
+		}
+
 		this.root.children[1].setGUID(this.config.guid);
 		this.saveToStorage();
+		this.setMood(this.config.content.mood);
+		this.setTheme(this.config.content.theme);
 	};
 
 	/**
@@ -54,6 +66,65 @@
 		// button
 		this.options = this.root.querySelector('.calc-options');
 		this.options.addEventListener('click', this.evalCalcOptions.bind(this));
+		// icons
+		this.icons = this.root.querySelectorAll('svg-icon');
+		// mood
+		this.mood = this.root.querySelector('.settings-mood');
+		this.moodDark = this.root.querySelector('#dark');
+		this.moodLight = this.root.querySelector('#light');
+		this.mood.addEventListener('click', this.validateMood.bind(this));
+		// theme
+		this.theme = this.root.querySelector('.settings-theme');
+		this.theme.addEventListener('click', this.validateTheme.bind(this));
+	};
+
+	CalculatorCard.validateTheme = function (event) {
+		if (event.target.hasAttribute('data-settings-theme')) {
+			this.setTheme(event.target.getAttribute('data-settings-theme'));
+			this.saveToStorage();
+		}
+	};
+
+	/**
+	 * @description	Saves the users input.
+	 */
+	CalculatorCard.validateMood = function (event) {
+		if (event.target.type === 'radio') {
+			this.setMood(event.target.id);
+			this.saveToStorage();
+		}
+	};
+
+	CalculatorCard.setIconColor = function (color) {
+		[].forEach.call(this.icons, function (item) {
+			item.setAttribute('color', color);
+		});
+	};
+
+	CalculatorCard.setMood = function (mood) {
+		var moodColor = 'black';
+
+		if (mood === 'dark') {
+			this.moodDark.checked = true;
+			moodColor = 'white';
+		}
+		else {
+			this.moodLight.checked = true;
+		}
+
+		this.config.content.mood = mood;
+		this.setIconColor(moodColor);
+		this.setAttribute('mood', mood);
+	};
+
+	CalculatorCard.setTheme = function (theme) {
+		var curTheme = this.theme.querySelector('.is-active');
+		var activeTheme = this.root.querySelector('[data-settings-theme="'+ theme +'"]');
+
+		this.config.content.theme = theme;
+		curTheme.classList.remove('is-active');
+		activeTheme.classList.add('is-active');
+		this.setAttribute('theme', theme);
 	};
 
 	CalculatorCard.getButton = function (elem) {

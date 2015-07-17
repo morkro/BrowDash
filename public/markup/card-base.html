@@ -228,9 +228,18 @@
 			transition: box-shadow 150ms ease-in-out, transform 150ms ease-in-out;
 			position: relative;
 		}
+			::content [data-settings-theme].is-active {
+				cursor: default;
+				box-shadow: inset 0 3px 10px rgba(0, 0, 0, .48);
+				transform: none;
+			}
 			::content [data-settings-theme]:hover {
 				box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.48);;
 				transform: translateY(-2px);
+			}
+			::content [data-settings-theme].is-active:hover {
+				box-shadow: inset 0 3px 10px rgba(0, 0, 0, .48);
+				transform: none;
 			}
 			::content [data-settings-theme="blue-a400"] { background: #448aff; }
 			::content [data-settings-theme="blue-a400"]:hover { background: #2979ff; }
