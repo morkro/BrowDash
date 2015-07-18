@@ -8,11 +8,16 @@
 		:host-context([mood="dark"]) /deep/ .module {
 			color: white;
 		}
-		:host-context([theme="blue-a400"]) .calc-wrap { background: #448aff; }
-		:host-context([theme="pink-400"]) .calc-wrap { background: #ec407a; }
-		:host-context([theme="teal-400"]) .calc-wrap { background: #26a69a; }
-		:host-context([theme="indigo-400"]) .calc-wrap { background: #5c6bc0; }
-		:host-context([theme="red"]) .calc-wrap { background: #f44336; }
+		:host-context([theme="blue-a400"]) .calc-wrap,
+		:host-context([theme="blue-a400"]) [data-calculator="equal"]::before { background: #448aff; }
+		:host-context([theme="pink-400"]) .calc-wrap,
+		:host-context([theme="pink-400"])  [data-calculator="equal"]::before { background: #ec407a; }
+		:host-context([theme="teal-400"]) .calc-wrap,
+		:host-context([theme="teal-400"])  [data-calculator="equal"]::before { background: #26a69a; }
+		:host-context([theme="indigo-400"]) .calc-wrap,
+		:host-context([theme="indigo-400"]) [data-calculator="equal"]::before { background: #5c6bc0; }
+		:host-context([theme="red"]) .calc-wrap ,
+		:host-context([theme="red"]) [data-calculator="equal"]::before { background: #f44336; }
 		:host /deep/ .dragg-area[data-position="bottom"] {
 			height: 10px;
 		}
@@ -30,9 +35,12 @@
 			background: none;
 			border: none;
 			text-align: center;
-			font-size: 24px;
+			font-size: 20px;
 			padding: 12px 0;
 			cursor: pointer;
+		}
+		button:not([data-calculator="equal"]):hover {
+			background: rgba(0, 0, 0, .15);
 		}
 		button:focus, button:active {
 			outline: none;
@@ -73,6 +81,9 @@
 				font-weight: 300;
 				margin: 0 0 20px 0;
 			}
+		.settings-theme li {
+			height: 40px !important;
+		}
 		/* Result */
 		.calc-result {
 			color: white;
@@ -84,15 +95,15 @@
 			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
 		}
 		:host-context(.is-edit) .calc-result {
-			transform: translateY(400%);
+			transform: translateY(415%);
 		}
 			.calc-result input {
 				border: none;
 				background: transparent;
 				width: 100%;
 				font-size: 24px;
-				color: white;
-				padding: 10px 15px;
+				color: black;
+				padding: 5px 15px;
 				text-align: right;
 			}
 			.calc-result input:active,
@@ -118,6 +129,7 @@
 			border-bottom-right-radius: 2px;
 			transform: translateY(0);
 			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+			box-shadow: 1px 2px 3px 3px rgba(0,0,0,.2);
 		}
 		:host-context(.is-edit) .calc-options {
 			transform: translateY(100%);
@@ -128,6 +140,22 @@
 		}
 			.calc-options button {
 				width: 20%;
+				position: relative;
+			}
+			[data-calculator="equal"] svg-icon {
+				position: relative;
+				z-index: 1;
+			}
+			[data-calculator="equal"]::before {
+				position: absolute;
+				content: "";
+				z-index: 0;
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -55%);
 			}
 	</style>
 	<card-base>

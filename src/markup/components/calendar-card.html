@@ -1,0 +1,234 @@
+<template id="calendar-card">
+	<style>
+		* { box-sizing: border-box; }
+		:host {
+			width: 100%;
+			display: block;
+		}
+
+		:host-context([theme="blue-a400"]) section { background: rgb(34, 69, 127); }
+		:host-context([theme="blue-a400"]) .calendar-month { background: #448aff; }
+		:host-context([theme="pink-400"]) section { background: rgb(118, 32, 61); }
+		:host-context([theme="pink-400"])  .calendar-month { background: #ec407a; }
+		:host-context([theme="teal-400"]) section { background: rgb(19, 83, 77); }
+		:host-context([theme="teal-400"])  .calendar-month { background: #26a69a; }
+		:host-context([theme="indigo-400"]) section { background: #2E3560; }
+		:host-context([theme="indigo-400"]) .calendar-month { background: #5c6bc0; }
+		:host-context([theme="red"]) section { background: rgb(122, 33, 27); }
+		:host-context([theme="red"]) .calendar-month { background: #f44336; }
+
+		section {
+			border-radius: 2px;
+			overflow: hidden;
+			position: relative;
+			color: white;
+			height: 100%;
+			width: 100%;
+			background-color: #143C7F;
+			transition: background-color 105ms ease-in-out;
+		}
+		ul {
+			list-style: none;
+			padding: 0;
+		}
+		li {
+			margin-bottom: 20px;
+		}
+		/* Settings */
+		.calendar-settings {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			color: white;
+			padding: 20px;
+			transform: translateY(-100%);
+			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+			:host-context(.is-edit) .calendar-settings {
+				transform: translateY(0);
+			}
+		.calendar-settings h1 {
+			font-size: 24px;
+			font-weight: 300;
+			margin: 0 0 20px 0;
+		}
+		/* Header */
+		.calendar-head {
+			box-shadow: 0px 1px 3px rgba(0,0,0,.3);
+			padding: 20px 20px 0;
+			position: relative;
+			z-index: 1;
+			border-top-right-radius: 2px;
+			border-top-left-radius: 2px;
+			transform: translateY(0);
+			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+			:host-context(.is-edit) .calendar-head {
+				transform: translateY(300%);
+			}
+		.calendar-head h1 {
+			margin: 0;
+			font-weight: 400;
+			line-height: 35px;
+		}
+		.calendar-head span {
+			color: rgba(255,255,255,.3);
+		}
+		.calendar-ctrls {
+			position: absolute;
+			right: 20px;
+			top: 20px;
+		}
+		.calendar-ctrls button {
+			width: 35px;
+			height: 35px;
+			background-color: rgb(255,82,82);
+			border: none;
+			border-radius: 50%;
+			color: white;
+			text-align: center;
+			cursor: pointer;
+			line-height: 0px;
+			box-shadow: 0 1px 3px rgba(0,0,0,.24);
+		}
+			.calendar-ctrls button:active, .calendar-ctrls button:focus {
+				outline: none;
+			}
+		/* Week */
+		.calendar-week {
+			list-style: none;
+			padding: 20px 0 10px;
+			margin: 0;
+			display: flex;
+			justify-content: space-between;
+		}
+			.calendar-week li {
+				display: inline-block;
+			}
+		/* Month */
+		.calendar-month {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			padding: 10px;
+			border-bottom-right-radius: 2px;
+			border-bottom-left-radius: 2px;
+			background-color: #2979ff;
+			transform: translateY(0);
+			transition: transform 333ms cubic-bezier(0.86, 0, 0.07, 1);
+		}
+			:host-context(.is-edit) .calendar-month {
+				transform: translateY(415%);
+			}
+			:host-context([appearance="blank"]) .calendar-month {
+				background: white;
+				color: black;
+			}
+		.calendar-month span {
+			width: calc(100% / 7);
+			text-align: center;
+			line-height: 35px;
+			position: relative;
+			z-index: 1;
+		}
+		.calendar-month .is-before {
+			color: rgba(255,255,255,.5);
+		}
+			:host-context([appearance="blank"]) .calendar-month .is-before {
+				color: rgba(0,0,0,.5);
+			}
+		.calendar-month .is-today {
+			font-weight: 700;
+			color: white;
+		}
+			.calendar-month .is-today::before {
+				position: absolute;
+				z-index: -1;
+				display: block;
+				content: "";
+				width: 35px;
+				height: 35px;
+				border-radius: 50%;
+				top: 50%;
+				left: 50%;
+				background-color: rgb(255,82,82);
+				transform: translate(-50%, -50%);
+			}
+	</style>
+	<card-base>
+		<section>
+			<div class="calendar-settings">
+				<h1>Calendar theme</h1>
+				<ul class="settings-theme">
+					<li data-settings-theme="blue-a400" class="is-active"></li>
+					<li data-settings-theme="pink-400"></li>
+					<li data-settings-theme="teal-400"></li>
+					<li data-settings-theme="indigo-400"></li>
+					<li data-settings-theme="red"></li>
+				</ul>
+				<h1>Month</h1>
+				<ul class="settings-month">
+					<li>
+						<input type="radio" id="colored" name="settings-month">
+						<label for="colored">Colored</label>
+					</li>
+					<li>
+						<input type="radio" id="blank" name="settings-month">
+						<label for="blank">Blank</label>
+					</li>
+				</ul>
+			</div>
+			<header class="calendar-head">
+				<h1>July <span>2015</span></h1>
+				<div class="calendar-ctrls">
+					<button><svg-icon icon="arrow-left" color="white"></svg-icon></button>
+					<button><svg-icon icon="arrow-right" color="white"></svg-icon></button>
+				</div>
+				<ul class="calendar-week">
+					<li>Mo</li>
+					<li>Tu</li>
+					<li>We</li>
+					<li>Th</li>
+					<li>Fr</li>
+					<li>Sa</li>
+					<li>So</li>
+				</ul>
+			</header>
+			<div class="calendar-month">
+				<span class="is-before">01</span>
+				<span class="is-before">02</span>
+				<span class="is-before">03</span>
+				<span class="is-before">04</span>
+				<span class="is-before">05</span>
+				<span class="is-before">06</span>
+				<span class="is-before">07</span>
+				<span class="is-before">08</span>
+				<span class="is-before">09</span>
+				<span class="is-before">10</span>
+				<span class="is-before">11</span>
+				<span class="is-before">12</span>
+				<span class="is-before">13</span>
+				<span class="is-before">14</span>
+				<span class="is-before">15</span>
+				<span class="is-before">16</span>
+				<span class="is-today">17</span>
+				<span>18</span>
+				<span>19</span>
+				<span>20</span>
+				<span>21</span>
+				<span>22</span>
+				<span>23</span>
+				<span>24</span>
+				<span>25</span>
+				<span>26</span>
+				<span>27</span>
+				<span>28</span>
+				<span>29</span>
+				<span>30</span>
+			</div>
+		</section>
+	</card-base>
+</template>
+<script type="text/javascript" src="../scripts/calendar-card.js"></script>

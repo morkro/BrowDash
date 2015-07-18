@@ -21,7 +21,10 @@ class Card {
 			case 'weather': return document.createElement('weather-card');
 			case 'todo': return document.createElement('todo-card');
 			case 'calculator': return document.createElement('calculator-card');
-			default: return document.createElement('text-card');
+			case 'calendar': return document.createElement('calendar-card');
+			default:
+				console.warn(`I couldn't find "${this.config.type}" module :( Take this <text-card> instead :)`);
+				return document.createElement('text-card');
 		}
 	}
 
