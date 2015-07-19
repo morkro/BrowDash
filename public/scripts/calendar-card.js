@@ -7,6 +7,10 @@
 	var CalendarCard	= Object.create(HTMLDivElement.prototype);
 
 	CalendarCard.config = { module: true, type: 'calendar', content: {} };
+	CalendarCard.monthList = [
+		'January', 'February', 'March', 'April', 'May', 'June', 'July',
+		'August', 'September', 'October', 'November', 'December'
+	];
 
 	/**
 	 * @description	Initialises data.
@@ -41,6 +45,7 @@
 		this.saveToStorage();
 		this.setMonthAppearance(this.config.content.month);
 		this.setTheme(this.config.content.theme);
+		this.setCurrentDates();
 	};
 
 	/**
@@ -57,14 +62,52 @@
 		this.root = this.createShadowRoot();
 		this.root.appendChild( document.importNode(template.content, true) );
 
-		// month
+		// current month
+		this.curMonthElem = this.root.querySelector('.calendar-date');
+		this.curDaysOfMonth = this.root.querySelector('.calendar-month');
+		// settings month
 		this.settingsMonth = this.root.querySelector('.settings-month');
 		this.monthColored = this.root.querySelector('#colored');
 		this.monthBlank = this.root.querySelector('#blank');
 		this.settingsMonth.addEventListener('click', this.validateMonthAppearance.bind(this))
-		// theme
+		// settings theme
 		this.theme = this.root.querySelector('.settings-theme');
 		this.theme.addEventListener('click', this.validateTheme.bind(this));
+	};
+
+	CalendarCard.setCurrentDates = function () {
+		var date = new Date();
+		var daysOfMonth = this.getDaysInMonth(date.getMonth(), date.getFullYear());
+
+		// header
+		this.curMonthElem.textContent = this.monthList[date.getMonth()];
+		this.curMonthElem.appendChild(this.createCurYearElem(date.getFullYear()));
+		// month
+		for (var i = 0; i < daysOfMonth.length; i++) {
+			this.curDaysOfMonth.appendChild(this.createDayOfMonth(i + 1));
+		}
+	};
+
+	CalendarCard.createDayOfMonth = function (day) {
+		var elem = document.createElement('span');
+		elem.textContent = day;
+		return elem;
+	};
+
+	CalendarCard.createCurYearElem = function (date) {
+		var elem = document.createElement('span');
+		elem.textContent = ' '+ date;
+		return elem;
+	};
+
+	CalendarCard.getDaysInMonth = function (month, year) {
+		var date = new Date(year, month, 1);
+		var days = [];
+		while (date.getMonth() === month) {
+			days.push(new Date(date));
+			date.setDate(date.getDate() + 1);
+		}
+		return days;
 	};
 
 	CalendarCard.validateTheme = function (event) {

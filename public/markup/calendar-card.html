@@ -8,14 +8,22 @@
 
 		:host-context([theme="blue-a400"]) section { background: rgb(34, 69, 127); }
 		:host-context([theme="blue-a400"]) .calendar-month { background: #448aff; }
+
 		:host-context([theme="pink-400"]) section { background: rgb(118, 32, 61); }
-		:host-context([theme="pink-400"])  .calendar-month { background: #ec407a; }
+		:host-context([theme="pink-400"]) .calendar-month { background: #ec407a; }
+		:host-context([theme="pink-400"]) .calendar-ctrls button,
+		:host-context([theme="pink-400"]) .calendar-month .is-today::before { background: #00bcd4; }
+
 		:host-context([theme="teal-400"]) section { background: rgb(19, 83, 77); }
-		:host-context([theme="teal-400"])  .calendar-month { background: #26a69a; }
+		:host-context([theme="teal-400"]) .calendar-month { background: #26a69a; }
+
 		:host-context([theme="indigo-400"]) section { background: #2E3560; }
 		:host-context([theme="indigo-400"]) .calendar-month { background: #5c6bc0; }
+
 		:host-context([theme="red"]) section { background: rgb(122, 33, 27); }
 		:host-context([theme="red"]) .calendar-month { background: #f44336; }
+		:host-context([theme="red"]) .calendar-ctrls button,
+		:host-context([theme="red"]) .calendar-month .is-today::before { background: #2979ff; }
 
 		section {
 			border-radius: 2px;
@@ -30,9 +38,6 @@
 		ul {
 			list-style: none;
 			padding: 0;
-		}
-		li {
-			margin-bottom: 20px;
 		}
 		/* Settings */
 		.calendar-settings {
@@ -53,6 +58,9 @@
 			font-size: 24px;
 			font-weight: 300;
 			margin: 0 0 20px 0;
+		}
+		.calendar-settings li {
+			margin-bottom: 20px;
 		}
 		/* Header */
 		.calendar-head {
@@ -181,7 +189,7 @@
 				</ul>
 			</div>
 			<header class="calendar-head">
-				<h1>July <span>2015</span></h1>
+				<h1 class="calendar-date"></h1>
 				<div class="calendar-ctrls">
 					<button><svg-icon icon="arrow-left" color="white"></svg-icon></button>
 					<button><svg-icon icon="arrow-right" color="white"></svg-icon></button>
@@ -196,38 +204,7 @@
 					<li>So</li>
 				</ul>
 			</header>
-			<div class="calendar-month">
-				<span class="is-before">01</span>
-				<span class="is-before">02</span>
-				<span class="is-before">03</span>
-				<span class="is-before">04</span>
-				<span class="is-before">05</span>
-				<span class="is-before">06</span>
-				<span class="is-before">07</span>
-				<span class="is-before">08</span>
-				<span class="is-before">09</span>
-				<span class="is-before">10</span>
-				<span class="is-before">11</span>
-				<span class="is-before">12</span>
-				<span class="is-before">13</span>
-				<span class="is-before">14</span>
-				<span class="is-before">15</span>
-				<span class="is-before">16</span>
-				<span class="is-today">17</span>
-				<span>18</span>
-				<span>19</span>
-				<span>20</span>
-				<span>21</span>
-				<span>22</span>
-				<span>23</span>
-				<span>24</span>
-				<span>25</span>
-				<span>26</span>
-				<span>27</span>
-				<span>28</span>
-				<span>29</span>
-				<span>30</span>
-			</div>
+			<div class="calendar-month"></div>
 		</section>
 	</card-base>
 </template>
